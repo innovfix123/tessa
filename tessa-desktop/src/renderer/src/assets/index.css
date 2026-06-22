@@ -1,0 +1,322 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+  ::-webkit-scrollbar-track {
+    background: #09090b;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background: #27272a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-brand-600 px-3.5 py-2
+           text-sm font-medium text-white transition-colors
+           hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/40
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-zinc-800 px-3.5 py-2
+           text-sm font-medium text-zinc-200 border border-zinc-700 transition-colors
+           hover:bg-zinc-700 hover:border-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-500/40
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-3.5 py-2
+           text-sm font-medium text-zinc-400 transition-colors
+           hover:bg-zinc-800 hover:text-zinc-200 focus:outline-none
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-red-600/10 px-3.5 py-2
+           text-sm font-medium text-red-400 border border-red-500/20 transition-colors
+           hover:bg-red-600/20 focus:outline-none focus:ring-2 focus:ring-red-500/40
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center rounded-md p-2
+           text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input-field {
+    @apply w-full rounded-md bg-surface-3 border border-zinc-700 px-3 py-2
+           text-sm text-zinc-100 placeholder:text-zinc-500 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-600;
+  }
+
+  .textarea-field {
+    @apply w-full rounded-md bg-surface-3 border border-zinc-700 px-3 py-2
+           text-sm text-zinc-100 placeholder:text-zinc-500 transition-colors resize-none
+           focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-600;
+  }
+
+  .select-field {
+    @apply w-full rounded-md bg-surface-3 border border-zinc-700 px-3 py-2
+           text-sm text-zinc-100 transition-colors appearance-none
+           focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-600;
+  }
+
+  .card {
+    @apply rounded-lg bg-surface-2 border border-zinc-800 p-4;
+  }
+
+  .card-hover {
+    @apply card transition-colors hover:border-zinc-700 cursor-pointer;
+  }
+
+  .page-title {
+    @apply text-xl font-semibold text-zinc-100 flex items-center gap-2.5;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold text-zinc-300;
+  }
+
+  .label-text {
+    @apply block text-sm font-medium text-zinc-400 mb-1;
+  }
+
+  .muted {
+    @apply text-xs text-zinc-500;
+  }
+}
+
+/*
+ * Tessa AI chat reply styles
+ * Copied directly from tessa/public/css/app.css lines 2489–2606
+ * OUTSIDE @layer so they override Tailwind's preflight border resets
+ */
+.tessa-reply {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+.tessa-reply p {
+  margin: 0 0 12px;
+}
+.tessa-reply p:last-child {
+  margin-bottom: 0;
+}
+.tessa-reply ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+.tessa-reply li {
+  margin-bottom: 4px;
+  color: #cbd5e1;
+}
+.tessa-reply li:last-child {
+  margin-bottom: 0;
+}
+.tessa-reply strong {
+  font-weight: 600;
+  color: #f8fafc;
+}
+.tessa-reply em {
+  font-style: italic;
+}
+.tessa-reply code {
+  font-size: 13px;
+  padding: 2px 6px;
+  background: #27272a;
+  border-radius: 4px;
+  color: #93c5fd;
+}
+.tessa-reply h3 {
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.tessa-reply h3:first-child {
+  margin-top: 0;
+}
+.tessa-reply h4 {
+  margin: 10px 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.tessa-reply h4:first-child {
+  margin-top: 0;
+}
+.tessa-reply hr {
+  margin: 12px 0;
+  border: none;
+  border-top: 1px solid #333;
+}
+.tessa-reply a {
+  color: #60a5fa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.tessa-reply a:hover {
+  color: #93c5fd;
+}
+
+/* Tessa table — matching .tessa-msg-content table from app.css lines 2526–2551 */
+.tessa-table {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+.tessa-table table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+.tessa-table th,
+.tessa-table td {
+  padding: 8px 12px !important;
+  border: 1px solid #333 !important;
+  border-width: 1px !important;
+  text-align: left;
+}
+.tessa-table thead th {
+  background: #222;
+  color: #f8fafc;
+  font-weight: 600;
+}
+.tessa-table tbody tr:nth-child(odd) {
+  background: #1a1a1a;
+}
+.tessa-table tbody tr:nth-child(even) {
+  background: transparent;
+}
+
+/* Tables directly inside .tessa-reply (Guide, etc.) */
+.tessa-reply table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+  margin: 12px 0;
+}
+.tessa-reply table th,
+.tessa-reply table td {
+  padding: 8px 12px !important;
+  border: 1px solid #333 !important;
+  border-width: 1px !important;
+  text-align: left;
+}
+.tessa-reply table thead th {
+  background: #222;
+  color: #f8fafc;
+  font-weight: 600;
+}
+.tessa-reply table tbody tr:nth-child(odd) {
+  background: #1a1a1a;
+}
+.tessa-reply table tbody tr:nth-child(even) {
+  background: transparent;
+}
+
+/* ── Voice Assistant Animations ── */
+
+/* Idle state - subtle breathing glow */
+.voice-orb-idle {
+  animation: orbIdle 3s ease-in-out infinite;
+}
+
+@keyframes orbIdle {
+  0%, 100% { box-shadow: 0 4px 20px -4px currentColor; }
+  50% { box-shadow: 0 4px 30px -2px currentColor; }
+}
+
+/* Listening state - gentle pulse */
+.voice-orb-listening {
+  animation: orbListening 1.8s ease-in-out infinite;
+}
+
+@keyframes orbListening {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+/* Expanding rings for listening */
+.voice-ring-expand-1 {
+  animation: ringExpand 2.4s ease-out infinite;
+}
+
+.voice-ring-expand-2 {
+  animation: ringExpand 2.4s ease-out infinite 0.8s;
+}
+
+.voice-ring-expand-3 {
+  animation: ringExpand 2.4s ease-out infinite 1.6s;
+}
+
+@keyframes ringExpand {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Soft glow pulse behind orb */
+.voice-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.15; }
+}
+
+/* Speaking state - rhythmic pulse */
+.voice-orb-speaking {
+  animation: orbSpeaking 0.8s ease-in-out infinite;
+}
+
+@keyframes orbSpeaking {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.voice-speak-ring {
+  animation: speakRing 1.2s ease-out infinite;
+}
+
+@keyframes speakRing {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* Error shake */
+.voice-orb-shake {
+  animation: orbShake 0.5s ease-in-out;
+}
+
+@keyframes orbShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Wake word indicator - subtle pulse to show "Hey Tessa" is listening */
+.voice-wake-pulse {
+  animation: wakePulse 3s ease-in-out infinite;
+}
+
+@keyframes wakePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}

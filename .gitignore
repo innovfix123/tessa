@@ -1,0 +1,49 @@
+.env
+.env.backup
+.env.production
+/vendor/
+/node_modules/
+/public/build/
+/public/hot
+/public/storage
+/storage/*.key
+*.log
+.DS_Store
+
+# === Local-only / sensitive — never pushed to GitHub ===
+# AI / IDE working dirs
+.claude/
+.cursor/
+
+# Loose binaries, media, data dumps & scratch notes dropped at repo root
+/*.pdf
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.mp4
+/*.mp3
+/*.zip
+/*.xlsx
+/*.csv
+
+# Database backups
+/storage/backups/
+
+# Employee photos (PII), media & build artifacts under public/
+/public/img/employees/*.jpg
+/public/img/employees/*.jpeg
+/public/img/employees/*.png
+/public/video/
+/public/downloads/
+
+# Internal HR / org / payroll notes (sensitive)
+/*-team-hr-review-*.md
+/ceo-org-problems-*.md
+/Offer-Letter-Salary-Structure-*.md
+/Salary-Payroll-Formulas-*.md
+/cat_signin_plan.md
+
+# Local-only env backups & test cache (never pushed)
+.env.bak*
+.phpunit.cache/

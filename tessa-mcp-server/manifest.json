@@ -1,0 +1,70 @@
+{
+  "manifest_version": "0.3",
+  "name": "tessa",
+  "display_name": "Tessa",
+  "version": "0.2.0",
+  "description": "Talk to the InnovFix Tessa portal from Claude — tasks, meetings, notes, KRAs, agile, HR, finance.",
+  "long_description": "Adds Tessa as a connector inside Claude Desktop. Lets Claude list and act on your Tessa tasks, meetings, action items, dashboard notes, KRAs, daily reports, employees, leave requests, agile squads, and sprint boards. Authenticates with a personal MCP token issued by a Tessa admin (php artisan mcp:mint).",
+  "author": {
+    "name": "InnovFix",
+    "url": "https://tessa.innovfix.ai"
+  },
+  "homepage": "https://tessa.innovfix.ai/settings/connect-claude",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {
+        "TESSA_BASE_URL": "${user_config.base_url}",
+        "TESSA_API_TOKEN": "${user_config.api_token}"
+      }
+    }
+  },
+  "user_config": {
+    "api_token": {
+      "type": "string",
+      "title": "Tessa MCP token",
+      "description": "Get this from a Tessa admin (Slack-DM Fida or JP) — they'll run `php artisan mcp:mint <your-email> \"<device-name>\"` and send back the token. Keep it secret; revoke any time.",
+      "sensitive": true,
+      "required": true
+    },
+    "base_url": {
+      "type": "string",
+      "title": "Tessa base URL",
+      "description": "The Tessa portal URL. Most users should leave this as-is.",
+      "default": "https://tessa.innovfix.ai",
+      "required": true
+    }
+  },
+  "tools": [
+    { "name": "whoami",                "description": "Return the signed-in Tessa user (id, name, email, role)." },
+    { "name": "list_tasks",            "description": "List Tessa tasks; filter by status/assignee/squad/due window." },
+    { "name": "get_task",              "description": "Fetch a single task by id." },
+    { "name": "create_task",           "description": "Create a Tessa task assigned to a teammate." },
+    { "name": "update_task",           "description": "Update an existing Tessa task (status, title, deadline, etc.)." },
+    { "name": "list_meetings",         "description": "List meetings (filter by date range)." },
+    { "name": "list_action_items",     "description": "List meeting action items." },
+    { "name": "save_meeting_note",     "description": "Save (create or replace) a meeting's note for a given week." },
+    { "name": "list_dashboard_notes",  "description": "List your portal dashboard notes." },
+    { "name": "create_dashboard_note", "description": "Create a dashboard note (sticky) on your portal." },
+    { "name": "list_my_kras",          "description": "Fetch your KRAs / scorecard." },
+    { "name": "list_daily_reports",    "description": "List daily reports for a user (defaults to you)." },
+    { "name": "update_daily_report",   "description": "Set a single daily-report field for a date (e.g. log a KPI value)." },
+    { "name": "list_employees",        "description": "List employees in Tessa." },
+    { "name": "list_leave_requests",   "description": "List leave requests." },
+    { "name": "list_squads",           "description": "List agile squads." },
+    { "name": "get_sprint_board",      "description": "Fetch a sprint's kanban board." },
+    { "name": "tessa_request",         "description": "Generic GET/POST/PUT/PATCH/DELETE escape hatch for any Tessa API." }
+  ],
+  "keywords": ["tessa", "innovfix", "tasks", "agile", "meetings", "kra"],
+  "license": "UNLICENSED",
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=20.0.0"
+    }
+  }
+}

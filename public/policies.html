@@ -1,0 +1,2681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Innovfix Policies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #000;
+    --bg-1: #0a0a0a;
+    --bg-2: #111;
+    --bg-3: #161616;
+    --text: #fff;
+    --text-70: rgba(255,255,255,0.7);
+    --text-50: rgba(255,255,255,0.5);
+    --text-30: rgba(255,255,255,0.3);
+    --text-15: rgba(255,255,255,0.15);
+    --line: rgba(255,255,255,0.08);
+    --line-2: rgba(255,255,255,0.15);
+    --accent: #fff;
+    --sidebar-w: 280px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    letter-spacing: -0.005em;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--bg-1);
+    border-right: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .sidebar-logo .company {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 4px;
+  }
+  .sidebar-logo .title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .sidebar-nav {
+    padding: 20px 12px;
+    flex: 1;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    padding: 0 12px;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+  .nav-section-label:first-child { margin-top: 0; }
+
+  .nav-item {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-50);
+    font-size: 12.5px;
+    font-weight: 450;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.45;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  .nav-item:hover {
+    background: var(--bg-2);
+    color: var(--text-70);
+  }
+  .nav-item.active {
+    background: var(--bg-2);
+    color: var(--text);
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+    color: var(--text-30);
+    line-height: 1.5;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    min-width: 0;
+    padding: 64px 64px 120px;
+    max-width: 860px;
+  }
+
+  /* ── POLICY SECTION ── */
+  .policy-section {
+    display: none;
+  }
+  .policy-section.visible {
+    display: block;
+  }
+
+  /* ── POLICY HEADER ── */
+  .policy-header {
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .policy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 20px;
+  }
+  .policy-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-30);
+  }
+  .policy-header h1 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1.2px;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .policy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 20px;
+  }
+  .meta-item {
+    font-size: 12px;
+  }
+  .meta-label {
+    color: var(--text-30);
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+  }
+  .meta-value {
+    color: var(--text-70);
+    font-weight: 500;
+  }
+
+  /* ── POLICY BODY ── */
+  .policy-body {
+    counter-reset: section;
+  }
+
+  .policy-block {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .policy-block:last-child {
+    border-bottom: none;
+  }
+
+  .policy-block h2 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 16px;
+  }
+
+  .policy-block p {
+    font-size: 14.5px;
+    color: var(--text-70);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+  .policy-block p:last-child { margin-bottom: 0; }
+
+  .policy-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .policy-block ul li {
+    font-size: 14.5px;
+    color: var(--text-70);
+    line-height: 1.75;
+    padding: 6px 0 6px 20px;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+  }
+  .policy-block ul li:last-child { border-bottom: none; }
+  .policy-block ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--text-30);
+    font-size: 12px;
+  }
+
+  /* Leave types table */
+  .leave-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 13.5px;
+  }
+  .leave-table thead th {
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-30);
+    font-weight: 600;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .leave-table tbody tr {
+    border-bottom: 1px solid var(--line);
+    transition: background 0.1s;
+  }
+  .leave-table tbody tr:hover {
+    background: var(--bg-2);
+  }
+  .leave-table tbody tr:last-child {
+    border-bottom: none;
+  }
+  .leave-table td {
+    padding: 14px 16px;
+    vertical-align: top;
+    color: var(--text-70);
+    line-height: 1.6;
+  }
+  .leave-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .badge-auto {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .badge-approval {
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Responsibility blocks */
+  .resp-group {
+    margin-bottom: 24px;
+  }
+  .resp-group:last-child { margin-bottom: 0; }
+  .resp-group-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-50);
+    margin-bottom: 12px;
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    border-left: 3px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-size: 13.5px;
+    color: var(--text-70);
+    line-height: 1.65;
+    margin-top: 16px;
+  }
+  .callout strong {
+    color: var(--text);
+  }
+
+  /* ── LANDING (index view) ── */
+  #index-view {
+    display: block;
+  }
+  #index-view.hidden {
+    display: none;
+  }
+  .index-header {
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .index-header .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 16px;
+  }
+  .index-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .index-header p {
+    font-size: 14px;
+    color: var(--text-50);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+  .policy-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .policy-card {
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-decoration: none;
+  }
+  .policy-card:hover {
+    border-color: var(--line-2);
+    background: var(--bg-2);
+  }
+  .card-number {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 12.5px;
+    color: var(--text-50);
+    line-height: 1.6;
+  }
+  .card-meta {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 16px;
+  }
+  .card-meta span {
+    font-size: 11px;
+    color: var(--text-30);
+  }
+  .card-meta span strong {
+    color: var(--text-50);
+  }
+
+  /* ── MOBILE TOP BAR ── */
+  .mobile-topbar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--line);
+    padding: 0 16px;
+    height: 52px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .mobile-topbar-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-70);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+  .mobile-topbar-logo {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    white-space: nowrap;
+  }
+  .mobile-menu-btn {
+    display: none;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    color: var(--text-70);
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .mobile-menu-btn:hover { background: var(--bg-3); }
+
+  /* ── BACKDROP ── */
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 49;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    pointer-events: none;
+  }
+  .sidebar-backdrop.visible {
+    display: block;
+    pointer-events: auto;
+  }
+
+  /* ── TABLE RESPONSIVE ── */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 8px;
+  }
+  .table-wrap .leave-table {
+    min-width: 480px;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .policy-cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    /* Show mobile topbar */
+    .mobile-topbar { display: flex; }
+    .mobile-menu-btn { display: flex; }
+
+    /* Sidebar becomes drawer */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      height: 100vh;
+      z-index: 50;
+      width: min(var(--sidebar-w), 85vw);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    }
+    .sidebar.open { left: 0; }
+
+    /* Main takes full width */
+    .main {
+      padding: 24px 20px 80px;
+      max-width: 100%;
+    }
+
+    /* Typography */
+    .policy-header h1 { font-size: 24px; letter-spacing: -0.8px; }
+    .index-header h1 { font-size: 26px; letter-spacing: -1px; }
+    .policy-block p,
+    .policy-block ul li { font-size: 14px; }
+
+    /* Cards */
+    .policy-cards { grid-template-columns: 1fr; }
+
+    /* Meta wrap */
+    .policy-meta { gap: 14px; }
+
+    /* Tables */
+    .leave-table { min-width: 480px; }
+    .policy-block .leave-table,
+    .policy-block table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Resp groups */
+    .resp-group { margin-bottom: 20px; }
+  }
+
+  @media (max-width: 420px) {
+    .main { padding: 20px 16px 80px; }
+    .policy-header h1 { font-size: 22px; }
+    .index-header h1 { font-size: 22px; }
+    .callout { padding: 12px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Mobile top bar -->
+<div class="mobile-topbar" id="mobile-topbar">
+  <span class="mobile-topbar-logo">Innovfix</span>
+  <span class="mobile-topbar-title" id="mobile-topbar-title">Company Policies</span>
+  <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+</div>
+
+<!-- Sidebar backdrop -->
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="company">Innovfix</div>
+      <div class="title">Company Policies</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a class="nav-item active" href="#" onclick="showIndex(event)">All Policies</a>
+
+      <div class="nav-section-label">HR Policies</div>
+      <a class="nav-item" href="#attendance" onclick="showPolicy(event,'attendance')">Attendance &amp; Working Hours</a>
+      <a class="nav-item" href="#performance" onclick="showPolicy(event,'performance')">Performance Management</a>
+      <a class="nav-item" href="#probation" onclick="showPolicy(event,'probation')">Probation &amp; Exit</a>
+      <a class="nav-item" href="#posh" onclick="showPolicy(event,'posh')">POSH</a>
+      <a class="nav-item" href="#code-of-conduct" onclick="showPolicy(event,'code-of-conduct')">Code of Conduct</a>
+      <a class="nav-item" href="#resignation" onclick="showPolicy(event,'resignation')">Resignation &amp; F&amp;F</a>
+      <a class="nav-item" href="#grievance" onclick="showPolicy(event,'grievance')">Grievance Redressal</a>
+      <a class="nav-item" href="#travel" onclick="showPolicy(event,'travel')">Travel &amp; Expense</a>
+      <a class="nav-item" href="#it-security" onclick="showPolicy(event,'it-security')">IT &amp; Data Security</a>
+      <a class="nav-item" href="#moonlighting" onclick="showPolicy(event,'moonlighting')">Moonlighting &amp; Conflict of Interest</a>
+      <a class="nav-item" href="#recruitment" onclick="showPolicy(event,'recruitment')">Recruitment &amp; Onboarding</a>
+      <a class="nav-item" href="#social-media" onclick="showPolicy(event,'social-media')">Social Media</a>
+      <a class="nav-item" href="#training" onclick="showPolicy(event,'training')">Training &amp; Development</a>
+      <a class="nav-item" href="#maternity" onclick="showPolicy(event,'maternity')">Maternity &amp; Paternity Leave</a>
+      <a class="nav-item" href="#payroll" onclick="showPolicy(event,'payroll')">Salary &amp; Payroll</a>
+      <a class="nav-item" href="#ip" onclick="showPolicy(event,'ip')">Intellectual Property</a>
+      <a class="nav-item" href="#assets" onclick="showPolicy(event,'assets')">Asset Management</a>
+      <a class="nav-item" href="#whistleblower" onclick="showPolicy(event,'whistleblower')">Whistleblower</a>
+      <a class="nav-item" href="#equal-opportunity" onclick="showPolicy(event,'equal-opportunity')">Equal Opportunity</a>
+      <a class="nav-item" href="#expense" onclick="showPolicy(event,'expense')">Business Expense</a>
+      <a class="nav-item" href="#wfh" onclick="showPolicy(event,'wfh')">Work From Home</a>
+      <!-- ADD FUTURE POLICIES BELOW THIS LINE -->
+
+      <!-- <div class="nav-section-label">IT Policies</div> -->
+      <!-- <a class="nav-item" href="#data-security" onclick="showPolicy(event,'data-security')">Data Security</a> -->
+    </nav>
+
+    <div class="sidebar-footer">
+      Innovfix Private Limited<br/>
+      Internal use only · v1.0
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main">
+
+    <!-- INDEX VIEW -->
+    <div id="index-view">
+      <div class="index-header">
+        <div class="eyebrow">Innovfix Private Limited</div>
+        <h1>Company Policies</h1>
+        <p>All company policies are maintained here. Select a policy to read it in full. Policies are owned by HR and reviewed annually.</p>
+      </div>
+
+      <div class="policy-cards">
+        <a class="policy-card" href="#attendance" onclick="showPolicy(event,'attendance')">
+          <div class="card-number">HR · 01</div>
+          <div class="card-title">Attendance &amp; Working Hours</div>
+          <div class="card-desc">Flexible attendance, leave types, Tessa self-reporting, weekend work, and probation rules.</div>
+          <div class="card-meta">
+            <span>Effective <strong>Jul 17, 2026</strong></span>
+            <span>Version <strong>1.0</strong></span>
+          </div>
+        </a>
+        <a class="policy-card" href="#performance" onclick="showPolicy(event,'performance')">
+          <div class="card-number">HR · 02</div>
+          <div class="card-title">Performance Management</div>
+          <div class="card-desc">KPI-based reviews, rating process, increments, promotions, weekly feedback, and Employee of the Quarter.</div>
+          <div class="card-meta">
+            <span>Effective <strong>Jul 17, 2026</strong></span>
+            <span>Version <strong>1.0</strong></span>
+          </div>
+        </a>
+        <a class="policy-card" href="#probation" onclick="showPolicy(event,'probation')">
+          <div class="card-number">HR · 03</div>
+          <div class="card-title">Probation &amp; Exit</div>
+          <div class="card-desc">8-step probation review process covering early identification, formal review, termination, notice period, F&amp;F settlement, and exit formalities.</div>
+          <div class="card-meta">
+            <span>Effective <strong>Jul 17, 2026</strong></span>
+            <span>Version <strong>1.0</strong></span>
+          </div>
+        </a>
+        <a class="policy-card" href="#posh" onclick="showPolicy(event,'posh')">
+          <div class="card-number">HR · 04</div>
+          <div class="card-title">POSH</div>
+          <div class="card-desc">Prevention of Sexual Harassment at Workplace — legally mandatory under the POSH Act 2013. ICC, complaint process, and confidentiality.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#code-of-conduct" onclick="showPolicy(event,'code-of-conduct')">
+          <div class="card-number">HR · 05</div>
+          <div class="card-title">Code of Conduct</div>
+          <div class="card-desc">Professional behaviour, integrity, confidentiality, company resource usage, and disciplinary standards for all employees.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#resignation" onclick="showPolicy(event,'resignation')">
+          <div class="card-number">HR · 06</div>
+          <div class="card-title">Resignation &amp; F&amp;F</div>
+          <div class="card-desc">Resignation process for confirmed employees — notice period, handover, exit interview, and full &amp; final settlement.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#grievance" onclick="showPolicy(event,'grievance')">
+          <div class="card-number">HR · 07</div>
+          <div class="card-title">Grievance Redressal</div>
+          <div class="card-desc">Formal process for employees to raise workplace concerns — escalation path, timelines, confidentiality, and no-retaliation guarantee.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#travel" onclick="showPolicy(event,'travel')">
+          <div class="card-number">HR · 08</div>
+          <div class="card-title">Travel &amp; Expense</div>
+          <div class="card-desc">₹3,000 monthly travel allowance for full-time employees. Bill reimbursement via Tessa.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#it-security" onclick="showPolicy(event,'it-security')">
+          <div class="card-number">HR · 09</div>
+          <div class="card-title">IT &amp; Data Security</div>
+          <div class="card-desc">Responsible use of company devices, data handling, password standards, and software guidelines.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#moonlighting" onclick="showPolicy(event,'moonlighting')">
+          <div class="card-number">HR · 10</div>
+          <div class="card-title">Moonlighting &amp; Conflict of Interest</div>
+          <div class="card-desc">Rules on side work, freelancing, competing companies, and maintaining integrity during working hours.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#recruitment" onclick="showPolicy(event,'recruitment')">
+          <div class="card-number">HR · 11</div>
+          <div class="card-title">Recruitment &amp; Onboarding</div>
+          <div class="card-desc">How hiring is initiated, managed on Tessa, and how new employees are onboarded from offer to first week.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#social-media" onclick="showPolicy(event,'social-media')">
+          <div class="card-number">HR · 12</div>
+          <div class="card-title">Social Media</div>
+          <div class="card-desc">What employees may and may not post publicly — covering company reputation, confidential information, and brand integrity.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#training" onclick="showPolicy(event,'training')">
+          <div class="card-number">HR · 13</div>
+          <div class="card-title">Training &amp; Development</div>
+          <div class="card-desc">How employees request training, manager approval process, and guidelines for company-sponsored learning.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#maternity" onclick="showPolicy(event,'maternity')">
+          <div class="card-number">HR · 14</div>
+          <div class="card-title">Maternity &amp; Paternity Leave</div>
+          <div class="card-desc">26 weeks paid maternity leave (legal mandate), 10 days paternity leave, documentation requirements, and return-to-work process.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#payroll" onclick="showPolicy(event,'payroll')">
+          <div class="card-number">HR · 15</div>
+          <div class="card-title">Salary &amp; Payroll</div>
+          <div class="card-desc">Salary credited 30th/31st every month. PF, ESI, TDS deductions, automated payslip on Tessa, and LWP calculation.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#ip" onclick="showPolicy(event,'ip')">
+          <div class="card-number">HR · 16</div>
+          <div class="card-title">Intellectual Property</div>
+          <div class="card-desc">All work created during employment — code, design, content, ideas — belongs to Innovfix. Covers usage rights, portfolio, and post-employment obligations.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#assets" onclick="showPolicy(event,'assets')">
+          <div class="card-number">HR · 17</div>
+          <div class="card-title">Asset Management</div>
+          <div class="card-desc">IT department issues and tracks all company assets. Employee responsibilities for safekeeping, reporting damage, and returning assets on exit.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#whistleblower" onclick="showPolicy(event,'whistleblower')">
+          <div class="card-number">HR · 18</div>
+          <div class="card-title">Whistleblower</div>
+          <div class="card-desc">Confidential channel to report fraud, corruption, or unethical conduct. Full non-retaliation protection for employees who report in good faith.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#equal-opportunity" onclick="showPolicy(event,'equal-opportunity')">
+          <div class="card-number">HR · 19</div>
+          <div class="card-title">Equal Opportunity</div>
+          <div class="card-desc">Hiring, promotion, and pay at Innovfix are purely merit-based — free from bias of gender, religion, caste, disability, or background.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#expense" onclick="showPolicy(event,'expense')">
+          <div class="card-number">HR · 20</div>
+          <div class="card-title">Business Expense</div>
+          <div class="card-desc">Employees can claim reimbursement for any legitimate work-related expense by submitting bills on Tessa with manager approval.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <a class="policy-card" href="#wfh" onclick="showPolicy(event,'wfh')">
+          <div class="card-number">HR · 21</div>
+          <div class="card-title">Work From Home</div>
+          <div class="card-desc">WFH eligibility and frequency are entirely at the manager's discretion based on role requirements and team needs.</div>
+          <div class="card-meta"><span>Effective <strong>Jul 17, 2026</strong></span><span>Version <strong>1.0</strong></span></div>
+        </a>
+        <!-- ADD FUTURE POLICY CARDS HERE -->
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: ATTENDANCE & WORKING HOURS         -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="attendance">
+
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 01</div>
+        <h1>Attendance &amp; Working Hours</h1>
+        <div class="policy-meta">
+          <div class="meta-item">
+            <div class="meta-label">Effective Date</div>
+            <div class="meta-value">July 17, 2026</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Version</div>
+            <div class="meta-value">1.0</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Policy Owner</div>
+            <div class="meta-value">HR</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Applies To</div>
+            <div class="meta-value">All Employees</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="policy-body">
+
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines Innovfix Private Limited's approach to attendance and working hours. We operate on a foundation of trust, ownership, and flexibility — believing that great work is about output and accountability, not clock-watching.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>2. Standard Working Hours</h2>
+          <p>The reference working hours at Innovfix are <strong>10:00 AM to 6:00 PM, Monday to Friday</strong>. Saturday and Sunday are official off days for all employees.</p>
+          <p>These hours serve as a guideline for team collaboration and availability — not as a rigid login/logout requirement. Employees are expected to be reachable and productive during core business hours, ensuring smooth communication with teammates and stakeholders.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>3. Flexible Attendance</h2>
+          <p>There is no mandated login time. Employees are trusted to manage their schedules responsibly, provided they:</p>
+          <ul>
+            <li>Complete their assigned work and meet deadlines</li>
+            <li>Are available for team meetings and collaboration windows</li>
+            <li>Communicate proactively with their manager if their availability differs on a given day</li>
+          </ul>
+        </div>
+
+        <div class="policy-block">
+          <h2>4. Work Model</h2>
+          <p>Work arrangements at Innovfix are <strong>role-dependent</strong>. The applicable model (in-office, hybrid, or remote) for each role will be communicated at the time of joining or as updated by the respective manager and HR. Employees are expected to adhere to the arrangement applicable to their role.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>5. Attendance Tracking</h2>
+          <p>Employees are responsible for <strong>self-reporting their attendance on Tessa</strong> on a daily basis. This includes marking presence, work-from-home days, or leave. Accurate and timely self-reporting is a professional expectation at Innovfix.</p>
+          <p>If an employee needs to step out or leave early for <strong>1–2 hours</strong> during the working day, they must apply for a <strong>Permission</strong> on Tessa before stepping out or, at the latest, by end of day.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>6. Leave &amp; Attendance Options on Tessa</h2>
+          <p>All leave and attendance updates must be logged on <strong>Tessa</strong>. The portal covers the following categories:</p>
+
+          <div class="table-wrap"><table class="leave-table">
+            <thead>
+              <tr>
+                <th>Leave Type</th>
+                <th>Description</th>
+                <th>Approval</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Casual Leave</td>
+                <td>For planned personal needs. No pay cut applies.</td>
+                <td><span class="badge badge-approval">Manager Approval</span></td>
+              </tr>
+              <tr>
+                <td>Sick Leave</td>
+                <td>For health-related absences.</td>
+                <td><span class="badge badge-auto">Auto-Approved</span></td>
+              </tr>
+              <tr>
+                <td>Emergency Leave</td>
+                <td>For situations requiring immediate unplanned time off, under sick or casual circumstances.</td>
+                <td><span class="badge badge-auto">Auto-Approved</span></td>
+              </tr>
+              <tr>
+                <td>Menstrual Leave</td>
+                <td>Available to employees as needed, no questions asked.</td>
+                <td><span class="badge badge-auto">Auto-Approved</span></td>
+              </tr>
+              <tr>
+                <td>Work From Home</td>
+                <td>For days where an employee works remotely.</td>
+                <td><span class="badge badge-approval">Manager Approval</span></td>
+              </tr>
+              <tr>
+                <td>Permission</td>
+                <td>For short absences of 1–2 hours during the working day.</td>
+                <td><span class="badge badge-approval">Manager Approval</span></td>
+              </tr>
+              <tr>
+                <td>Compensatory Off</td>
+                <td>For employees who work on a weekend at their manager's direction.</td>
+                <td><span class="badge badge-approval">Manager Approval</span></td>
+              </tr>
+            </tbody>
+          </table></div>
+
+          <div class="callout">
+            The company's <strong>public holiday calendar</strong> is available on Tessa. Public holidays are separate from leave entitlements. Whatever the nature of the absence or adjustment, <strong>Tessa is the single source of truth</strong>. Employees are expected to keep their records updated at all times.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>7. Weekend Work</h2>
+          <p>Saturday and Sunday are official off days at Innovfix. In exceptional cases, if an employee is required to work over the weekend, this must be at the explicit direction of their manager. Such employees are entitled to either a <strong>Compensatory Off</strong> or <strong>additional incentive compensation</strong>, as determined by the manager.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>8. Unplanned Absences</h2>
+          <p>If an employee is unable to come in or work on a given day without prior planning, they must inform their <strong>direct manager</strong> on the same day and log the absence on <strong>Tessa</strong> at the earliest opportunity. Prompt communication is expected as a matter of professional courtesy.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>9. Sick &amp; Emergency Leave</h2>
+          <p>Innovfix offers <strong>unlimited sick and emergency leave</strong> with no loss of pay. If an employee is unwell or facing an emergency, they are required to <strong>mark the appropriate leave on Tessa</strong> — it will be auto-approved instantly.</p>
+          <p>For absences extending beyond <strong>3 consecutive days</strong>, employees may be required to submit a medical certificate upon return.</p>
+          <p>Regardless of the leave, employees are expected to take full accountability for their work. They must ensure that pending tasks are either completed or handed over to a colleague who can cover, so that no work is left unattended or delayed due to their absence.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>10. Probation Period</h2>
+          <p>Employees serving their probation period are <strong>not entitled to any leave</strong>. Any absence during probation must be communicated to the direct manager and HR immediately, and will be treated as leave without pay unless otherwise decided by management.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>11. Responsibilities</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">Employees</div>
+            <ul>
+              <li>Self-report attendance honestly and consistently on Tessa</li>
+              <li>Apply for the correct leave type on Tessa in a timely manner</li>
+              <li>Ensure their work is covered or completed during any absence</li>
+              <li>Deliver on their commitments regardless of when or where they work</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Managers</div>
+            <ul>
+              <li>Review and act on leave requests on Tessa promptly</li>
+              <li>Ensure their team's attendance records are accurate</li>
+              <li>Flag patterns of concern to HR without delay</li>
+              <li>Model the behaviour expected of their teams</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <strong>Non-Compliance:</strong> Consistent failure to self-report attendance or log leave accurately on Tessa will be flagged and may be treated as a disciplinary matter.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>12. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: ATTENDANCE & WORKING HOURS -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: PERFORMANCE MANAGEMENT             -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="performance">
+
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 02</div>
+        <h1>Performance Management</h1>
+        <div class="policy-meta">
+          <div class="meta-item">
+            <div class="meta-label">Effective Date</div>
+            <div class="meta-value">July 17, 2026</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Version</div>
+            <div class="meta-value">1.0</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Policy Owner</div>
+            <div class="meta-value">HR</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Applies To</div>
+            <div class="meta-value">All Employees</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="policy-body">
+
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy establishes a clear and structured framework for evaluating, recognising, and improving employee performance at Innovfix Private Limited. It is designed to foster a culture of accountability, continuous growth, and merit-based reward — ensuring that every individual's contribution is assessed fairly and transparently.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>2. Scope</h2>
+          <p>This policy applies to all full-time employees of Innovfix Private Limited. Probationary employees, contract staff, and interns may be subject to a modified review process as communicated by HR at the time of joining.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>3. Performance Review Cycle</h2>
+          <p>Innovfix follows a <strong>performance review cycle that is individual to each employee</strong> based on their date of joining.</p>
+          <ul>
+            <li><strong>Mid-Year Review (6 Months):</strong> Conducted exclusively for employees who have demonstrated exceptional performance during their first six months. The decision to conduct a mid-year review is at the discretion of Senior Management and higher authorities.</li>
+            <li><strong>Annual Review (12 Months):</strong> The standard review for all employees, conducted at the completion of 12 months from their date of joining. Subsequent reviews continue every 12 months thereafter.</li>
+          </ul>
+          <div class="callout">
+            HR will track and communicate each employee's review schedule individually and ensure both the employee and their manager are notified well in advance.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>4. Goal Setting</h2>
+          <p>At Innovfix, goal setting is entirely <strong>KPI-based.</strong> Each employee is assigned a defined set of Key Performance Indicators (KPIs) relevant to their role and department at the beginning of every review cycle.</p>
+          <p>KPIs are set by the <strong>reporting manager in consultation with the department head</strong> and communicated to the employee within the first two weeks of each cycle. These KPIs serve as the primary benchmark against which performance will be measured throughout the cycle.</p>
+          <p>Employees are expected to:</p>
+          <ul>
+            <li>Understand their KPIs clearly before the cycle begins</li>
+            <li>Track and update their KPI progress regularly</li>
+            <li>Raise any concerns regarding their KPIs with their manager at the earliest</li>
+          </ul>
+          <div class="callout">
+            Any revision to KPIs mid-cycle must be approved by the department head and communicated to the employee formally.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>5. Performance Evaluation</h2>
+          <p>Performance is evaluated entirely on the basis of <strong>KPI achievement, overall contribution, and conduct</strong> observed during the review cycle. The evaluation is carried out by the reporting manager, reviewed by the department head, and finalised by Senior Management and higher authorities.</p>
+          <p>For employees in lead or managerial positions, the performance of their team and their effectiveness as a people manager is also taken into consideration during the evaluation.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>6. Performance Rating</h2>
+          <p>The performance of every employee is assessed and rated by their reporting manager, reviewed by the department head, and <strong>finalised by Senior Management and higher authorities.</strong></p>
+          <p>Ratings are based on overall KPI achievement, contribution, and conduct observed during the cycle. No rating is communicated to the employee until it has been formally approved by the higher authorities.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>7. Continuous Feedback</h2>
+          <p>Performance management at Innovfix is not limited to formal review periods. Managers are expected to conduct <strong>weekly reviews</strong> with each team member to assess progress against KPIs, provide feedback, and address any blockers or concerns.</p>
+          <p>As part of the weekly review, managers will assign a <strong>weekly rating</strong> to each employee based on their performance and output during that week. These weekly ratings are tracked and taken into consideration during the formal mid-year and annual review cycles.</p>
+          <p>Employees are expected to come prepared for their weekly reviews, with a clear update on their KPI progress, tasks completed, and any challenges faced during the week.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>8. Appraisal Conversation</h2>
+          <p>At the conclusion of each review cycle, every employee will have a formal <strong>one-on-one appraisal conversation</strong> with their manager. This is a structured two-way dialogue covering:</p>
+          <ul>
+            <li>Performance feedback based on KPI achievement</li>
+            <li>Key achievements and contributions during the cycle</li>
+            <li>Areas requiring improvement and development</li>
+            <li>KPI setting for the upcoming cycle</li>
+            <li>Career growth discussions and aspirations</li>
+          </ul>
+          <div class="callout">
+            Appraisal conversations must be conducted respectfully, constructively, and privately. HR may be present if required.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>9. Increment &amp; Promotion Policy</h2>
+          <p>Salary increments and promotions at Innovfix are <strong>entirely performance-based.</strong> There are no automatic or across-the-board increments or promotions. All decisions are made exclusively by <strong>Senior Management and higher authorities</strong> based on the employee's performance rating, overall KPI achievement, contribution, and conduct.</p>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Increment + Promotion</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">For employees who demonstrate the required capability and readiness — both an increment and a promotion are awarded simultaneously. Promotion is subject to demonstrated readiness, a recommendation from the reporting manager and department head, and final approval from Senior Management.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Increment Only</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">For employees who are performing but not yet ready for the next level — an increment alone is awarded based on their performance during the cycle.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Exceptional Performers (6-Month Review)</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">Employees who qualify for a mid-year review based on exceptional performance may be considered for an early increment or promotion at the discretion of Senior Management and higher authorities.</p>
+          </div>
+          <div class="callout" style="margin-top:20px;">
+            All decisions are communicated to the employee by HR at the completion of their individual review cycle and are <strong>final.</strong>
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>10. Rewards &amp; Recognition</h2>
+          <p>Innovfix believes in acknowledging exceptional work beyond the formal increment cycle.</p>
+          <div class="resp-group" style="margin-top:16px;">
+            <div class="resp-group-title">Employee of the Quarter</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">Every quarter, Innovfix formally recognises outstanding performers through the <strong style="color:var(--text-70);">Employee of the Quarter</strong> award — open to all employees across all departments. The selected employee will be celebrated at a quarterly recognition event and will receive:</p>
+            <ul style="margin-top:12px;">
+              <li>A token of appreciation as a gesture of recognition for their outstanding contribution</li>
+              <li>A formal appreciation communicated across the organisation</li>
+            </ul>
+          </div>
+          <div class="callout" style="margin-top:20px;">
+            Selection is based on performance, contribution, and conduct during the quarter, as assessed and decided by Senior Management and higher authorities. Recognition is encouraged at all levels and is not limited to formal review periods.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>11. Responsibilities</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">Employees</div>
+            <ul>
+              <li>Understand and deliver on their assigned KPIs</li>
+              <li>Take ownership of their work and performance</li>
+              <li>Engage openly and honestly in appraisal conversations</li>
+              <li>Continuously seek feedback and work on areas of improvement</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Managers</div>
+            <ul>
+              <li>Set clear and measurable KPIs for each team member</li>
+              <li>Conduct weekly reviews and assign weekly ratings consistently</li>
+              <li>Complete all appraisal evaluations within the timelines set by HR</li>
+              <li>Recommend ratings that are fair, justified, and well-documented</li>
+              <li>Identify and escalate performance concerns to HR early</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">HR</div>
+            <ul>
+              <li>Design and administer the performance review framework</li>
+              <li>Track and communicate individual employee review schedules</li>
+              <li>Ensure the process is consistent, fair, and timely across all departments</li>
+              <li>Support managers and employees through the appraisal process</li>
+              <li>Maintain all performance records securely and confidentially</li>
+              <li>Coordinate increment and promotion decisions with Senior Management</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Senior Management &amp; Higher Authorities</div>
+            <ul>
+              <li>Review and approve all performance ratings</li>
+              <li>Make final decisions on increments and promotions</li>
+              <li>Ensure the overall integrity and fairness of the performance management process</li>
+              <li>Set the increment budget and guidelines for each review cycle</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>12. Confidentiality</h2>
+          <p>All performance ratings, appraisal feedback, increment details, and promotion decisions are strictly confidential. Employees must not share or discuss their ratings or increments with colleagues.</p>
+          <div class="callout">
+            <strong>Any breach of confidentiality will be treated as a disciplinary matter.</strong>
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>13. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change. Any updates will be communicated to all employees in a timely manner.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: PERFORMANCE MANAGEMENT -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: PROBATION & EXIT                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="probation">
+
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 03</div>
+        <h1>Probation &amp; Exit</h1>
+        <div class="policy-meta">
+          <div class="meta-item">
+            <div class="meta-label">Effective Date</div>
+            <div class="meta-value">July 17, 2026</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Version</div>
+            <div class="meta-value">1.0</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Policy Owner</div>
+            <div class="meta-value">HR</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Applies To</div>
+            <div class="meta-value">All Employees</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="policy-body">
+
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines the probation review process at Innovfix Private Limited and defines the steps to be followed in the event of performance concerns, extension, or termination during probation. It ensures that every probation outcome is handled fairly, consistently, and with full transparency.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>2. Probation Period</h2>
+          <p>The standard probation period at Innovfix is <strong>1 month</strong> from the date of joining. During this period, the employee's performance, conduct, and overall fit are assessed against the expectations communicated at the time of joining.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>3. Expectations at Joining</h2>
+          <p>At the time of joining, the manager communicates the role's KPIs and behavioural expectations to the probationer within the first week. These KPIs follow the same KPI-based framework as the Performance Management Policy and form the primary basis of the probation review.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 1 — Early Identification</h2>
+          <p>The manager identifies any performance or behavioural concern early during probation and flags it to HR immediately. The earlier the better — managers must not wait until the last week of probation to raise concerns.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 2 — Informal Conversation</h2>
+          <p>The manager has a direct, honest conversation with the employee about the concerns. Within <strong>24 hours</strong> of the discussion, the manager sends a written summary to the employee via email, copying HR. The employee is given a clear picture of what improvement is expected and by when.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 3 — Probation Review Meeting</h2>
+          <p>A formal review is conducted <strong>no later than 14 days before the probation end date.</strong> HR, the manager, and the employee are all present. Performance against the employee's set KPIs and expectations is reviewed formally.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 4 — Decision by Management</h2>
+          <p>Based on the review, Senior Management and higher authorities make one of three decisions:</p>
+          <ul>
+            <li><strong>Confirm</strong> — employee passes probation and is confirmed as a full-time employee</li>
+            <li><strong>Extend Probation</strong> — employee is given additional time (typically 1–3 months) to demonstrate the required improvement, at the manager's discretion</li>
+            <li><strong>Terminate</strong> — employee is exited during or at the end of probation</li>
+          </ul>
+          <div class="callout">
+            If an employee's probation is extended and they still do not meet the required standards by the end of the extension, the outcome is determined by the manager in consultation with HR and Senior Management, and may result in termination.
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 5 — Termination Communication</h2>
+          <p>If the decision is to terminate, the termination letter is <strong>drafted by HR and approved by Senior Management</strong> before issuance. HR communicates this to the employee in a private, respectful setting. The termination letter covers:</p>
+          <ul>
+            <li>Effective date of termination</li>
+            <li>Reason stated professionally — not meeting probation standards</li>
+            <li>Last working day</li>
+            <li>Details of final settlement</li>
+          </ul>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 6 — Notice Period During Probation</h2>
+          <div class="table-wrap"><table class="leave-table">
+            <thead>
+              <tr>
+                <th>Party</th>
+                <th>Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Employee</td>
+                <td>1 month</td>
+              </tr>
+              <tr>
+                <td>Employer</td>
+                <td>1 month or pay in lieu of notice</td>
+              </tr>
+            </tbody>
+          </table></div>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 7 — Full &amp; Final Settlement</h2>
+          <p>Processed within <strong>30 days</strong> of the last working day, covering:</p>
+          <ul>
+            <li>Salary for days worked</li>
+            <li>Any reimbursements pending</li>
+            <li>No gratuity — not applicable during probation</li>
+            <li>PF settlement as applicable</li>
+          </ul>
+        </div>
+
+        <div class="policy-block">
+          <h2>Step 8 — Exit Formalities</h2>
+          <ul>
+            <li>Return of all company assets — laptop, access cards, and any other equipment</li>
+            <li>The <strong>IT department</strong> is responsible for revoking all system and tool access by EOD on the last working day</li>
+            <li>Exit interview conducted by <strong>HR</strong> — recommended for all probation exits</li>
+            <li>Employees are reminded that their confidentiality and NDA obligations, signed at the time of joining, continue to apply in full after the last working day</li>
+          </ul>
+        </div>
+
+        <div class="policy-block">
+          <h2>4. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: PROBATION & EXIT -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: POSH                               -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="posh">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 04</div>
+        <h1>Prevention of Sexual Harassment (POSH)</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Legal Reference</div><div class="meta-value">POSH Act 2013</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>Innovfix Private Limited is committed to providing a safe, respectful, and dignified work environment for all employees. This policy establishes a zero-tolerance approach to sexual harassment in the workplace, in compliance with the Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Scope</h2>
+          <p>This policy applies to all employees, interns, contractors, vendors, clients, and visitors at any Innovfix workplace or work-related setting — including off-site events, travel, and digital communication channels.</p>
+        </div>
+        <div class="policy-block">
+          <h2>3. What Constitutes Sexual Harassment</h2>
+          <p>Sexual harassment includes any unwelcome act or behaviour of a sexual nature, whether physical, verbal, or non-verbal. Examples include:</p>
+          <ul>
+            <li>Unwelcome physical contact or advances</li>
+            <li>Demand or request for sexual favours</li>
+            <li>Making sexually coloured remarks, jokes, or innuendos</li>
+            <li>Showing pornography or sexually explicit material</li>
+            <li>Any other unwelcome physical, verbal, or non-verbal conduct of a sexual nature</li>
+            <li>Creating a hostile, intimidating, or offensive work environment through such conduct</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. Internal Complaints Committee (ICC)</h2>
+          <p>Innovfix has constituted an Internal Complaints Committee (ICC) as required under the POSH Act. The ICC is responsible for receiving, investigating, and resolving all complaints of sexual harassment.</p>
+          <ul>
+            <li>Presiding Officer — a senior female employee of Innovfix</li>
+            <li>Two or more employee members — preferably with legal or social work background</li>
+            <li>One external member — from an NGO or organisation working in the field of women's rights</li>
+          </ul>
+          <div class="callout">ICC member details are maintained by HR and available to all employees on request. The ICC constitution is reviewed annually.</div>
+        </div>
+        <div class="policy-block">
+          <h2>5. How to File a Complaint</h2>
+          <p>Any employee who has experienced or witnessed sexual harassment may submit a written complaint to the ICC or to HR within <strong>3 months</strong> of the incident. In exceptional circumstances, this period may be extended by the ICC.</p>
+          <p>Complaints may be submitted to HR via email or in person. HR will forward the complaint to the ICC immediately upon receipt.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Investigation Process</h2>
+          <ul>
+            <li>The ICC will acknowledge receipt of the complaint within 7 days</li>
+            <li>Conciliation may be offered before a formal inquiry, if the complainant requests it</li>
+            <li>A formal inquiry, if initiated, will be completed within <strong>60 days</strong></li>
+            <li>The ICC will submit its findings and recommendations to Senior Management within 10 days of completing the inquiry</li>
+            <li>Action on the recommendations will be taken within <strong>60 days</strong> of receipt of the report</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>7. Consequences</h2>
+          <p>If the ICC finds the complaint to be substantiated, disciplinary action will be taken against the respondent. Actions may include warning, suspension, demotion, or termination, depending on the severity of the conduct. Cases may also be referred to law enforcement authorities where applicable.</p>
+          <div class="callout"><strong>False complaints made maliciously</strong> will also be treated as a misconduct and may result in disciplinary action against the complainant.</div>
+        </div>
+        <div class="policy-block">
+          <h2>8. Confidentiality</h2>
+          <p>The identity of the complainant, respondent, witnesses, and all information related to the complaint will be kept strictly confidential throughout the process. Disclosure of any information in violation of this policy will be treated as a serious disciplinary offence.</p>
+        </div>
+        <div class="policy-block">
+          <h2>9. Non-Retaliation</h2>
+          <p>Innovfix strictly prohibits any form of retaliation against an employee who has filed a complaint, served as a witness, or participated in an inquiry in good faith. Any retaliation will be treated as a separate disciplinary offence.</p>
+        </div>
+        <div class="policy-block">
+          <h2>10. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR. The ICC will hold at least one awareness session per year for all employees.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: CODE OF CONDUCT                    -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="code-of-conduct">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 05</div>
+        <h1>Code of Conduct</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines the standards of professional behaviour expected of every employee at Innovfix Private Limited. It is the foundation on which trust, collaboration, and a healthy work culture are built. Every employee is expected to read, understand, and uphold these standards.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Professional Behaviour</h2>
+          <p>Employees are expected to conduct themselves with integrity, respect, and professionalism at all times — with colleagues, managers, clients, vendors, and all other stakeholders.</p>
+          <ul>
+            <li>Treat everyone with dignity and respect regardless of role, gender, background, or belief</li>
+            <li>Communicate honestly and constructively — in person and in writing</li>
+            <li>Raise disagreements through appropriate channels, not through gossip or passive conduct</li>
+            <li>Take ownership of mistakes and work to correct them</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. Attendance &amp; Punctuality</h2>
+          <p>Employees are expected to be present and reachable during core business hours and to self-report attendance accurately on Tessa. Refer to the <strong>Attendance &amp; Working Hours Policy</strong> for full details.</p>
+        </div>
+        <div class="policy-block">
+          <h2>4. Confidentiality</h2>
+          <p>Employees must not share, disclose, or misuse any confidential information belonging to Innovfix — including product plans, financials, user data, business strategies, or personnel matters. This obligation continues after employment ends, as governed by the NDA signed at joining.</p>
+        </div>
+        <div class="policy-block">
+          <h2>5. Use of Company Resources</h2>
+          <p>Company-provided devices, tools, software, and office resources are for professional use. Employees must:</p>
+          <ul>
+            <li>Use company equipment responsibly and return all assets upon exit</li>
+            <li>Not install unauthorised software on company devices</li>
+            <li>Not use company resources for personal business or side projects</li>
+            <li>Report lost or damaged equipment to IT and HR immediately</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. Conflict of Interest</h2>
+          <p>Employees must avoid situations where personal interests conflict — or appear to conflict — with the interests of Innovfix. Refer to the <strong>Moonlighting &amp; Conflict of Interest Policy</strong> for full details.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Workplace Safety &amp; Environment</h2>
+          <p>Every employee is responsible for maintaining a safe, clean, and professional office environment. Behaviour that is threatening, violent, or creates an unsafe environment will not be tolerated and will result in immediate disciplinary action.</p>
+        </div>
+        <div class="policy-block">
+          <h2>8. Social Media</h2>
+          <p>Employees must not post content that defames the company, its leadership, products, or colleagues. Refer to the <strong>Social Media Policy</strong> for full details.</p>
+        </div>
+        <div class="policy-block">
+          <h2>9. Disciplinary Action</h2>
+          <p>Violations of this Code of Conduct will be taken seriously. Depending on the nature and severity of the misconduct, disciplinary action may include:</p>
+          <ul>
+            <li>Verbal or written warning</li>
+            <li>Performance Improvement Plan</li>
+            <li>Suspension with or without pay</li>
+            <li>Termination of employment</li>
+            <li>Legal action where applicable</li>
+          </ul>
+          <div class="callout">All disciplinary decisions are made by HR in consultation with Senior Management and are final.</div>
+        </div>
+        <div class="policy-block">
+          <h2>10. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: RESIGNATION & F&F                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="resignation">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 06</div>
+        <h1>Resignation &amp; Full &amp; Final Settlement</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">Confirmed Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines the process for confirmed employees who wish to resign from Innovfix Private Limited. It ensures that every exit is handled respectfully, professionally, and with full settlement of dues.</p>
+        </div>
+        <div class="policy-block">
+          <h2>Step 1 — Submitting a Resignation</h2>
+          <p>The employee must submit a <strong>written resignation</strong> to their direct manager with HR in copy. Verbal resignations are not accepted. The resignation must state the intended last working day based on the applicable notice period.</p>
+        </div>
+        <div class="policy-block">
+          <h2>Step 2 — Notice Period</h2>
+          <div class="table-wrap"><table class="leave-table">
+            <thead><tr><th>Party</th><th>Notice Period</th></tr></thead>
+            <tbody>
+              <tr><td>Employee</td><td>1 month</td></tr>
+              <tr><td>Employer</td><td>1 month or pay in lieu of notice</td></tr>
+            </tbody>
+          </table></div>
+          <div class="callout" style="margin-top:16px;">Notice period buyout (early exit) may be approved at the discretion of the manager and HR, with any outstanding salary adjusted accordingly.</div>
+        </div>
+        <div class="policy-block">
+          <h2>Step 3 — Handover</h2>
+          <p>Within the first week of serving notice, the employee must prepare and submit a <strong>handover plan</strong> to their manager covering all ongoing responsibilities, pending tasks, documentation, and knowledge transfer. A clean handover is a professional obligation.</p>
+        </div>
+        <div class="policy-block">
+          <h2>Step 4 — Exit Interview</h2>
+          <p>HR will conduct an exit interview with the employee before or on the last working day. The purpose is to gather honest feedback and ensure a positive offboarding experience.</p>
+        </div>
+        <div class="policy-block">
+          <h2>Step 5 — Exit Formalities</h2>
+          <ul>
+            <li>Return of all company assets — laptop, access cards, and any other equipment</li>
+            <li>The <strong>IT department</strong> will revoke all system and tool access by EOD on the last working day</li>
+            <li>Employees are reminded that NDA and confidentiality obligations signed at joining remain in effect after the last working day</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>Step 6 — Full &amp; Final Settlement</h2>
+          <p>Processed within <strong>30 days</strong> of the last working day, covering:</p>
+          <ul>
+            <li>Salary for days worked in the final month</li>
+            <li>Any approved pending reimbursements</li>
+            <li>Gratuity — as per applicable law (payable after 5 years of continuous service)</li>
+            <li>PF settlement as applicable</li>
+            <li>Deductions for notice period shortfall, if any</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>2. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: GRIEVANCE REDRESSAL                -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="grievance">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 07</div>
+        <h1>Grievance Redressal</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>Innovfix Private Limited is committed to ensuring that every employee has a safe and effective way to raise workplace concerns. This policy provides a formal, fair, and confidential process for employees to voice grievances and have them addressed promptly.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. What Constitutes a Grievance</h2>
+          <p>A grievance is any genuine concern related to an employee's work, working conditions, or treatment at the workplace — including but not limited to:</p>
+          <ul>
+            <li>Unfair treatment or perceived bias by a manager or colleague</li>
+            <li>Concerns about work conditions, workload, or safety</li>
+            <li>Disagreements related to leave, attendance records, or appraisal</li>
+            <li>Concerns about policy application or compliance</li>
+          </ul>
+          <div class="callout">Grievances related to sexual harassment are handled exclusively under the <strong>POSH Policy</strong> and must be raised with the ICC.</div>
+        </div>
+        <div class="policy-block">
+          <h2>3. Grievance Process</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">Step 1 — Raise with Manager</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">The employee raises the concern directly with their immediate manager. The manager must respond within <strong>3 working days</strong>. If the concern involves the manager directly, the employee should proceed to Step 2.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Step 2 — Escalate to HR</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">If the issue is not resolved at Step 1, or involves the direct manager, the employee submits a written grievance to HR. HR will acknowledge within <strong>2 working days</strong> and work towards resolution within <strong>7 working days</strong>.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Step 3 — Escalate to Senior Management</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">If the issue remains unresolved after Step 2, HR escalates to Senior Management. A decision will be communicated to the employee within <strong>14 working days</strong> of the original written grievance. This decision is final.</p>
+          </div>
+        </div>
+        <div class="policy-block">
+          <h2>4. Confidentiality</h2>
+          <p>All grievances and related discussions will be handled with strict confidentiality. Information will only be shared with those directly involved in resolving the matter.</p>
+        </div>
+        <div class="policy-block">
+          <h2>5. Non-Retaliation</h2>
+          <p>No employee will face any negative consequence for raising a grievance in good faith. Any form of retaliation against an employee who has raised a grievance will be treated as a serious disciplinary offence.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: TRAVEL & EXPENSE                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="travel">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 08</div>
+        <h1>Travel &amp; Expense</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">Full-Time Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines the travel allowance entitlement and expense reimbursement process for full-time employees at Innovfix Private Limited who commute to the office or travel for work-related purposes.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Eligibility</h2>
+          <p>All <strong>full-time employees</strong> of Innovfix are eligible for travel reimbursement under this policy. Interns, contractors, and part-time staff are not covered unless specifically communicated at the time of joining.</p>
+        </div>
+        <div class="policy-block">
+          <h2>3. Travel Allowance</h2>
+          <p>Eligible employees are entitled to a monthly travel reimbursement of up to <strong>₹3,000</strong> for commute and work-related local travel. This applies to days the employee works from office (WFO).</p>
+          <div class="callout">Travel allowance is not applicable on WFH days or leave days. The ₹3,000 limit is the maximum claimable amount per month — actual reimbursement is based on bills submitted.</div>
+        </div>
+        <div class="policy-block">
+          <h2>4. Reimbursement Process</h2>
+          <ul>
+            <li>Employees must upload valid bills or receipts on <strong>Tessa</strong> to claim reimbursement</li>
+            <li>Claims must be submitted within <strong>30 days</strong> of the expense date — claims submitted later will not be processed</li>
+            <li>The manager reviews and approves reimbursement requests on Tessa</li>
+            <li>Approved claims are processed with the next payroll cycle</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. What is Reimbursable</h2>
+          <ul>
+            <li>Auto, cab, or bus fare for commuting to and from the office on WFO days</li>
+            <li>Local travel for official meetings or work assignments</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. What is Not Reimbursable</h2>
+          <ul>
+            <li>Travel on WFH days or days of leave</li>
+            <li>Personal travel unrelated to work</li>
+            <li>Claims submitted without valid bills or receipts</li>
+            <li>Claims exceeding the ₹3,000 monthly cap</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>7. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR. The travel allowance limit may be revised based on organisational requirements.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: IT & DATA SECURITY                 -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="it-security">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 09</div>
+        <h1>IT &amp; Data Security</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR &amp; IT</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy establishes the standards for responsible use of Innovfix's IT systems, devices, and data. It protects the company, its users, and its employees from security risks, data breaches, and misuse of technology resources.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Device Usage</h2>
+          <ul>
+            <li>Company-provided devices must be used primarily for work purposes</li>
+            <li>Employees must not share their device or login credentials with any other person</li>
+            <li>Devices must be locked when unattended</li>
+            <li>Lost or stolen devices must be reported to IT and HR immediately</li>
+            <li>Employees must not install unauthorised software or applications on company devices</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. Password &amp; Access Management</h2>
+          <ul>
+            <li>Employees must use strong passwords for all work accounts and change them regularly</li>
+            <li>Passwords must never be shared with colleagues, managers, or anyone else</li>
+            <li>Multi-factor authentication (MFA) must be enabled wherever available</li>
+            <li>Access to systems and tools is granted on a need-to-know basis and must not be shared</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. Data Handling &amp; Confidentiality</h2>
+          <p>Employees who have access to company data — including user data, financial records, product code, or business information — must handle it with the highest level of care.</p>
+          <ul>
+            <li>Company data must not be stored on personal devices or shared via personal accounts</li>
+            <li>Confidential information must not be shared with unauthorised internal or external parties</li>
+            <li>Data must not be downloaded, exported, or copied beyond what is required for the role</li>
+          </ul>
+          <div class="callout">All data confidentiality obligations are governed by the <strong>NDA signed at the time of joining</strong>, which remains in effect after employment ends.</div>
+        </div>
+        <div class="policy-block">
+          <h2>5. Internet &amp; Email Use</h2>
+          <ul>
+            <li>Company email accounts must be used for all official communication</li>
+            <li>Employees must not access or download content that is illegal, offensive, or inappropriate on company networks or devices</li>
+            <li>Phishing emails or suspicious links must be reported to IT immediately without clicking</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. Access Revocation on Exit</h2>
+          <p>All system access is revoked by the IT department on the employee's last working day, as outlined in the Resignation &amp; Exit policies.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Consequences of Non-Compliance</h2>
+          <p>Violations of this policy — including data breaches caused by negligence, unauthorised access, or misuse of company systems — will result in disciplinary action up to and including termination, and may be referred to law enforcement where applicable.</p>
+        </div>
+        <div class="policy-block">
+          <h2>8. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR and IT or earlier if security requirements change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: MOONLIGHTING & CONFLICT OF INTEREST-->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="moonlighting">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 10</div>
+        <h1>Moonlighting &amp; Conflict of Interest</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines Innovfix's position on employees engaging in external work, freelancing, or other professional activities outside of their role at Innovfix. It is designed to protect the company's interests while being fair to employees.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. What is Permitted</h2>
+          <p>Employees may engage in freelance work, personal projects, or part-time work outside of Innovfix, provided that:</p>
+          <ul>
+            <li>The work is in a domain <strong>unrelated</strong> to Innovfix's business or products</li>
+            <li>It does not involve a competitor or company operating in the same domain as Innovfix</li>
+            <li>It is done entirely outside of office hours and not on company premises or using company resources</li>
+            <li>It does not affect the employee's performance, availability, or commitment to their role at Innovfix</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. What is Not Permitted</h2>
+          <ul>
+            <li>Working for or advising any company that directly competes with Innovfix or operates in the same domain</li>
+            <li>Engaging in any external work during official working hours while in the office</li>
+            <li>Using Innovfix's confidential information, tools, or resources for any external project</li>
+            <li>Taking on external work that creates a conflict of interest with your responsibilities at Innovfix</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. Disclosure</h2>
+          <p>If an employee is uncertain whether their external activity constitutes a conflict of interest, they must disclose it to HR before commencing the work. HR will assess the situation and provide a decision in consultation with Senior Management.</p>
+          <div class="callout">When in doubt, disclose. Undisclosed conflicts of interest discovered later will be treated more seriously than those proactively raised.</div>
+        </div>
+        <div class="policy-block">
+          <h2>5. Consequences</h2>
+          <p>Violation of this policy — particularly working for a competing company or using Innovfix resources for external purposes — will be treated as a serious breach of trust and may result in immediate termination of employment.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: RECRUITMENT & ONBOARDING           -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="recruitment">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 11</div>
+        <h1>Recruitment &amp; Onboarding</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees &amp; Hiring Managers</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines how Innovfix Private Limited recruits talent and onboards new employees. It ensures a consistent, fair, and efficient hiring experience — and a structured first-day experience for every new joiner.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Initiating a Hire</h2>
+          <p>All hiring at Innovfix is initiated and managed through <strong>Tessa</strong>. When a manager identifies a hiring need, they must raise a request on Tessa. HR will own the end-to-end recruitment process from job posting to offer.</p>
+        </div>
+        <div class="policy-block">
+          <h2>3. Recruitment Process</h2>
+          <ul>
+            <li>HR posts the job opening and screens initial applications</li>
+            <li>Shortlisted candidates are shared with the hiring manager for review</li>
+            <li>Interview rounds are coordinated by HR and conducted by the manager and relevant stakeholders</li>
+            <li>Offer decisions are made by the hiring manager in consultation with HR and Senior Management</li>
+            <li>HR issues the formal offer letter upon approval</li>
+          </ul>
+          <div class="callout">All hiring decisions must be merit-based and free from bias. Innovfix is an equal opportunity employer.</div>
+        </div>
+        <div class="policy-block">
+          <h2>4. Offer &amp; Pre-joining</h2>
+          <ul>
+            <li>Offer letters are issued via Tessa and must be signed digitally by the candidate before a joining date is confirmed</li>
+            <li>Background verification may be conducted at HR's discretion</li>
+            <li>The joining date is confirmed by HR in coordination with the hiring manager</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Onboarding — First Week</h2>
+          <ul>
+            <li>HR completes documentation and sets up Tessa access on Day 1</li>
+            <li>IT sets up device, email, and tool access on Day 1</li>
+            <li>The manager introduces the employee to the team and communicates role expectations and KPIs within the first week</li>
+            <li>The employee attends a HR induction covering all company policies</li>
+            <li>The employee signs the NDA and any other required documents on Day 1</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if hiring processes evolve.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: SOCIAL MEDIA                       -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="social-media">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 12</div>
+        <h1>Social Media</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines acceptable social media conduct for all Innovfix employees. It is not intended to restrict personal expression but to ensure that no employee's online activity causes harm to the company, its products, its users, or their colleagues.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Scope</h2>
+          <p>This policy applies to all personal and professional social media activity — including but not limited to Instagram, LinkedIn, X (Twitter), YouTube, Facebook, WhatsApp groups, Reddit, and any other public or semi-public online platform.</p>
+        </div>
+        <div class="policy-block">
+          <h2>3. What is Not Permitted</h2>
+          <ul>
+            <li><strong>Defaming the company</strong> — posting content that damages Innovfix's reputation, misrepresents the company, or attacks its leadership, culture, or decisions</li>
+            <li><strong>Reducing product or brand value</strong> — sharing negative, misleading, or disparaging content about Innovfix's products, features, or brand</li>
+            <li><strong>Sharing confidential information</strong> — disclosing any internal business data, product plans, financials, user data, or personnel information on any platform</li>
+            <li><strong>Impersonating the company</strong> — creating accounts or content that appears to officially represent Innovfix without HR's written approval</li>
+            <li><strong>Harassing or targeting colleagues</strong> — using social media to bully, demean, or harass any current or former employee of Innovfix</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. What is Permitted</h2>
+          <ul>
+            <li>Sharing company-approved content, job postings, or product launches</li>
+            <li>Expressing personal opinions clearly marked as your own and not representative of Innovfix</li>
+            <li>Discussing your role or work in general, positive terms without revealing confidential information</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Consequences</h2>
+          <p>Violation of this policy — particularly defaming the company or sharing confidential information — will be treated as a serious breach of conduct and may result in immediate disciplinary action up to and including termination. Legal action may be pursued where applicable.</p>
+          <div class="callout">This policy applies during employment and extends to post-employment conduct where confidential information or defamation is involved, as governed by the NDA signed at joining.</div>
+        </div>
+        <div class="policy-block">
+          <h2>6. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: TRAINING & DEVELOPMENT             -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="training">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 13</div>
+        <h1>Training &amp; Development</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>Innovfix Private Limited is invested in the continuous growth of its people. This policy outlines how employees can request training, how approvals are managed, and the guidelines for company-sponsored learning.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Types of Training</h2>
+          <ul>
+            <li><strong>Role-specific training</strong> — skills directly relevant to the employee's current responsibilities</li>
+            <li><strong>Certifications</strong> — professional certifications relevant to the role or department</li>
+            <li><strong>Workshops &amp; conferences</strong> — external events approved by the manager</li>
+            <li><strong>Internal training</strong> — cross-functional knowledge sharing, mentoring, or sessions organised by HR</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. How to Request Training</h2>
+          <p>Employees who wish to pursue any external training, certification, or course must:</p>
+          <ul>
+            <li>Discuss the request with their <strong>direct manager</strong> first</li>
+            <li>Provide details of the programme — name, provider, duration, cost, and relevance to their role</li>
+            <li>Obtain manager approval before making any commitments or registrations</li>
+          </ul>
+          <div class="callout">The manager has full discretion to approve or decline a training request based on role relevance, timing, and budget availability.</div>
+        </div>
+        <div class="policy-block">
+          <h2>4. Company-Sponsored Training</h2>
+          <p>When Innovfix sponsors the cost of external training, the following applies:</p>
+          <ul>
+            <li>Approval must be obtained from the manager and HR before registration</li>
+            <li>For training with a significant cost, a <strong>bonding clause</strong> may apply — the employee will be required to continue employment for a defined period after completion, or repay a prorated portion of the cost upon early exit</li>
+            <li>Bonding clause details will be communicated in writing at the time of approval</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Employee Responsibility</h2>
+          <p>Employees who attend training — whether company-sponsored or self-funded — are expected to:</p>
+          <ul>
+            <li>Actively engage and complete the programme</li>
+            <li>Apply learnings to their role wherever relevant</li>
+            <li>Share key takeaways with their team if the training was company-sponsored</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if organisational needs change.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: MATERNITY & PATERNITY LEAVE        -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="maternity">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 14</div>
+        <h1>Maternity &amp; Paternity Leave</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Legal Reference</div><div class="meta-value">Maternity Benefit Act 2017</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines Innovfix Private Limited's maternity and paternity leave entitlements. Maternity leave provisions comply fully with the Maternity Benefit Act, 2017. Paternity leave is offered by Innovfix as a voluntary benefit in recognition of shared family responsibilities.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>2. Eligibility</h2>
+          <p>To be eligible for maternity leave, an employee must have worked at Innovfix for a minimum of <strong>80 days</strong> in the 12 months preceding the expected date of delivery. Employees who do not meet this threshold are not entitled to paid maternity leave under this policy.</p>
+          <p>Paternity leave is available to all confirmed male employees with no minimum service requirement.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>3. Maternity Leave Entitlement</h2>
+          <div class="table-wrap"><table class="leave-table">
+            <thead>
+              <tr>
+                <th>Situation</th>
+                <th>Leave Duration</th>
+                <th>Pay</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>First &amp; second child</td>
+                <td>26 weeks</td>
+                <td>Full pay</td>
+              </tr>
+              <tr>
+                <td>Third child onwards</td>
+                <td>12 weeks</td>
+                <td>Full pay</td>
+              </tr>
+              <tr>
+                <td>Adoption (child under 3 months)</td>
+                <td>12 weeks</td>
+                <td>Full pay</td>
+              </tr>
+              <tr>
+                <td>Surrogacy (commissioning mother)</td>
+                <td>12 weeks</td>
+                <td>Full pay</td>
+              </tr>
+              <tr>
+                <td>Miscarriage / medical termination</td>
+                <td>6 weeks</td>
+                <td>Full pay</td>
+              </tr>
+            </tbody>
+          </table></div>
+          <div class="callout" style="margin-top:16px;">Maternity leave may commence up to <strong>8 weeks before</strong> the expected delivery date. The remaining weeks are available post-delivery.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>4. Paternity Leave Entitlement</h2>
+          <p>All confirmed male employees are entitled to <strong>10 days of paid paternity leave</strong> on the birth or adoption of a child. This leave must be availed within 3 months of the child's birth or adoption date. Paternity leave cannot be carried forward or encashed.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>5. Required Documentation</h2>
+          <p>Leave will not be processed without valid supporting documents. The following must be submitted to HR at each stage:</p>
+          <div class="table-wrap"><table class="leave-table">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Document Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Before leave begins</td>
+                <td>Medical certificate from a registered doctor confirming pregnancy and expected delivery date</td>
+              </tr>
+              <tr>
+                <td>After delivery</td>
+                <td>Birth certificate or hospital discharge summary</td>
+              </tr>
+              <tr>
+                <td>Miscarriage / termination</td>
+                <td>Medical certificate from a registered practitioner</td>
+              </tr>
+              <tr>
+                <td>Adoption</td>
+                <td>Legal adoption order or official documentation of adoption</td>
+              </tr>
+              <tr>
+                <td>Paternity leave</td>
+                <td>Birth certificate or hospital document confirming birth / adoption</td>
+              </tr>
+            </tbody>
+          </table></div>
+          <div class="callout" style="margin-top:16px;"><strong>Submission of false documentation</strong> will be treated as gross misconduct and grounds for immediate termination.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>6. Salary Payment During Maternity Leave</h2>
+          <p>Maternity leave pay is disbursed in <strong>two parts</strong>:</p>
+          <ul>
+            <li><strong>First instalment</strong> — paid before the leave begins, upon submission of the pre-leave medical certificate</li>
+            <li><strong>Second instalment</strong> — paid after delivery, upon submission of the birth certificate or hospital discharge summary</li>
+          </ul>
+        </div>
+
+        <div class="policy-block">
+          <h2>7. Return to Work</h2>
+          <p>HR will initiate a check-in with the employee at least <strong>2 weeks before</strong> the expected return date to confirm the return plan. The employee must provide written confirmation of their return date.</p>
+          <p>If the employee is unable to return on the expected date due to medical reasons, an extension may be considered upon submission of a medical certificate. Any extension beyond the statutory entitlement will be treated as leave without pay.</p>
+          <div class="callout">Innovfix will not terminate or demote an employee on account of their maternity leave. The employee's role and compensation will be protected for the duration of their statutory leave.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>8. Work From Home During Maternity Leave</h2>
+          <p>After the statutory maternity leave period, if the nature of the role permits, the employee may request a <strong>phased return or work-from-home arrangement</strong> in mutual agreement with their manager and HR. This is at the discretion of the manager and is not a guaranteed entitlement.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>9. Responsibilities</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">Employee</div>
+            <ul>
+              <li>Inform HR and manager as early as possible upon confirmation of pregnancy or planned adoption</li>
+              <li>Submit all required documents at each stage in a timely manner</li>
+              <li>Confirm return-to-work date with HR before leave ends</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">HR</div>
+            <ul>
+              <li>Verify eligibility (80-day rule) before approving maternity leave</li>
+              <li>Process salary disbursements in two instalments upon receipt of documents</li>
+              <li>Conduct pre-return check-in and confirm return plan</li>
+              <li>Maintain all records confidentially</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>10. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR and updated in line with any amendments to the Maternity Benefit Act or applicable labour laws.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: MATERNITY & PATERNITY LEAVE -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: SALARY & PAYROLL                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="payroll">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 15</div>
+        <h1>Salary &amp; Payroll</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR &amp; Finance</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines how salaries are processed, when they are credited, what deductions apply, and how employees can access their payslips at Innovfix Private Limited. It is intended to provide full transparency on payroll and eliminate ambiguity around salary-related matters.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>2. Salary Credit Date</h2>
+          <p>Salaries are credited on the <strong>30th or 31st of every month</strong> — the last day of the calendar month. In months with fewer days (e.g. February), salary is credited on the last working day of that month.</p>
+          <div class="callout">If the 30th or 31st falls on a bank holiday or weekend, salary will be credited on the preceding working day.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>3. Salary Structure</h2>
+          <p>Each employee's salary structure — including Basic Pay, HRA, and any applicable allowances — is defined in their <strong>offer letter</strong>. The offer letter is the authoritative document for the employee's compensation breakdown. Employees are encouraged to read and retain their offer letter for reference.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>4. Statutory Deductions</h2>
+          <p>The following statutory deductions are applied to salaries as required by Indian law. All applicable deductions are reflected in the employee's offer letter and monthly payslip.</p>
+          <div class="table-wrap"><table class="leave-table">
+            <thead>
+              <tr>
+                <th>Deduction</th>
+                <th>Employee Contribution</th>
+                <th>Employer Contribution</th>
+                <th>Applicability</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Provident Fund (PF)</td>
+                <td>12% of Basic Pay</td>
+                <td>12% of Basic Pay</td>
+                <td>All eligible employees</td>
+              </tr>
+              <tr>
+                <td>ESI (Employee State Insurance)</td>
+                <td>0.75% of Gross Salary</td>
+                <td>3.25% of Gross Salary</td>
+                <td>Gross salary ≤ ₹21,000/month</td>
+              </tr>
+              <tr>
+                <td>TDS (Tax Deducted at Source)</td>
+                <td>As per Income Tax slab</td>
+                <td>—</td>
+                <td>All employees as applicable</td>
+              </tr>
+            </tbody>
+          </table></div>
+          <div class="callout" style="margin-top:16px;">TDS is calculated based on the employee's declared investment proofs and applicable tax regime. Employees must submit their <strong>investment declarations</strong> to Finance at the beginning of each financial year and actual proofs before March 31st to avoid excess deduction.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>5. Leave Without Pay (LWP)</h2>
+          <p>If an employee is absent without an approved leave on Tessa, the days will be treated as <strong>Leave Without Pay (LWP)</strong>. Salary deduction for LWP is calculated as:</p>
+          <div class="callout">
+            <strong>LWP Deduction = (Gross Monthly Salary ÷ Number of days in the month) × Number of LWP days</strong>
+          </div>
+          <p style="margin-top:14px;">LWP days are determined based on attendance records on Tessa. Employees are encouraged to ensure their attendance is always accurately self-reported to avoid incorrect deductions.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>6. Payslip</h2>
+          <p>Payslips are <strong>automatically generated</strong> and available on <strong>Tessa</strong> every month once salary is processed. Employees can access, download, and save their payslips at any time from their Tessa profile.</p>
+          <p>The payslip reflects the complete salary breakdown including gross pay, all deductions, and net pay credited. Employees are encouraged to review their payslip every month.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>7. Salary During Special Circumstances</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">Probation Period</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">Salary during probation is the same as the confirmed salary as stated in the offer letter. There is no separate probation-period pay structure.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Maternity &amp; Paternity Leave</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">Full salary is paid during approved maternity and paternity leave as per the Maternity &amp; Paternity Leave Policy.</p>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Notice Period</div>
+            <p style="font-size:13.5px;color:var(--text-50);line-height:1.65;margin-top:8px;">Salary continues to be paid normally during the notice period. Any notice period shortfall or buyout is adjusted in the full and final settlement.</p>
+          </div>
+        </div>
+
+        <div class="policy-block">
+          <h2>8. Salary Revision</h2>
+          <p>Salary revisions at Innovfix are <strong>entirely performance-based</strong> and are processed through the annual performance review cycle. There are no automatic or across-the-board increments. Refer to the <strong>Performance Management Policy</strong> for details.</p>
+          <p>All revised salary structures will be reflected in a revised offer letter issued by HR at the time of the increment.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>9. Salary Queries &amp; Disputes</h2>
+          <p>If an employee believes there is an error in their salary or payslip, they must:</p>
+          <ul>
+            <li>Review their payslip on Tessa first to confirm the discrepancy</li>
+            <li>Raise the concern with <strong>HR</strong> within <strong>7 days</strong> of salary credit with specific details of the discrepancy</li>
+            <li>HR will review with Finance and respond within <strong>5 working days</strong></li>
+            <li>If confirmed as an error, the correction will be processed in the next payroll cycle or sooner if the amount is significant</li>
+          </ul>
+          <div class="callout">Salary queries raised after 30 days of the credit date may not be eligible for correction in the same financial year.</div>
+        </div>
+
+        <div class="policy-block">
+          <h2>10. Confidentiality</h2>
+          <p>Salary details are strictly confidential. Employees must not share or discuss their compensation with colleagues. Any breach of salary confidentiality will be treated as a disciplinary matter.</p>
+        </div>
+
+        <div class="policy-block">
+          <h2>11. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR and Finance or earlier if statutory rates or organisational requirements change.</p>
+        </div>
+
+      </div>
+    </section>
+    <!-- END: SALARY & PAYROLL -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: INTELLECTUAL PROPERTY              -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="ip">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 16</div>
+        <h1>Intellectual Property</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR &amp; Legal</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy establishes Innovfix Private Limited's ownership of all intellectual property created by employees in the course of their employment. It protects the company's products, technology, and creative work — and ensures employees understand their rights and obligations.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. What Belongs to Innovfix</h2>
+          <p>All intellectual property created by an employee <strong>during their employment at Innovfix</strong> — whether during working hours or outside of them, on company devices or personal devices — belongs exclusively to Innovfix Private Limited. This includes but is not limited to:</p>
+          <ul>
+            <li>Software code, scripts, algorithms, and technical architecture</li>
+            <li>Product designs, UI/UX work, prototypes, and wireframes</li>
+            <li>Marketing content, creative assets, copy, and campaign materials</li>
+            <li>Business strategies, product roadmaps, and internal documentation</li>
+            <li>Data, databases, and user research conducted as part of the role</li>
+            <li>Inventions, processes, or ideas conceived in relation to the employee's role or Innovfix's business</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. Assignment of Rights</h2>
+          <p>By accepting employment at Innovfix, employees automatically assign all rights, title, and interest in any work product created during their employment to Innovfix. This assignment is covered under the NDA signed at the time of joining and takes effect from Day 1 of employment.</p>
+        </div>
+        <div class="policy-block">
+          <h2>4. Portfolio &amp; Personal Use</h2>
+          <p>Employees may not use, publish, or share any work created for Innovfix — including code, designs, or content — in a personal portfolio, case study, or any external platform without prior <strong>written approval from HR and Senior Management.</strong></p>
+          <div class="callout">Approval requests for portfolio use must be submitted to HR and will be reviewed on a case-by-case basis. Approval is not guaranteed and will not be granted for confidential or unreleased work.</div>
+        </div>
+        <div class="policy-block">
+          <h2>5. Pre-existing IP</h2>
+          <p>If an employee brings any pre-existing intellectual property to Innovfix (e.g. open-source tools, prior code libraries), they must disclose this to HR in writing before using it in any Innovfix project. Innovfix will not claim ownership of disclosed pre-existing IP, but employees must ensure its use does not violate any third-party rights.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Post-Employment Obligations</h2>
+          <p>IP ownership obligations survive the end of employment. Former employees may not use, replicate, or build upon any Innovfix intellectual property after their last working day. All such obligations are governed by the NDA signed at joining.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Consequences</h2>
+          <p>Unauthorised use, disclosure, or reproduction of Innovfix's intellectual property will be treated as a serious breach of this policy and the NDA, and may result in disciplinary action, termination, and civil or criminal legal proceedings.</p>
+        </div>
+        <div class="policy-block">
+          <h2>8. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR and Legal or earlier if required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: ASSET MANAGEMENT                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="assets">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 17</div>
+        <h1>Asset Management</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">IT Department</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines how company assets are issued, maintained, and returned at Innovfix Private Limited. The IT department is responsible for managing all company assets and maintaining an accurate asset register.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Asset Issuance</h2>
+          <p>Company assets are issued to employees by the <strong>IT department</strong> on or before their joining date, based on the requirements of their role. The employee must sign an <strong>asset acknowledgement form</strong> upon receiving any company asset. The IT department maintains a register of all assets issued.</p>
+          <p>Assets that may be issued include:</p>
+          <ul>
+            <li>Laptop or desktop computer</li>
+            <li>Office access card</li>
+            <li>Mobile device (role-dependent)</li>
+            <li>Any other equipment as applicable to the role</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>3. Employee Responsibilities</h2>
+          <ul>
+            <li>Use company assets <strong>responsibly and only for work purposes</strong></li>
+            <li>Keep all assets in good working condition</li>
+            <li>Not share, lend, or transfer any company asset to another person</li>
+            <li>Ensure laptops and devices are kept secure and locked when not in use</li>
+            <li>Not install unauthorised software or make unauthorised modifications to company devices</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. Loss, Theft, or Damage</h2>
+          <p>Any loss, theft, or damage to a company asset must be reported to the <strong>IT department and HR immediately</strong> — no later than the same day the incident is discovered.</p>
+          <ul>
+            <li>Loss or theft due to negligence may result in the employee bearing the cost of replacement, at management's discretion</li>
+            <li>Accidental damage will be assessed by IT — fair wear and tear is expected and acceptable</li>
+            <li>Deliberate damage will be treated as a disciplinary matter</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Asset Return on Exit</h2>
+          <p>All company assets must be <strong>returned to the IT department on or before the last working day</strong>. Assets must be returned in the same condition as when issued, accounting for normal wear and tear.</p>
+          <div class="callout">Full &amp; Final settlement will be processed only after the IT department confirms that all assets have been returned and accounted for.</div>
+        </div>
+        <div class="policy-block">
+          <h2>6. Asset Register</h2>
+          <p>The IT department maintains an up-to-date register of all company assets — including the asset details, the employee it is assigned to, the date of issuance, and the date of return. This register is reviewed by HR on a quarterly basis.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Policy Review</h2>
+          <p>This policy will be reviewed annually by the IT department and HR.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: WHISTLEBLOWER                      -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="whistleblower">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 18</div>
+        <h1>Whistleblower Policy</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>Innovfix Private Limited is committed to maintaining the highest standards of integrity and ethical conduct. This policy provides employees with a safe, confidential channel to report genuine concerns about unethical behaviour, misconduct, fraud, or policy violations — without fear of retaliation.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. What Can Be Reported</h2>
+          <p>Employees may raise a concern under this policy if they have a genuine, reasonable belief that any of the following has occurred or is likely to occur:</p>
+          <ul>
+            <li>Financial fraud, embezzlement, or misuse of company funds</li>
+            <li>Corruption, bribery, or dishonest conduct</li>
+            <li>Serious violation of company policies or applicable law</li>
+            <li>Falsification of records, data, or documentation</li>
+            <li>Actions that endanger the health, safety, or welfare of employees</li>
+            <li>Deliberate concealment of any of the above</li>
+          </ul>
+          <div class="callout">This policy is not intended for personal grievances or interpersonal disputes — those must be raised through the <strong>Grievance Redressal Policy</strong>. Harassment concerns must be raised through the <strong>POSH Policy</strong>.</div>
+        </div>
+        <div class="policy-block">
+          <h2>3. How to Report</h2>
+          <p>Employees may raise a whistleblower concern by submitting a written report to <strong>HR</strong>. If the concern involves HR, it may be escalated directly to <strong>Senior Management</strong>.</p>
+          <p>Reports may be submitted anonymously. However, providing contact details helps HR investigate more effectively and keeps the employee informed of the outcome.</p>
+        </div>
+        <div class="policy-block">
+          <h2>4. Investigation Process</h2>
+          <ul>
+            <li>HR will acknowledge receipt of the report within <strong>5 working days</strong></li>
+            <li>An investigation will be initiated promptly and conducted confidentially</li>
+            <li>The investigation will be handled by HR and Senior Management — or an independent party if the concern involves senior personnel</li>
+            <li>The outcome will be communicated to the reporting employee (where identity is known) within a reasonable timeframe</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Confidentiality</h2>
+          <p>The identity of the reporting employee will be protected to the fullest extent possible throughout the investigation. Information shared under this policy will only be disclosed to those directly involved in resolving the matter.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Non-Retaliation</h2>
+          <p>Innovfix strictly prohibits any form of retaliation against an employee who raises a concern in good faith under this policy — including dismissal, demotion, harassment, or any other form of unfair treatment. Any act of retaliation will itself be treated as a serious disciplinary offence.</p>
+          <div class="callout"><strong>Reporting in good faith is protected even if the concern turns out to be unsubstantiated</strong>, as long as the report was not made maliciously or with intent to cause harm.</div>
+        </div>
+        <div class="policy-block">
+          <h2>7. False or Malicious Reports</h2>
+          <p>Reports made knowingly with false information or with malicious intent to harm a colleague will be treated as gross misconduct and may result in disciplinary action including termination.</p>
+        </div>
+        <div class="policy-block">
+          <h2>8. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if required.</p>
+        </div>
+      </div>
+    </section>
+    <!-- END: WHISTLEBLOWER -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: EQUAL OPPORTUNITY                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="equal-opportunity">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 19</div>
+        <h1>Equal Opportunity &amp; Non-Discrimination</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees &amp; Candidates</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>Innovfix Private Limited is committed to being a fair and inclusive employer. This policy affirms that every employment decision at Innovfix — from hiring to promotion, compensation, and exit — is based solely on merit, performance, and business need. Discrimination of any kind is not tolerated.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Our Commitment</h2>
+          <p>Innovfix does not discriminate against any employee or job applicant on the basis of:</p>
+          <ul>
+            <li>Gender, gender identity, or sexual orientation</li>
+            <li>Religion, caste, or community</li>
+            <li>Race, ethnicity, or national origin</li>
+            <li>Age</li>
+            <li>Disability or health condition</li>
+            <li>Marital or family status</li>
+            <li>Pregnancy or maternity</li>
+            <li>Political beliefs or affiliations</li>
+          </ul>
+          <div class="callout">This commitment applies to all aspects of employment — hiring, onboarding, compensation, promotions, training, day-to-day treatment, and exit.</div>
+        </div>
+        <div class="policy-block">
+          <h2>3. Hiring</h2>
+          <p>All recruitment decisions are made purely on the basis of qualifications, skills, and suitability for the role. Job postings, interview processes, and selection criteria are designed to be free from bias. Refer to the <strong>Recruitment &amp; Onboarding Policy</strong> for the full hiring process.</p>
+        </div>
+        <div class="policy-block">
+          <h2>4. Compensation &amp; Promotion</h2>
+          <p>Pay and promotions at Innovfix are determined by performance, KPI achievement, and role scope — not by any personal characteristic listed above. Refer to the <strong>Performance Management Policy</strong> for the full increment and promotion process.</p>
+        </div>
+        <div class="policy-block">
+          <h2>5. Responsibilities</h2>
+          <div class="resp-group">
+            <div class="resp-group-title">All Employees</div>
+            <ul>
+              <li>Treat every colleague with fairness and respect</li>
+              <li>Report any observed discriminatory behaviour to HR</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">Managers</div>
+            <ul>
+              <li>Make all people decisions — hiring, ratings, promotions — on merit alone</li>
+              <li>Ensure their team environment is inclusive and free from bias</li>
+              <li>Escalate any discrimination concern to HR without delay</li>
+            </ul>
+          </div>
+          <div class="resp-group" style="margin-top:20px;">
+            <div class="resp-group-title">HR</div>
+            <ul>
+              <li>Design hiring and review processes that are structured and bias-resistant</li>
+              <li>Investigate all discrimination complaints promptly and confidentially</li>
+              <li>Take corrective action wherever bias is found</li>
+            </ul>
+          </div>
+        </div>
+        <div class="policy-block">
+          <h2>6. Reporting Discrimination</h2>
+          <p>Any employee who believes they have experienced or witnessed discrimination must raise it with HR immediately. The concern will be treated with full confidentiality and investigated under the <strong>Grievance Redressal Policy</strong>. No employee will face retaliation for raising a genuine discrimination concern.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Consequences</h2>
+          <p>Any employee found to have engaged in discriminatory conduct will face disciplinary action, up to and including termination.</p>
+        </div>
+        <div class="policy-block">
+          <h2>8. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: BUSINESS EXPENSE                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="expense">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 20</div>
+        <h1>Business Expense &amp; Reimbursement</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR &amp; Finance</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Full-Time Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy outlines how employees at Innovfix can claim reimbursement for legitimate work-related expenses incurred on behalf of the company. Innovfix reimburses employees for reasonable and necessary expenses, provided they are approved by the employee's manager and supported by valid documentation.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. What is Reimbursable</h2>
+          <p>Employees may claim reimbursement for any genuine work-related expense, including but not limited to:</p>
+          <ul>
+            <li>Software subscriptions or tools required for the role</li>
+            <li>Office supplies purchased for work use</li>
+            <li>Client or team meals approved by the manager</li>
+            <li>Courier or delivery charges for work purposes</li>
+            <li>Any other expense directly and reasonably incurred in the course of performing the role</li>
+          </ul>
+          <div class="callout">Commute and local travel reimbursements are governed separately under the <strong>Travel &amp; Expense Policy</strong>.</div>
+        </div>
+        <div class="policy-block">
+          <h2>3. What is Not Reimbursable</h2>
+          <ul>
+            <li>Personal purchases unrelated to work</li>
+            <li>Expenses incurred without prior manager awareness or approval</li>
+            <li>Claims submitted without valid bills or receipts</li>
+            <li>Expenses that appear excessive or unreasonable relative to the purpose</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>4. Reimbursement Process</h2>
+          <ul>
+            <li>Employees must <strong>inform their manager before or at the time</strong> of incurring any significant work expense</li>
+            <li>Upload the valid bill or receipt on <strong>Tessa</strong> under the reimbursement section</li>
+            <li>The manager reviews and approves the claim on Tessa</li>
+            <li>Claims must be submitted within <strong>30 days</strong> of the expense date — claims submitted later will not be processed</li>
+            <li>Approved claims are processed with the next payroll cycle</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Manager's Discretion</h2>
+          <p>The manager has full discretion to approve or reject any expense claim. Approval depends on the legitimacy of the expense, its relevance to the employee's role, and its reasonableness in amount. Employees are encouraged to discuss larger or unusual expenses with their manager <strong>before</strong> incurring them to avoid rejection.</p>
+        </div>
+        <div class="policy-block">
+          <h2>6. Misuse</h2>
+          <p>Submitting false, inflated, or personal expenses for reimbursement will be treated as fraud and gross misconduct, and may result in immediate termination and recovery of the amount from the employee's final settlement.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR and Finance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- POLICY: WORK FROM HOME                     -->
+    <!-- ══════════════════════════════════════════ -->
+    <section class="policy-section" id="wfh">
+      <div class="policy-header">
+        <div class="policy-badge">HR Policy · 21</div>
+        <h1>Work From Home</h1>
+        <div class="policy-meta">
+          <div class="meta-item"><div class="meta-label">Effective Date</div><div class="meta-value">July 17, 2026</div></div>
+          <div class="meta-item"><div class="meta-label">Version</div><div class="meta-value">1.0</div></div>
+          <div class="meta-item"><div class="meta-label">Policy Owner</div><div class="meta-value">HR</div></div>
+          <div class="meta-item"><div class="meta-label">Applies To</div><div class="meta-value">All Employees</div></div>
+        </div>
+      </div>
+      <div class="policy-body">
+        <div class="policy-block">
+          <h2>1. Purpose</h2>
+          <p>This policy defines Innovfix's approach to work from home. Innovfix supports flexible working arrangements where the role and output allow for it, while ensuring team collaboration and performance are never compromised.</p>
+        </div>
+        <div class="policy-block">
+          <h2>2. Eligibility &amp; Frequency</h2>
+          <p>WFH eligibility and the number of WFH days permitted are <strong>entirely at the manager's discretion</strong>, based on the nature of the role, team requirements, and the employee's track record of delivery. There is no fixed or guaranteed number of WFH days per week across the organisation.</p>
+          <p>Some roles may be fully in-office by nature and may not be eligible for WFH at all. This will be communicated by the manager at the time of joining or as the role evolves.</p>
+        </div>
+        <div class="policy-block">
+          <h2>3. How to Apply</h2>
+          <p>Employees must apply for each WFH day on <strong>Tessa</strong> and receive manager approval. WFH is not automatic — it requires explicit approval every time unless the manager has communicated a standing arrangement.</p>
+          <div class="callout">Marking attendance as WFH on Tessa without manager approval will be treated as an attendance discrepancy.</div>
+        </div>
+        <div class="policy-block">
+          <h2>4. Expectations While Working From Home</h2>
+          <p>Employees working from home are held to the <strong>exact same performance and availability standards</strong> as when working from the office. WFH is a flexibility, not a reduced-work arrangement.</p>
+          <ul>
+            <li>Be reachable and responsive during core business hours (10 AM – 6 PM)</li>
+            <li>Attend all scheduled meetings on camera unless otherwise agreed</li>
+            <li>Deliver the same quality and volume of work as on in-office days</li>
+            <li>Ensure a professional environment free from distractions during meetings</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>5. Equipment &amp; Security</h2>
+          <p>Employees are responsible for ensuring they have a suitable, secure setup at home to work effectively. This includes a stable internet connection and a distraction-free workspace.</p>
+          <ul>
+            <li>Company devices must be used for all work activities while on WFH</li>
+            <li>Company data must not be accessed or stored on personal devices</li>
+            <li>All IT &amp; Data Security Policy obligations apply in full while working from home</li>
+          </ul>
+        </div>
+        <div class="policy-block">
+          <h2>6. Manager's Right to Revoke</h2>
+          <p>A manager may revoke an employee's WFH arrangement at any time — temporarily or permanently — based on business needs, team requirements, or performance concerns. This decision rests entirely with the manager and does not require HR approval.</p>
+        </div>
+        <div class="policy-block">
+          <h2>7. Policy Review</h2>
+          <p>This policy will be reviewed annually by HR or earlier if work model requirements change.</p>
+        </div>
+      </div>
+    </section>
+    <!-- END: WORK FROM HOME -->
+
+    <!-- ADD FUTURE POLICY SECTIONS HERE -->
+
+  </main>
+</div>
+
+<script>
+  function setMobileTitle(title) {
+    const el = document.getElementById('mobile-topbar-title');
+    if (el) el.textContent = title;
+  }
+
+  function showIndex(e) {
+    e.preventDefault();
+    document.getElementById('index-view').classList.remove('hidden');
+    document.querySelectorAll('.policy-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    setMobileTitle('Company Policies');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    closeSidebar();
+  }
+
+  function showPolicy(e, id) {
+    e.preventDefault();
+    document.getElementById('index-view').classList.add('hidden');
+    document.querySelectorAll('.policy-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const section = document.getElementById(id);
+    if (section) section.classList.add('visible');
+    e.currentTarget.classList.add('active');
+    const title = e.currentTarget.textContent.trim();
+    setMobileTitle(title);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.pushState(null, '', '#' + id);
+    closeSidebar();
+  }
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    const isOpen = sidebar.classList.toggle('open');
+    backdrop.classList.toggle('visible', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-backdrop').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  // Handle direct hash links on load
+  (function() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const section = document.getElementById(hash);
+      const navLink = document.querySelector('.nav-item[href="#' + hash + '"]');
+      if (section) {
+        document.getElementById('index-view').classList.add('hidden');
+        section.classList.add('visible');
+      }
+      if (navLink) {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        navLink.classList.add('active');
+        setMobileTitle(navLink.textContent.trim());
+      }
+    }
+  })();
+</script>
+</body>
+</html>

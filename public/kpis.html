@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Innovfix KPIs — Team Scorecards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #000;
+    --bg-1: #0a0a0a;
+    --bg-2: #111;
+    --text: #fff;
+    --text-70: rgba(255, 255, 255, 0.7);
+    --text-50: rgba(255, 255, 255, 0.5);
+    --text-30: rgba(255, 255, 255, 0.3);
+    --text-15: rgba(255, 255, 255, 0.15);
+    --line: rgba(255, 255, 255, 0.08);
+    --line-2: rgba(255, 255, 255, 0.15);
+    --accent: #fff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 32px 100px;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 64px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .header-meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .header .subtitle {
+    font-size: 15px;
+    color: var(--text-50);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .header .nav {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  .header .nav a {
+    color: var(--text-70);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-30);
+    padding-bottom: 1px;
+  }
+  .header .nav a:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  /* PERSON SECTION */
+  .person {
+    margin-bottom: 80px;
+  }
+  .person-header {
+    margin-bottom: 8px;
+  }
+  .person-name {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+  .person-role {
+    font-size: 13px;
+    color: var(--text-50);
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+  .kpi-review {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-30);
+    margin-bottom: 32px;
+    padding: 8px 12px;
+    background: var(--bg-1);
+    border-left: 2px solid var(--text-30);
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .kpi-review b { color: var(--text-70); font-weight: 600; }
+
+  /* SECTION HEADERS */
+  .section {
+    margin-top: 48px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 24px;
+  }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 2px solid var(--text);
+    padding: 16px 24px;
+    font-size: 14px;
+    color: var(--text-70);
+    line-height: 1.7;
+  }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  /* WEIGHT BAR (visual product priority) */
+  .weight-bar {
+    display: flex;
+    height: 80px;
+    margin: 24px 0;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid var(--line-2);
+  }
+  .weight-segment {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12px 18px;
+    border-right: 1px solid var(--line-2);
+  }
+  .weight-segment:last-child { border-right: none; }
+  .weight-segment .pct {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .weight-segment .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 6px;
+    color: var(--text-50);
+  }
+  .weight-segment.primary {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .weight-segment.primary .label { color: rgba(0, 0, 0, 0.55); }
+  .weight-segment.secondary {
+    background: var(--text-15);
+    color: var(--text);
+  }
+  .weight-segment.tertiary {
+    background: transparent;
+  }
+
+  /* DIMENSION BLOCK */
+  .dimension-block {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .dimension-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .dimension-name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .dimension-weight {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-50);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* KPI LIST (table-like) */
+  .kpi-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .kpi-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .kpi-row:last-child { border-bottom: none; }
+  .kpi-row .kpi-name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .kpi-row .kpi-desc {
+    font-size: 12px;
+    color: var(--text-50);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .kpi-row .kpi-target {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-70);
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .kpi-row .kpi-weight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 600;
+    min-width: 38px;
+  }
+
+  /* PRODUCT BLOCK */
+  .product-block {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line-2);
+  }
+  .product-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .product-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .product-share {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-50);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .product-tagline {
+    font-size: 13px;
+    color: var(--text-50);
+    margin-bottom: 24px;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 16px;
+  }
+  th {
+    text-align: left;
+    padding: 12px 16px 12px 0;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-30);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  th:last-child, td:last-child { padding-right: 0; }
+  td {
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-70);
+    vertical-align: top;
+  }
+  td:first-child { color: var(--text); font-weight: 500; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* SCORECARD (mono block) */
+  .scorecard {
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    padding: 24px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--text-70);
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  .scorecard .head {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .scorecard .pass { color: var(--text); }
+  .scorecard .warn { color: var(--text-30); }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-70);
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  /* RATINGS TABLE */
+  .ratings-table th, .ratings-table td {
+    padding: 12px 0;
+  }
+  .ratings-table .score {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* MATRIX TABLE */
+  .matrix-table {
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .matrix-table th {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line-2);
+    background: var(--bg-1);
+    color: var(--text-70);
+    font-size: 10px;
+  }
+  .matrix-table td {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .matrix-table tbody tr:last-child td { border-bottom: none; }
+  .matrix-table .kpi-cell { line-height: 1.5; }
+
+  /* COMING NEXT */
+  .coming-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .coming-card {
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .coming-card .name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .coming-card .role {
+    font-size: 12px;
+    color: var(--text-50);
+  }
+
+  /* APP TABS */
+  .app-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .app-tab {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-50);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+  }
+  .app-tab:hover {
+    color: var(--text);
+    background: var(--bg-2);
+  }
+  .app-tab.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .app-tab .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    margin-left: 6px;
+    opacity: 0.6;
+  }
+
+  .person.hidden { display: none; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-30);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* RESPONSIVE */
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  @media (max-width: 720px) {
+    .container { padding: 32px 20px 60px; }
+    .header h1 { font-size: 28px; }
+    .person-name { font-size: 24px; }
+    .weight-bar { height: 64px; }
+    .weight-segment .pct { font-size: 22px; }
+    .kpi-row { grid-template-columns: 1fr; gap: 4px; }
+    .kpi-row .kpi-target, .kpi-row .kpi-weight { text-align: left; }
+    .coming-grid { grid-template-columns: 1fr; }
+    table { font-size: 12px; }
+    th, td { padding: 10px 8px 10px 0; }
+    .matrix-table { min-width: 600px; }
+    .matrix-table th, .matrix-table td { padding: 10px 12px 10px 0; }
+  }
+
+  @media (max-width: 420px) {
+    .header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-meta">Innovfix · Performance Framework</div>
+    <h1>KPI Scorecards</h1>
+    <div class="subtitle">
+      Role-specific performance metrics for each leader. Designed for objective monthly review. Each scorecard sums to 100 points.
+    </div>
+    <div class="nav">
+      <a href="/meetings.html">Meeting System →</a>
+    </div>
+  </div>
+
+  <!-- APP TABS -->
+  <div class="app-tabs">
+    <button class="app-tab active" data-filter="all">All <span class="count">27</span></button>
+    <button class="app-tab" data-filter="hima">Hima <span class="count">17</span></button>
+    <button class="app-tab" data-filter="only-care">Only Care <span class="count">12</span></button>
+    <button class="app-tab" data-filter="unman">Unman <span class="count">8</span></button>
+    <button class="app-tab" data-filter="blr-connect">BLR Connect <span class="count">4</span></button>
+    <button class="app-tab" data-filter="cross">Cross-cutting <span class="count">5</span></button>
+  </div>
+
+  <!-- SNEHA -->
+  <div class="person" data-apps="hima">
+    <div class="person-header">
+      <div class="person-name">Sneha Sunoj</div>
+    </div>
+    <div class="person-role">Hima Product Manager (acting) · Reports to JP · Manages Deeksha, Meghana, Anindita</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Sneha · 1st Thu 3:00 PM · 30 min &nbsp;·&nbsp; <b>Hima Leaders Sync</b> Mon + Thu 5:00 PM (Nandha hosts both) · attended with Meghana + Saran — JP via monthly</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own the Hima product roadmap. Drive monthly revenue growth, user retention, and creator health. Coordinate marketing, tech, and ops to ship features that move revenue. Single-product focus — 100% Hima.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics, 100% Hima focus</div>
+      <p style="font-size: 13px; color: var(--text-50); margin-bottom: 24px; line-height: 1.7;">
+        Sneha is Hima-only. No product weighting — just direct PM accountability across four pillars: business outcome, product stickiness, marketplace health, delivery quality.
+      </p>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Revenue Growth</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Hima MoM revenue growth from current ₹6 Cr baseline</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">₹7.5 Cr</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core business outcome — PM owns the roadmap that drives growth</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Call Connection Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of call attempts that connect AND complete (not dropped)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">45%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">The revenue driver — failed calls = lost revenue + user frustration</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Day 7 User Retention</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of new users active on day 7 after install</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Product stickiness — is the experience worth returning to?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Creator Retention (Monthly Active)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of creators active in the current month vs last</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">75%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Two-sided marketplace — no creators = no Hima</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics Sneha tracks weekly (not scored): ARPU · calls per user · creator availability · drop rate · match time · day 30 retention · top-creator concentration. These diagnose why a scored KPI moved.
+      </p>
+    </div>
+  </div>
+
+  <!-- NANDHA -->
+  <div class="person" data-apps="hima only-care unman blr-connect" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Nandha</div>
+    </div>
+    <div class="person-role">CMO — Marketing &amp; Content · Reports to JP · Manages Anirudh (paid), Krishnan (creative)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Nandha · 1st Thu 4:00 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> Marketing Leadership Sync (Tue 12 PM)</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own all Innovfix marketing — paid acquisition (via Anirudh) + ad creative engine (via Krishnan) across the product portfolio. Drive installs + paying users at efficient CAC/ROAS. Portfolio role weighted by product.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 60">
+          <div class="pct">60%</div>
+          <div class="label">Hima</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Only Care</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">Unman</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">BLR Connect</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-50); margin-top: 8px;">
+        Hima primary (revenue engine); Only Care secondary; Unman + BLR Connect emerging. Anirudh executes Hima paid; Swapna runs Only Care/Unman/Sudar/BLR paid.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 performance-marketing metrics as Anirudh, applied across the portfolio</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">CAC (Cost per Paid User)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Ad spend ÷ paying users acquired · what it actually costs to get a payer</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">₹450</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Real efficiency across the portfolio — paid users drive revenue</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">ROAS (30-day Return on Ad Spend)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Revenue from acquired users ÷ ad spend, 30-day window</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">3x</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Profitability signal per ad rupee</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Install Volume</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Total new installs driven by paid ads</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">40% MoM</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Top-of-funnel growth across all apps</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Register → First Purchase Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of registered users that buy coins within 7 days</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">28%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Targeting quality — registrations becoming payers</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Blended across the portfolio per the 60/20/10/10 product weighting. Nandha's numbers roll up Anirudh's Hima paid + Swapna's non-Hima paid + Krishnan's creative hit-rate. Sub-metrics: per-app CAC/ROAS, creative win rate, content output.
+      </p>
+    </div>
+  </div>
+
+  <!-- ANIRUDH -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Anirudh</div>
+    </div>
+    <div class="person-role">Performance Marketing Lead · Reports to Nandha · Manages Swapna M</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Nandha ↔ Anirudh · 1st Tue 3:00 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> data in Marketing Data Review (Thu 4 PM)</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Run paid acquisition for Hima — Meta Ads + Google Ads spend. Drive installs at the lowest possible CAC while maintaining profitability (ROAS). Uses Krishnan's ad creatives as fuel.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 standard performance marketing metrics</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">CAC (Cost per Paid User)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Ad spend ÷ paying users acquired · what it actually costs to get a payer</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">₹450</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Real efficiency — paid users are what drive revenue, not installs</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">ROAS (30-day Return on Ad Spend)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Revenue from acquired users ÷ ad spend, 30-day window</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">3x</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Faster profitability signal — 30 days for action, not 90</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Install Volume</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Total new installs driven by paid ads</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">40% MoM</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Scale — top of funnel filling Hima</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Register → First Purchase Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of registered users that buy coins within 7 days</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">28%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Targeting quality — serious users becoming payers (better than install funnel)</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: LTV:CAC ratio · spend by region (S vs N India) · spend by language · top performing creative (Krishnan's winners) · day 1/7/30 revenue per cohort · platform split (Meta vs Google).
+      </p>
+    </div>
+  </div>
+
+  <!-- KRISHNAN -->
+  <div class="person" data-apps="hima only-care unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Krishnan</div>
+    </div>
+    <div class="person-role">Creative Head — Ad Creative Engine · Reports to Nandha · Manages Kishore, Sivaranjani, Sooraj, Anaz</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Nandha ↔ Krishnan · 1st Tue 4:00 PM · 30 min &nbsp;·&nbsp; <b>Weekly perf data</b> Anirudh Fri 11:00 AM · 30 min</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Lead the 4-person team to produce AI-generated video ads + scripts. Output flows directly to Anirudh for Meta Ads + Google Ads campaigns. He is an <strong>ad creative engine</strong>, not a general content head.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics focused on ad creative throughput and performance</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Ad Creatives Shipped Monthly</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">AI-generated videos + scripts + graphics handed to ads team</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">140</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Volume — ads need fresh creatives constantly to fight fatigue</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Average Ad CTR (Meta + Google)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Click-through rate across all his creatives in paid ads</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2.5%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — better creative = lower CAC for Anirudh</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Ad → Install Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of ad clicks that convert to app installs</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">40%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Outcome — creative actually drove a user, not just a click</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hit Rate (Ads with CTR > 3%)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of shipped ads that performed above CTR benchmark</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">9.5%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality-adjusted output — winners vs churn</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: top-performing ads (winners to scale), underperformers (kill list), Hima vs Only Care creative split, AI generation cycle time, script writer output.
+      </p>
+    </div>
+  </div>
+
+  <!-- ANINDITA -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Anindita</div>
+    </div>
+    <div class="person-role">Growth Manager, North India · Reports to Sneha · Manages Gargi Bisht</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Sneha ↔ Anindita · 1st Mon 5:00 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> ops pulse in Sneha's 10:30 standup</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Drive Hima growth in North India (Hindi-speaking states + Bengali region). Same scorecard as Sneha — applied to her region only. Owns regional revenue, user base, creator pipeline.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 metrics as Hima PM — scoped to North India</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">N. India Revenue Growth (MoM)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Hima MoM revenue growth from North India users</div>
+            </td>
+            <td>20%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core outcome — is North India contributing to growth?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">N. India Call Connection Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of call attempts from NI users that connect AND complete</div>
+            </td>
+            <td>30%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Product works for NI users — quality of regional experience</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">N. India Day 7 User Retention</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of new NI users active on day 7 after install</div>
+            </td>
+            <td>1%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Are acquired NI users sticking around?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">N. India Creator Retention (Monthly Active)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of NI creators active in the current month vs last</div>
+            </td>
+            <td>80%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">NI supply side health — no creators = no growth</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Same framework as Sneha · all numbers filtered to North India. Saran provides the regional breakout from the same dashboards.
+      </p>
+    </div>
+  </div>
+
+  <!-- YUVANESH -->
+  <div class="person" data-apps="hima only-care blr-connect" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Yuvanesh</div>
+    </div>
+    <div class="person-role">Tech Lead — All Apps + Hima Strategist · Reports to JP · Manages Rishabh, Ranjini, Saran, Tamil Arasan, Sneha Prathap · Hosts Hima Sprint Planning + Review</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Yuvanesh · 1st Thu 3:30 PM · 30 min &nbsp;·&nbsp; <b>Hima Leaders Sync</b> Mon + Thu 5:00 PM (Nandha hosts) · attended with Sneha + Meghana + Saran</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own the tech direction for all 5 apps. Ship Hima reliably every 2 weeks. Allocate scarce resources (designer, QA, data) across products. Mentor the 4 product TLs. Hire and grow the engineering team.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 70">
+          <div class="pct">70%</div>
+          <div class="label">Hima</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Only Care</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">BLR Connect</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-50); margin-top: 8px;">
+        Hima primary revenue (₹6Cr/mo). Only Care growth product. Bangalore Connect new launch.
+      </div>
+    </div>
+
+    <!-- UNIVERSAL KPI MATRIX -->
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics, applied per app, weighted by product priority</div>
+      <p style="font-size: 13px; color: var(--text-50); margin-bottom: 24px; line-height: 1.7;">
+        Same scorecard for every app. Each product gets weighted by business priority. Total adds to 100.
+      </p>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 32%;">KPI</th>
+            <th style="width: 18%;">Target</th>
+            <th style="width: 12%; text-align: right;">Hima<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">70% block</span></th>
+            <th style="width: 14%; text-align: right;">Only Care<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">20% block</span></th>
+            <th style="width: 12%; text-align: right;">BLR Connect<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">10% block</span></th>
+            <th style="width: 12%; text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Sprint Release Compliance</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Bi-weekly sprints · 2 per month · both ship on planned date</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / 2</td>
+            <td style="text-align: right; color: var(--text);">22</td>
+            <td style="text-align: right; color: var(--text-70);">6</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">31</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Critical Bugs in Production (P0/P1)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Critical user-impacting bugs per month — includes security incidents, payment failures, data leaks, fraud exploits</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="text-align: right; color: var(--text);">18</td>
+            <td style="text-align: right; color: var(--text-70);">6</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">27</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Crash-Free Session Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of sessions without app crash</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">95%</td>
+            <td style="text-align: right; color: var(--text);">16</td>
+            <td style="text-align: right; color: var(--text-70);">5</td>
+            <td style="text-align: right; color: var(--text-50);">2</td>
+            <td style="text-align: right; font-weight: 600;">23</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">App Store Rating</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Play Store, maintained or trending up</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4.5 ★</td>
+            <td style="text-align: right; color: var(--text);">14</td>
+            <td style="text-align: right; color: var(--text-70);">3</td>
+            <td style="text-align: right; color: var(--text-50);">2</td>
+            <td style="text-align: right; font-weight: 600;">19</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Subtotal · Per Product</td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">70</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">20</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">10</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Each KPI is measured on all 3 product blocks. <span style="color: var(--text);">Crash-Free Session Rate</span> on Hima earns 16 points. Same metric on Only Care earns 5. On Bangalore Connect earns 2.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- RISHABH -->
+  <div class="person" data-apps="hima only-care" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Rishabh</div>
+    </div>
+    <div class="person-role">Team Lead — Hima Product · Reports to Yuvanesh · Manages Perumal (Hima), Maari (Only Care), Sumit (BLR Connect), Barkha (Astro)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Yuvanesh ↔ Rishabh · 1st Wed 2:30 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> Hima Sprint cycle (Mon 12 PM + Fri 2 PM)</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Direct accountability for Hima engineering output (primary — he + Perumal ship it). Hosts the Only Care sprint ceremony and mentors Maari (sole OC dev) as secondary. Also hosts BLR Connect sprints + oversees Barkha (Astro) — tracked via Engineering Standup, not separately scored.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 80">
+          <div class="pct">80%</div>
+          <div class="label">Hima</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Only Care</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-50); margin-top: 8px;">
+        Hima primary — revenue product Rishabh executes directly with Perumal. Only Care secondary — he hosts the sprint ceremony and mentors Maari (sole dev). BLR Connect + Astro tracked via Engineering Standup, not separately weighted.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 engineering metrics, weighted by product</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 32%;">KPI</th>
+            <th style="width: 18%;">Target</th>
+            <th style="width: 18%; text-align: right;">Hima<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">80% block</span></th>
+            <th style="width: 18%; text-align: right;">Only Care<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">20% block</span></th>
+            <th style="width: 14%; text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Sprint Release Compliance</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Bi-weekly sprints · 2 per month · both ship on planned date</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / 2</td>
+            <td style="text-align: right; color: var(--text);">26</td>
+            <td style="text-align: right; color: var(--text-50);">6</td>
+            <td style="text-align: right; font-weight: 600;">32</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Critical Bugs in Production (P0/P1)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Critical user-impacting bugs — includes security, payment, fraud</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="text-align: right; color: var(--text);">21</td>
+            <td style="text-align: right; color: var(--text-50);">5</td>
+            <td style="text-align: right; font-weight: 600;">26</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Crash-Free Session Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of sessions without app crash</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">95%</td>
+            <td style="text-align: right; color: var(--text);">17</td>
+            <td style="text-align: right; color: var(--text-50);">5</td>
+            <td style="text-align: right; font-weight: 600;">22</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">App Store Rating</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Play Store rating, maintained or trending up</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4.5 ★</td>
+            <td style="text-align: right; color: var(--text);">16</td>
+            <td style="text-align: right; color: var(--text-50);">4</td>
+            <td style="text-align: right; font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Per Product</td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">80</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">20</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Direct execution layer for Hima (his Hima score ⊆ Yuvanesh's Hima score). Only Care is the oversight layer — Maari is the dev; Rishabh is scored on hosting the ceremony + code/release quality. BLR Connect + Astro are tracked via Engineering Standup, not separately weighted.
+      </p>
+    </div>
+  </div>
+
+  <!-- PERUMAL -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Perumal</div>
+    </div>
+    <div class="person-role">Full Stack Developer — Hima · Reports to Rishabh</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Rishabh ↔ Perumal · 1st Wed 3:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Engineering Standup 11:00 AM + Hima sprint cycle</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Execute Hima feature development and bug fixes under Rishabh's direction. Co-accountable for Hima engineering output. 100% Hima focus — no other product allocations.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 engineering metrics, 100% Hima focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Sprint Release Compliance</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Bi-weekly sprints · 2 per month · both ship on planned Friday</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / 2</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Direct contribution to Hima shipping discipline</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">32</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Critical Bugs in Production (P0/P1)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Critical user-impacting bugs per month — includes security, payment, fraud</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Code quality — Perumal's code reaches users</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">26</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Crash-Free Session Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of sessions without app crash</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">95%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Stability of code Perumal ships</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">22</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">App Store Rating</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Play Store rating, maintained or trending up</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4.5 ★</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">User-facing quality signal</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Rishabh's Hima column. Same engineering outcomes, IC execution layer under TL.
+      </p>
+    </div>
+  </div>
+
+  <!-- MAARI -->
+  <div class="person" data-apps="only-care" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Maari</div>
+    </div>
+    <div class="person-role">Full Stack Developer — Only Care · Reports to Rishabh · Sole Only Care dev</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Rishabh ↔ Maari · 1st Wed 3:00 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> Only Care sprint cycle (Mon 2 PM + Tue 12 PM) + daily Engineering Standup</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Execute Only Care feature development and bug fixes as the sole Only Care dev, under Rishabh's direction. Co-accountable for Only Care engineering output. 100% Only Care focus — no other product allocations.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 engineering metrics, 100% Only Care focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Sprint Release Compliance</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Bi-weekly sprints · 2 per month · both ship on planned date</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / 2</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Direct contribution to Only Care shipping discipline</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">32</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Critical Bugs in Production (P0/P1)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Critical user-impacting bugs per month — includes security, payment, fraud</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Code quality — Maari's code reaches Only Care users</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">26</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Crash-Free Session Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of sessions without app crash</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">95%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Stability of code Maari ships</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">22</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">App Store Rating</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Only Care Play Store rating, maintained or trending up</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4.5 ★</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">User-facing quality signal</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Rishabh's Only Care column. Same engineering outcomes, sole-dev execution layer for Only Care.
+      </p>
+    </div>
+  </div>
+
+  <!-- BALA -->
+  <div class="person" data-apps="only-care" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Bala</div>
+    </div>
+    <div class="person-role">COO · acting PM — Only Care · Reports to JP · Manages Suwetha, Rachita, Dhanalakshmi (support) + Dhanush (BLR PM)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Bala · 1st Thu 4:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Only Care Standup 10:30 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own the Only Care product as acting PM — drive Only Care revenue, engagement, retention, and supply health. Coordinate dev (Maari, via Rishabh), support, and marketing for Only Care. (COO duties tracked separately.)
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Mirrors Sneha's 4 PM metrics — scoped to Only Care</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Revenue Growth (Only Care)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Only Care MoM revenue growth</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core business outcome — PM owns the roadmap that drives Only Care growth</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Call Connection Rate (Only Care)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of call attempts that connect AND complete (not dropped)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">The revenue driver — failed connections = lost revenue</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Day 7 User Retention (Only Care)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of new users active on day 7 after install</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Product stickiness</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Provider/Creator Retention (Monthly Active)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of providers/creators active in the current month vs last</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Two-sided marketplace health</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Sneha Sunoj's Hima PM scorecard, scoped to Only Care. Targets TBD — JP to set for Only Care scale. COO-level org/ops duties reviewed separately.
+      </p>
+    </div>
+  </div>
+
+  <!-- DHANUSH -->
+  <div class="person" data-apps="blr-connect" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Dhanush</div>
+    </div>
+    <div class="person-role">Product Manager — Bangalore Connect · Reports to Bala · Functional lead for Sumit (dev — engineering reports to Rishabh)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Bala ↔ Dhanush · 1st Wed 4:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Bangalore Connect Standup 10:30 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own BLR Connect end-to-end as PM for the Bangalore market — growth, engagement, retention, release delivery. Sumit dev's it; Rishabh hosts the engineering sprint.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Mirrors Sneha's 4 PM metrics — scoped to BLR Connect</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Revenue / User Growth (BLR Connect)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">BLR Connect MoM revenue / active-user growth (Bangalore market)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core business outcome — PM owns the roadmap that drives BLR Connect growth</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Call Connection Rate (BLR Connect)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of call attempts that connect AND complete (not dropped)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">The revenue driver — failed connections = lost revenue</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Day 7 User Retention (BLR Connect)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of new users active on day 7 after install</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Product stickiness</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Provider/Creator Retention (Monthly Active)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of providers/creators active in the current month vs last</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;"><b>TBD</b></td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Two-sided marketplace health</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Sneha Sunoj's PM scorecard, scoped to BLR Connect (Bangalore market). Targets TBD — to be set as the product matures.
+      </p>
+    </div>
+  </div>
+
+  <!-- RANJINI -->
+  <div class="person" data-apps="hima only-care unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Ranjini</div>
+    </div>
+    <div class="person-role">QA Lead · Reports to Yuvanesh · Manages Laxmi (Hima QA), Iksha (Only Care QA), Priya (Content Moderator &amp; QA)</div>
+    <div class="kpi-review">KPI Review · <b>Hima Sprint Planning + Review</b> · Mon 12 PM + Fri 2 PM · with Sneha + Yuvanesh + Rishabh</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Catch critical issues before they reach production across Hima, Only Care, and Unman. Build test coverage on critical paths. Operate Slack-first — no daily meetings, async bug reporting in #hima-bugs / #onlycare-bugs / #unman-bugs.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 70">
+          <div class="pct">70%</div>
+          <div class="label">Hima</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Only Care</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">Unman</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">3 QA-specific metrics, applied per product</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 32%;">KPI</th>
+            <th style="width: 18%;">Target</th>
+            <th style="width: 12%; text-align: right;">Hima<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">70% block</span></th>
+            <th style="width: 14%; text-align: right;">Only Care<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">20% block</span></th>
+            <th style="width: 12%; text-align: right;">Unman<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">10% block</span></th>
+            <th style="width: 12%; text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Defect Escape Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of critical bugs that reached prod despite QA</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="text-align: right; color: var(--text);">29</td>
+            <td style="text-align: right; color: var(--text-70);">9</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">41</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Test Coverage (Critical Paths)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of payment, call, auth flows with automated tests</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">80%</td>
+            <td style="text-align: right; color: var(--text);">22</td>
+            <td style="text-align: right; color: var(--text-70);">7</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">32</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Bug Verification Turnaround</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Avg time to verify a dev's bug fix</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 2 days</td>
+            <td style="text-align: right; color: var(--text);">19</td>
+            <td style="text-align: right; color: var(--text-70);">4</td>
+            <td style="text-align: right; color: var(--text-50);">4</td>
+            <td style="text-align: right; font-weight: 600;">27</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Per Product</td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">70</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">20</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">10</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: bugs found in QA vs reported by users, Slack response time on bug channels, Laxmi + Iksha output, test automation pipeline status, release sign-off on-time rate, regression count.
+      </p>
+    </div>
+  </div>
+
+  <!-- TAMIL ARASAN -->
+  <div class="person" data-apps="hima only-care blr-connect unman cross" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Tamil Arasan</div>
+    </div>
+    <div class="person-role">Product Designer · All Apps · Reports to Yuvanesh · Solo designer across the org</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Yuvanesh ↔ Tamil Arasan · 1st Wed 4:00 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> attends Mon Hima Sprint Planning (design briefs)</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own product design across all Innovfix apps. Ship Figma-final designs that match PM intent on first pass. Build and maintain a shared design system so new features are consistent across Hima, Only Care, BLR Connect, Unman. Bottleneck IC — one designer for 4+ apps means leverage matters more than volume.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 60">
+          <div class="pct">60%</div>
+          <div class="label">Hima</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Only Care</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">BLR Connect</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">Unman + Sudar</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-50); margin-top: 8px;">
+        Hima gets the most design effort (highest velocity, flagship). Other apps get baseline design support.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">3 design-specific metrics, applied per app</div>
+      <p style="font-size: 13px; color: var(--text-50); margin-bottom: 24px; line-height: 1.7;">
+        Same scorecard for every app. Each product weighted by business priority. Total adds to 100. Designs are anything Figma-final handed to dev — screens, flows, components, illustrations.
+      </p>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 32%;">KPI</th>
+            <th style="width: 14%;">Target</th>
+            <th style="width: 11%; text-align: right;">Hima<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">60% block</span></th>
+            <th style="width: 12%; text-align: right;">Only Care<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">20% block</span></th>
+            <th style="width: 11%; text-align: right;">BLR Connect<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">10% block</span></th>
+            <th style="width: 10%; text-align: right;">Unman+Sudar<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">10% block</span></th>
+            <th style="width: 10%; text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Designs Shipped Monthly</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Figma-final screens/flows handed to dev each month</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">20</td>
+            <td style="text-align: right; color: var(--text);">24</td>
+            <td style="text-align: right; color: var(--text-70);">8</td>
+            <td style="text-align: right; color: var(--text-50);">4</td>
+            <td style="text-align: right; color: var(--text-50);">4</td>
+            <td style="text-align: right; font-weight: 600;">40</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">First-Pass Approval Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of designs approved by PM without major revisions</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">60%</td>
+            <td style="text-align: right; color: var(--text);">21</td>
+            <td style="text-align: right; color: var(--text-70);">7</td>
+            <td style="text-align: right; color: var(--text-50);">4</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Design System Adoption</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of new features using shared design system components</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">90%</td>
+            <td style="text-align: right; color: var(--text);">15</td>
+            <td style="text-align: right; color: var(--text-70);">5</td>
+            <td style="text-align: right; color: var(--text-50);">2</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">25</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Per Product</td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">60</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">20</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">10</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">10</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: design system component count, screens reused across apps, revisions per design, time-to-first-iteration, designer-PM-dev handoff quality. <span style="color: var(--text-30);">Bottleneck IC — quality and leverage matter more than raw volume since he's the sole designer.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- DEEKSHA -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Deeksha</div>
+    </div>
+    <div class="person-role">Team Lead — Operations · Reports to Sneha · Manages Nisha (Tamil), Gousia (Telugu), Reshma (Malayalam), Anjali (Bengali + Hindi) · Handles Kannada herself</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Sneha ↔ Deeksha · 1st Mon 3:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> ops pulse in Sneha's 10:30 standup</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Lead the Hima support team across 6 languages (Tamil, Telugu, Malayalam, Bengali, Hindi, Kannada). Deeksha herself handles Kannada in addition to leading the team. Resolve user + creator issues fast, keep CSAT high, escalate only when truly necessary.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 standard support metrics — 100% Hima focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Ticket Resolution Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of tickets resolved by support without escalating to dev/JP</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">90%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core effectiveness — is the team self-sufficient?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">First Response Time (FRT)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of tickets receiving first response within SLA time</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">80%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Speed builds trust — users hate waiting</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Ticket Re-open Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of resolved tickets reopened by the same user · proxy for satisfaction · no customer rating system in Hima</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 5%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality of resolution — reopened ticket = dissatisfied user</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Average Resolution Time</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of tickets resolved within SLA time window</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">100%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Throughput — closing tickets, not just opening</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: tickets by language (Ta / Te / Ml / Bn / Hi / Kn), response time per rep, top 5 issue categories (payment, calls, creators), repeat issue rate, refund volume.
+      </p>
+    </div>
+  </div>
+
+  <!-- KISHORE -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Kishore Prabakaran</div>
+    </div>
+    <div class="person-role">Content Lead — Hima · Reports to Krishnan · Manages Nehal, Fathima, Tiyasa, Haripriya, Disha</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Krishnan ↔ Kishore · 1st Wed 3:00 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Creative Standup 10:30 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Lead Hima ad creative production. Direct the 5-person Hima content team to ship AI-generated video ads + scripts that feed Anirudh's Meta + Google Ads campaigns. The execution layer under Krishnan for Hima specifically.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 metrics as Krishnan — 100% Hima focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hima Ad Creatives Shipped Monthly</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Hima-specific AI videos + scripts + graphics handed to ads team</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">130</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Volume — Hima needs constant fresh creatives</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hima Ad CTR (Meta + Google)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Click-through rate of Hima creatives in paid ads</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — better Hima creative = lower CAC for Anirudh</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hima Ad → Install Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of Hima ad clicks that convert to app installs</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">35%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Outcome — creative actually drove a Hima user</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hima Hit Rate (Ads with CTR > 3%)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of Hima shipped ads that performed above CTR benchmark</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">9%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality-adjusted output — winners vs churn</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Krishnan's Hima share. Sub-metrics tracked weekly: top Hima ad winners (which scaled), underperformer kill list, each creator's output (Nehal / Fathima / Tiyasa / Haripriya / Disha), script-to-publish cycle time, AI generation cost per video.
+      </p>
+    </div>
+  </div>
+
+  <!-- ANAZ -->
+  <div class="person" data-apps="hima only-care unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Anaz</div>
+    </div>
+    <div class="person-role">Video Editor · Reports to Krishnan · Bottleneck IC for ad creative production</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Krishnan ↔ Anaz · 1st Wed 4:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Creative Standup 10:30 AM with Krishnan</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Edit final videos for Hima + Only Care + Unman ad campaigns. Single-point dependency for video output — if Anaz is blocked, the whole ad pipeline stalls. Speed + quality + reliability are non-negotiable.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics for video edit throughput and quality</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Videos Edited Per Month</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Final edited videos shipped to ads team</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">130</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Throughput — Anaz's volume drives Krishnan's volume</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Edit Cycle Time</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Avg hours from script/raw footage to final video</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 2 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Speed — fast cycle = more ads tested = more winners found</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">First-Pass Approval Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of edits Krishnan approves without revision</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">50%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — fewer rework loops = more output</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Output Coverage Across Products</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Hima / Only Care / Unman split matches demand</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Fairness — no product starved of video edits</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">15</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: backlog depth (pending edits), AI tool usage efficiency, video styles experimented, reuse of effects/templates across edits.
+      </p>
+    </div>
+  </div>
+
+  <!-- GARGI -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Gargi Bisht</div>
+    </div>
+    <div class="person-role">Social Media Manager · Reports to Anindita · Organic growth across social platforms</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Anindita ↔ Gargi · 1st Mon 4:00 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Growth Standup 11:30 AM with Anindita</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Research trending content and post consistently across Instagram, YouTube, Facebook, and Threads to drive <strong>organic</strong> audience growth. No paid promotion — that's Anirudh's domain. Build Hima brand presence organically.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 organic social media metrics</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Organic Follower Growth (MoM)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Net new followers across all platforms, without paid push</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">60%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Main outcome — audience grows organically</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Avg Engagement Rate per Post</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">(Likes + comments + shares + saves) / views</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">3%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — does content actually resonate?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Posts Per Week (multi-platform)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Consistent posting cadence across all platforms</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">20</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Discipline — algorithms reward consistency</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Reach / Impressions Growth (MoM)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Total people seeing Hima content organically</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">20%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Top of funnel — awareness beyond just followers</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">15</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: platform breakdown (Instagram / YouTube / Facebook / Threads), top performing post, trending topics caught early, Hindi vs Bengali split, best time to post analysis.
+      </p>
+    </div>
+  </div>
+
+  <!-- SWAPNA -->
+  <div class="person" data-apps="only-care unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Swapna M</div>
+    </div>
+    <div class="person-role">Performance Marketer · Reports to Anirudh · Handles Only Care + Sudar + Unman paid ads</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Anirudh ↔ Swapna · 1st Wed 4:00 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Performance Marketing Standup 11:00 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Run paid acquisition for Innovfix's non-Hima apps — Only Care (primary), Sudar (secondary), Unman (small). Same playbook as Anirudh but applied to growing products. Anirudh focuses on Hima; Swapna fills the rest.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Product Weighting</div>
+      <div class="weight-bar">
+        <div class="weight-segment primary" style="flex: 70">
+          <div class="pct">70%</div>
+          <div class="label">Only Care</div>
+        </div>
+        <div class="weight-segment secondary" style="flex: 20">
+          <div class="pct">20%</div>
+          <div class="label">Sudar</div>
+        </div>
+        <div class="weight-segment tertiary" style="flex: 10">
+          <div class="pct">10%</div>
+          <div class="label">Unman</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 metrics as Anirudh — applied to non-Hima apps</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 32%;">KPI</th>
+            <th style="width: 18%;">Target</th>
+            <th style="width: 14%; text-align: right;">Only Care<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">70% block</span></th>
+            <th style="width: 12%; text-align: right;">Sudar<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">20% block</span></th>
+            <th style="width: 12%; text-align: right;">Unman<br><span style="color: var(--text-30); font-size: 9px; letter-spacing: 1px;">10% block</span></th>
+            <th style="width: 12%; text-align: right;">Total</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">CAC (Cost per Paid User)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Ad spend ÷ paying users acquired across non-Hima apps</div>
+            </td>
+            <td>₹450</td>
+            <td style="text-align: right; color: var(--text);">21</td>
+            <td style="text-align: right; color: var(--text-70);">6</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">ROAS (30-day Return on Ad Spend)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Revenue from acquired users ÷ ad spend, 30-day window</div>
+            </td>
+            <td>3x</td>
+            <td style="text-align: right; color: var(--text);">18</td>
+            <td style="text-align: right; color: var(--text-70);">5</td>
+            <td style="text-align: right; color: var(--text-50);">2</td>
+            <td style="text-align: right; font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Install Volume</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Total new installs from paid ads</div>
+            </td>
+            <td>40% MoM</td>
+            <td style="text-align: right; color: var(--text);">17</td>
+            <td style="text-align: right; color: var(--text-70);">5</td>
+            <td style="text-align: right; color: var(--text-50);">3</td>
+            <td style="text-align: right; font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Register → First Purchase Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of registered users that buy coins within 7 days</div>
+            </td>
+            <td>28%</td>
+            <td style="text-align: right; color: var(--text);">14</td>
+            <td style="text-align: right; color: var(--text-70);">4</td>
+            <td style="text-align: right; color: var(--text-50);">2</td>
+            <td style="text-align: right; font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Per Product</td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">70</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">20</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">10</td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Anirudh's framework, applied to non-Hima apps. Sub-metrics tracked weekly: spend by region, top performing creative, day 1/7/30 revenue per cohort, platform split (Meta vs Google), per-app CAC trends.
+      </p>
+    </div>
+  </div>
+
+  <!-- SIVARANJANI -->
+  <div class="person" data-apps="only-care" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Sivaranjani N</div>
+    </div>
+    <div class="person-role">Content Lead — Only Care · Reports to Krishnan</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Krishnan ↔ Sivaranjani · 1st Wed 3:30 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Creative Standup 10:30 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Lead Only Care ad creative production. Ship AI-generated video ads + scripts that feed Swapna's Only Care Meta + Google Ads campaigns. The execution layer under Krishnan for Only Care.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 metrics as Kishore — 100% Only Care focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Only Care Ad Creatives Shipped Monthly</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Only Care AI videos + scripts + graphics handed to ads team</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Volume — Only Care needs constant fresh creatives</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Only Care Ad CTR (Meta + Google)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Click-through rate of Only Care creatives in paid ads</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — better Only Care creative = lower CAC for Swapna</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Only Care Ad → Install Conversion</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of Only Care ad clicks that convert to app installs</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Outcome — creative actually drove an Only Care user</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Only Care Hit Rate (Ads with CTR > 3%)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of Only Care shipped ads that performed above CTR benchmark</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality-adjusted output — winners vs churn</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Kishore's framework for Only Care. Sub-metrics tracked weekly: top Only Care ad winners, underperformer kill list, script-to-publish cycle time, AI generation cost per video.
+      </p>
+    </div>
+  </div>
+
+  <!-- SARAN -->
+  <div class="person" data-apps="hima data" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Saran</div>
+    </div>
+    <div class="person-role">Data Analyst — Hima · Reports to Yuvanesh · Strategic data partner to JP · Manages Prajwal (intern)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Yuvanesh ↔ Saran · 1st Thu 11:00 AM · 30 min &nbsp;·&nbsp; <b>Daily</b> CEO Data Briefing with JP · 11:30 AM</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Build self-serve dashboards so people stop asking for numbers. Detect anomalies. Run strategic deep-dives that move JP's decisions. <strong>DA finds insight; BA recommends action.</strong> Saran owns the data layer for Hima — Meghana translates his work into business cases.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 data-specific metrics — 100% Hima focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Self-Serve Dashboard / MCP Coverage</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of standard business questions answerable via dashboards or MCP tools without asking Saran directly</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">75%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Leverage — Saran's #1 job is making himself optional for routine numbers</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Anomaly Detection Speed</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Time to flag revenue/CAC/retention anomalies after they occur</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 4 hrs</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Early warning — anomalies caught at hour 4 cost less than at day 4</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Strategic Deep-Dives Delivered</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Major investigations per month (LTV by region, top-creator analysis, payment funnel, etc.)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / month</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Strategic value — answers questions that change company direction</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">A/B Test Throughput</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">A/B tests designed + analyzed per month (with statistical rigor)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / month</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Experiment velocity — drives data-informed product + marketing decisions</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: ad-hoc query volume (lower = better dashboards), insight quality rating from JP, time-to-answer for ad-hoc requests, Prajwal output, A/B test result documentation, model accuracy on anomaly detection.
+      </p>
+    </div>
+  </div>
+
+  <!-- MEGHANA -->
+  <div class="person" data-apps="hima" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Meghana</div>
+    </div>
+    <div class="person-role">Business Analyst — Hima · Reports to Sneha · Translates data into business decisions</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Sneha ↔ Meghana · 1st Mon 4:30 PM · 30 min &nbsp;·&nbsp; <b>Weekly</b> Sneha 1:1 Mon 4:00 PM · 30 min</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Take insights from Saran's data, add business context, recommend actions to Sneha + JP. The decision-support layer for Hima. Owns weekly executive reports and ad-hoc business cases. <strong>BA recommends action; DA finds insight.</strong>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics focused on business decision support — not data work</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Business Recommendations Delivered (monthly)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Action proposals to Sneha/JP — not findings, but what to DO</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">6</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Core BA output — moves business forward, not just describes it</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Recommendation Adoption Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of her recommendations Sneha actually acted on</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">60%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — are her recommendations relevant + sound?</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Decision Memo Turnaround</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Speed when Sneha/JP ask "Should we do X? Build me a case."</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 3 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Responsiveness — unblocks decisions</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Weekly Hima Business Report</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Synthesized executive intel for Sneha + JP (not raw data — Saran's job)</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4 / 4</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Discipline — leadership rhythm always running</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: top recommendation of the week, adoption status of last month's recommendations, open decision memos, weekly report contents, Saran collaboration cadence.
+      </p>
+    </div>
+  </div>
+
+  <!-- SOORAJ -->
+  <div class="person" data-apps="hima only-care unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Sooraj</div>
+    </div>
+    <div class="person-role">Graphic Designer · Reports to Krishnan · Bottleneck IC for all visual design across products</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Krishnan ↔ Sooraj · 1st Wed 4:00 PM · 30 min &nbsp;·&nbsp; <b>Daily</b> Creative Standup 10:30 AM with Krishnan</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Design graphic assets for all Innovfix products — ad banners, app store screenshots, thumbnails, brand assets, social graphics. Single-point dependency for visual design. Speed + quality + product coverage are non-negotiable.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics for graphic design throughput and quality</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Graphics Designed Per Month</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Final graphic assets shipped to ads / marketing</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">80</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Throughput — Sooraj's volume drives ad creative variety</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">35</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Design Cycle Time</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Avg hours from brief to final asset</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 2 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Speed — faster turnaround = more ads tested</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">First-Pass Approval Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of designs Krishnan approves without revision</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">60%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Quality — fewer rework loops = more output</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Output Coverage Across Products</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Hima / Only Care / Unman split matches demand</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">20</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Fairness — no product starved of design assets</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">15</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: ad banners shipped, app store screenshots, thumbnails, brand assets, social graphics (Gargi requests), internal asset requests (decks/presentations), backlog depth.
+      </p>
+    </div>
+  </div>
+
+  <!-- AYUSH -->
+  <div class="person" data-apps="cross" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Ayush</div>
+    </div>
+    <div class="person-role">Co-founder · CFO — Finance · Reports to JP · Manages Shoyab · Irisha (ad-hoc — leaving end-of-month)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Ayush · 1st Thu 5:00 PM · 60 min &nbsp;·&nbsp; <b>Weekly</b> JP ↔ Ayush CFO Check-in (Tue 4 PM)</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Co-founder accountability: build strategic capital — investor relationships, expert advisors, partnership pipeline, and industry presence. Finance ops (books, payout, GST/TDS) are Shoyab's execution; Ayush's scored contribution is external relationship-building and strategic-level financial oversight.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 strategic / network metrics — co-founder accountability</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">New Strategic Connections</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Investors · advisors · domain experts · partners introduced to Innovfix per month</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">1</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Network compounds — each connection opens multiple doors</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Expert / Advisor Meetings Conducted</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Meetings held with investors, advisors, or domain experts per month</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">1</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Learning + credibility — expert input improves decisions</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Investment Events &amp; Conferences Attended</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Startup summits, VC events, industry conferences visited per month</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">1</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Visibility + deal flow — presence in the right rooms</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Investor / Partner Pipeline Advanced</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Conversations moved to next stage — term sheets, LOIs, partnerships, or formal follow-ups per month</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">1</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Pipeline momentum — relationships converting to outcomes</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Conservative targets (1 per month each) — minimum standard for now; raise as deal flow builds. Finance ops (payout accuracy, books close, GST/TDS) tracked via Shoyab's scorecard — not double-scored here. Monthly JP ↔ Ayush MBR reviews both this scorecard and the full P&amp;L.
+      </p>
+    </div>
+  </div>
+
+  <!-- SHOYAB -->
+  <div class="person" data-apps="cross" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Shoyab</div>
+    </div>
+    <div class="person-role">Accountant · Reports to Ayush · Bottleneck IC for all finance operations</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Ayush ↔ Shoyab · 1st Wed 11:00 AM · 30 min &nbsp;·&nbsp; <b>Daily</b> Finance Standup 10:30 AM with Ayush</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Run all of Innovfix's finance ops — payroll, GST/TDS filings, creator payouts (₹2 Cr/mo at Hima alone), bank reconciliation across PhonePe + Cashfree, vendor payments. Single-point dependency — if Shoyab is blocked, finance breaks.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 finance operations metrics</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Creator Payout Accuracy & Timeliness</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of creators paid correct amount on schedule</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">100%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Hima creator payouts = ₹2 Cr/mo. One mistake = creator trust gone</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Tax Filing Compliance (GST + TDS)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">All tax filings completed on/before due date</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0 penalties · 0 late</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Legal risk — missed deadlines = penalties + audit risk</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Monthly Books Close Time</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Days from month-end to closed books</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">≤ 5 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Ayush needs clean books for monthly P&L review with JP</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Daily Bank Reconciliation Cadence</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">PhonePe + Cashfree + bank statement reconciled daily</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">22 / 22 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Catches discrepancies early — daily, not monthly</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: payout volume (₹ + creator count), PhonePe vs Cashfree reconciliation status, pending vendor invoices, outstanding tax deadlines, payroll accuracy rate.
+      </p>
+    </div>
+  </div>
+
+  <!-- SNEHA PRATHAP -->
+  <div class="person" data-apps="unman" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Sneha Prathap</div>
+    </div>
+    <div class="person-role">Gen AI Developer — Unman · Reports to Yuvanesh · Lead dev for Unman (Unman equivalent of Rishabh)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> Yuvanesh ↔ Sneha Prathap · 1st Wed 3:00 PM · 30 min &nbsp;·&nbsp; owns Unman end-to-end</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Lead Unman development — the Gen AI product. Single-product focus (100% Unman). Direct accountability for shipping Unman releases, model quality, and user experience. AI-specific issues (model accuracy, hallucinations, generation errors) count as critical bugs.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">Same 4 engineering metrics, 100% Unman focus</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Sprint Release Compliance</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Bi-weekly sprints · 2 per month · both ship on planned date</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">2 / 2</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Delivery discipline — Sneha P is the one shipping Unman</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">32</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Critical Bugs in Production (P0/P1)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Includes AI model issues — accuracy failures, hallucinations, generation errors</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">0</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Code + model quality — direct user impact</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">26</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Crash-Free Session Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of Unman sessions without app crash</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">95%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Stability of the Unman code Sneha P ships</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">22</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">App Store Rating</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Unman Play Store rating, maintained or trending up</div>
+            </td>
+            <td style="color: var(--text); font-weight: 600;">4.5 ★</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">User-facing quality signal for AI product</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Mirrors Rishabh's structure for Unman. Sub-metrics tracked weekly: model accuracy / quality scores, inference latency, API cost per query, hallucination / error rate, user satisfaction with AI outputs.
+      </p>
+    </div>
+  </div>
+
+  <!-- AKSHARA -->
+  <div class="person" data-apps="cross" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Akshara</div>
+    </div>
+    <div class="person-role">HR Manager · Reports to JP</div>
+    <div class="kpi-review">KPI Review · <b>JP ↔ Akshara 1:1</b> · TBD · Weekly</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Own all people operations for Innovfix — recruitment, retention, employee satisfaction, and compliance. Talent is the engine of every product; Akshara keeps it fueled.
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 HR fundamentals — hire, keep, satisfy, comply</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Time to Hire</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Avg days from job posted to offer accepted</div>
+            </td>
+            <td>5 days</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Growth depends on filling roles fast — stuck open roles = lost momentum</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Employee Retention Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of employees retained over rolling quarter</div>
+            </td>
+            <td>80%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Losing seniors = months of recovery, lost context, hiring cost</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Employee Satisfaction (eNPS)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Net Promoter Score — would employees recommend Innovfix?</div>
+            </td>
+            <td>90%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Leading indicator of retention — culture quality signal</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">HR Compliance Score</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">PF, ESI, labor law, contracts — all on time, zero penalties</div>
+            </td>
+            <td>100%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Zero legal risk — missed deadlines = penalties + audit risk</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">20</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: open roles + days open per role, recent resignations (regretted vs not), new hire 90-day retention, pending PF/ESI deadlines, performance review completion %.
+      </p>
+    </div>
+  </div>
+
+  <!-- FIDA -->
+  <div class="person" data-apps="cross" style="padding-top: 32px; border-top: 1px solid var(--line);">
+    <div class="person-header">
+      <div class="person-name">Fida Taneem</div>
+    </div>
+    <div class="person-role">Lead AI Engineer · Reports to JP · Manages 3 AI Interns · Internal AI tooling (Tessa, Finance, HR, Ops)</div>
+    <div class="kpi-review">KPI Review · <b>Monthly</b> JP ↔ Fida · 1st Thu 2:00 PM · 30 min &nbsp;·&nbsp; weekly alignment async (Slack) · daily AI Standup with interns</div>
+
+    <div class="section">
+      <div class="section-eyebrow">Mandate</div>
+      <div class="callout">
+        Build <strong>internal AI tools</strong> that reduce manual work for in-house employees — Tessa platform, Finance AI, HR automations, Ops AI. Impact measured in work hours saved across the company, not external revenue. Different from Sneha Prathap (who builds Unman for customers).
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">KPI Framework</div>
+      <div class="section-title">4 metrics — output, adoption, impact, reliability</div>
+
+      <div class="tbl-scroll"><table class="matrix-table" style="margin-top: 0;">
+        <thead>
+          <tr>
+            <th style="width: 38%;">KPI</th>
+            <th style="width: 25%;">Target</th>
+            <th style="width: 22%;">Why it matters</th>
+            <th style="width: 15%; text-align: right;">Weight</th>
+          </tr>
+        </thead>
+        <tbody class="mono">
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">AI Features Shipped Monthly</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Tessa releases + Finance/HR/Ops AI tools built</div>
+            </td>
+            <td>6</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Output velocity — building new tools regularly</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Internal Tool Adoption Rate</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">% of employees actively using her tools weekly</div>
+            </td>
+            <td>95%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Shipping ≠ adoption. Tools no one uses = waste</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">30</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">Hours Saved Across Company (monthly)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Estimated manual work hours eliminated by her tools</div>
+            </td>
+            <td>—</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">The real impact — JP's vision of "AI reducing inhouse work"</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">25</td>
+          </tr>
+          <tr>
+            <td class="kpi-cell">
+              <div style="font-weight: 600;">System Reliability (Uptime + Bug-free)</div>
+              <div style="font-size: 11px; color: var(--text-50); font-family: 'Inter'; margin-top: 2px;">Internal tools uptime + critical bug count</div>
+            </td>
+            <td>98%</td>
+            <td style="font-family: 'Inter'; font-size: 12px; color: var(--text-50);">Broken Tessa = broken meetings. Outages kill adoption.</td>
+            <td style="text-align: right; color: var(--text); font-weight: 600;">15</td>
+          </tr>
+          <tr style="border-top: 2px solid var(--line-2);">
+            <td style="padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">Total</td>
+            <td></td>
+            <td></td>
+            <td style="text-align: right; padding-top: 18px; font-weight: 700; color: var(--text); font-size: 14px;">100</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <p style="font-size: 12px; color: var(--text-50); margin-top: 16px; line-height: 1.7;">
+        Sub-metrics tracked weekly: Tessa releases shipped, Finance AI tools used by Shoyab, HR automations active for Akshara, Ops AI usage by Deeksha, marketing AI used by Krishnan, bug count in internal systems, intern team output (Bhuvan / Bhoomika / Soundarya).
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Innovfix KPI Framework · Updated <span id="last-updated"></span>
+  </div>
+
+</div>
+<script>
+  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  // App tab filtering
+  const tabs = document.querySelectorAll('.app-tab');
+  const persons = document.querySelectorAll('.person');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter;
+
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      persons.forEach(p => {
+        const apps = (p.dataset.apps || '').split(' ');
+        if (filter === 'all' || apps.includes(filter)) {
+          p.classList.remove('hidden');
+        } else {
+          p.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1007 @@
+/* ══════════════════════════════════════════════════
+   Shared Meeting Styles  (mtg-* prefix)
+   Imported by every portal that has a Meetings tab.
+   ══════════════════════════════════════════════════ */
+
+/* ── Meeting Page Layout ── */
+.mtg-page {
+    height: calc(100vh - 56px); overflow: hidden;
+}
+.mtg-container {
+    height: 100%; display: flex; flex-direction: column;
+    max-width: 1400px; margin: 0 auto; padding: 20px 24px;
+}
+
+.mtg-top-row { margin-bottom: 16px; }
+.mtg-week-nav {
+    display: flex; align-items: center; gap: 12px;
+}
+.mtg-nav-btn {
+    width: 36px; height: 36px; border: 1px solid #27272a; border-radius: 8px;
+    background: #18181b; color: #a1a1aa; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: all 0.15s;
+}
+.mtg-nav-btn:hover { background: #27272a; color: #fff; border-color: #3f3f46; }
+.mtg-week-info { display: flex; flex-direction: column; }
+.mtg-week-label { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+.mtg-week-range { font-size: 13px; color: #a1a1aa; margin-top: 1px; }
+
+.mtg-layout {
+    flex: 1; display: flex; gap: 20px; min-height: 0;
+}
+
+/* ── Sidebar ── */
+.mtg-sidebar {
+    width: 248px; flex-shrink: 0;
+    background: #0f0f11; border: 1px solid #1c1c1e; border-radius: 12px;
+    padding: 12px; display: flex; flex-direction: column; overflow: hidden;
+}
+.mtg-sidebar-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    color: #71717a; font-weight: 600; margin-bottom: 12px;
+}
+.mtg-list { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow-y: auto; }
+
+.mtg-sidebar-footer {
+    flex-shrink: 0;
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid #1c1c1e;
+}
+
+/* ── Cards ── */
+.mtg-card {
+    border: 1px solid #1c1c1e; border-radius: 9px; padding: 10px 12px;
+    background: #18181b; cursor: pointer; transition: all 0.15s;
+}
+.mtg-card:hover { border-color: #3f3f46; background: #1f1f23; }
+.mtg-card.active {
+    border-color: #3f3f46; background: #27272a;
+    box-shadow: 0 0 0 1px #3f3f46;
+}
+.mtg-card-title { font-size: 13px; font-weight: 600; margin: 0; }
+.mtg-card-meta {
+    font-size: 11px; color: #71717a; margin-top: 3px;
+    display: flex; align-items: center; gap: 6px;
+}
+.mtg-card-dot {
+    width: 4px; height: 4px; border-radius: 50%; background: #3f3f46;
+}
+.mtg-card-status {
+    display: inline-block; padding: 2px 8px; border-radius: 999px;
+    font-size: 9px; font-weight: 600; letter-spacing: 0.2px;
+    background: rgba(130, 200, 130, 0.1); color: #6ee7b7; margin-top: 6px;
+}
+.mtg-card-attendees {
+    font-size: 10px; color: #71717a; margin-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mtg-day-badges {
+    display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
+}
+.mtg-day-badge {
+    padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;
+    background: #27272a; color: #a1a1aa; cursor: pointer;
+    border: 1px solid #3f3f46; transition: all 0.15s;
+}
+.mtg-day-badge:hover { background: #3f3f46; color: #e4e4e7; }
+.mtg-day-badge.mtg-day-today { background: rgba(99,102,241,0.18); color: #a5b4fc; border-color: #6366f1; }
+.mtg-day-badge.mtg-day-active { background: #fafafa; color: #09090b; border-color: #fafafa; }
+.mtg-day-badge.mtg-day-skipped { opacity: 0.35; text-decoration: line-through; cursor: default; pointer-events: none; }
+.mtg-day-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: #e4e4e7;
+    background: #27272a;
+    border: 1px solid #3f3f46;
+}
+.cal-meeting-standup { border-left-color: #a5b4fc; }
+
+/* ── Main Panel ── */
+.mtg-main {
+    flex: 1; min-width: 0;
+    background: #0f0f11; border: 1px solid #1c1c1e; border-radius: 12px;
+    display: flex; flex-direction: column; overflow: hidden;
+}
+
+.mtg-empty {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #52525b; text-align: center; padding: 40px;
+}
+.mtg-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+.mtg-empty h3 { font-size: 18px; font-weight: 600; color: #71717a; margin: 0 0 6px; }
+.mtg-empty p { font-size: 13px; color: #52525b; max-width: 340px; margin: 0; line-height: 1.5; }
+
+/* ── Detail Header ── */
+.mtg-detail { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.mtg-detail-header {
+    padding: 20px 24px 0; flex-shrink: 0;
+}
+.mtg-detail-title { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin: 0; }
+.mtg-detail-sub {
+    display: flex; align-items: center; gap: 8px 12px;
+    flex-wrap: wrap;
+    margin-top: 6px; font-size: 13px; color: #71717a;
+}
+.mtg-detail-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500;
+    background: #27272a; color: #a1a1aa;
+    white-space: nowrap;
+}
+
+/* ── Tabs ── */
+.mtg-tabs {
+    display: flex; gap: 2px; padding: 16px 24px 0;
+    border-bottom: 1px solid #1c1c1e; flex-shrink: 0;
+}
+.mtg-tab {
+    background: none; border: none; color: #71717a;
+    padding: 10px 16px; font-size: 13px; font-weight: 500;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all 0.15s; display: flex; align-items: center; gap: 6px;
+    margin-bottom: -1px;
+}
+.mtg-tab:hover { color: #a1a1aa; }
+.mtg-tab.active { color: #fff; border-bottom-color: #fff; }
+.mtg-tab-icon { font-size: 14px; }
+
+/* ── Tab Panels ── */
+.mtg-tab-panel {
+    display: none; flex: 1; overflow-y: auto; padding: 20px 24px;
+}
+.mtg-tab-panel.active { display: flex; flex-direction: column; }
+#tab-lastMom {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.mtg-section-head { margin-bottom: 16px; flex-shrink: 0; }
+.mtg-section-head h4 { font-size: 15px; font-weight: 600; margin: 0; }
+.mtg-section-hint { font-size: 12px; color: #52525b; margin-top: 2px; display: block; }
+
+/* ── Agenda ── */
+.mtg-agenda-section {
+    border: 1px solid #1c1c1e; border-radius: 12px;
+    background: #111113; margin-bottom: 14px; overflow: hidden;
+}
+.mtg-agenda-section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; background: #18181b; border-bottom: 1px solid #1c1c1e;
+}
+.mtg-agenda-section-title {
+    font-size: 14px; font-weight: 600; color: #f4f4f5; margin: 0;
+    text-transform: uppercase; letter-spacing: 0.3px;
+}
+.mtg-agenda-del-section {
+    background: none; border: none; color: #52525b; font-size: 18px;
+    cursor: pointer; padding: 0 4px; line-height: 1;
+}
+.mtg-agenda-del-section:hover { color: #ef4444; }
+.mtg-agenda-section-points {
+    display: flex; flex-direction: column; gap: 0;
+}
+.mtg-agenda-item {
+    border-bottom: 1px solid #1c1c1e;
+    padding: 14px 16px; background: transparent;
+    transition: background-color 0.15s;
+}
+.mtg-agenda-item:last-child { border-bottom: none; }
+.mtg-agenda-item:hover { background: #18181b; }
+.mtg-agenda-question-row {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 8px;
+}
+.mtg-agenda-question {
+    font-size: 13px; font-weight: 500; color: #e4e4e7; flex: 1;
+}
+.mtg-agenda-del-point {
+    background: none; border: none; color: #3f3f46; font-size: 16px;
+    cursor: pointer; padding: 0 2px; line-height: 1; flex-shrink: 0; margin-left: 8px;
+}
+.mtg-agenda-del-point:hover { color: #ef4444; }
+.mtg-agenda-add-point {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-top: 1px solid #1c1c1e;
+}
+.mtg-agenda-add-point .mtg-input-sm {
+    flex: 1; padding: 7px 10px; font-size: 13px;
+    border: 1px solid #27272a; border-radius: 6px;
+    background: #0f0f11; color: #fafafa;
+}
+.mtg-btn-sm {
+    padding: 6px 12px; font-size: 12px; font-weight: 600;
+    border: 1px solid #27272a; border-radius: 6px;
+    background: #18181b; color: #a1a1aa; cursor: pointer;
+}
+.mtg-btn-sm:hover { background: #27272a; color: #fafafa; }
+.mtg-agenda-section-other { border-style: dashed; }
+.mtg-agenda-empty {
+    color: #52525b; font-size: 14px; padding: 24px;
+    text-align: center; border: 1px dashed #27272a; border-radius: 10px;
+}
+.mtg-agenda-toolbar {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.mtg-agenda-add {
+    display: flex; align-items: center; gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+.mtg-agenda-add .mtg-input { flex: 1; }
+
+/* ── Action Items ── */
+.mtg-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 170px;
+}
+.mtg-action-empty {
+    color: #52525b; font-size: 14px; padding: 24px;
+    text-align: center; border: 1px dashed #27272a; border-radius: 10px; flex: 1;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.act-form {
+    margin-top: 14px;
+    border: 1px solid #1c1c1e;
+    border-radius: 10px;
+    background: #101014;
+    padding: 12px;
+}
+.act-form-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+}
+.act-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.act-form-field-task {
+    grid-column: span 2;
+}
+.act-form-field-kpi {
+    grid-column: 1 / -1;
+}
+.act-form-field label {
+    font-size: 10px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+.act-form-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.act-form-status {
+    font-size: 12px;
+    color: #71717a;
+}
+
+.act-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.act-summary-item {
+    border: 1px solid #1c1c1e;
+    background: #101014;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+.act-summary-item.overdue {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.08);
+}
+.act-summary-count {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e5e7eb;
+}
+.act-summary-label {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.act-table-wrap {
+    border: 1px solid #1c1c1e;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+.act-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111115;
+    table-layout: auto;
+}
+.act-table th,
+.act-table td {
+    border-bottom: 1px solid #1c1c1e;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+.act-table td:nth-child(2) {
+    vertical-align: top;
+}
+.act-table th:not(:nth-child(2)),
+.act-table td:not(:nth-child(2)) {
+    white-space: nowrap;
+}
+.act-table th {
+    background: #18181b;
+    color: #71717a;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+.act-row:hover td {
+    background: #15151b;
+}
+.act-row.act-carried td {
+    background: rgba(99, 102, 241, 0.05);
+}
+.act-row.act-overdue td {
+    background: rgba(239, 68, 68, 0.06);
+}
+.act-row.act-overdue td:first-child {
+    box-shadow: inset 3px 0 0 #ef4444;
+}
+.act-task-cell {
+    min-width: 220px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+.act-task {
+    color: #e5e7eb;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.act-carry-label {
+    margin-top: 4px;
+    font-size: 10px;
+    color: #a5b4fc;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.act-comment {
+    margin-top: 6px;
+    padding: 6px 8px;
+    border-left: 2px solid #3f3f46;
+    border-radius: 0 4px 4px 0;
+    background: #17171d;
+    color: #cbd5e1;
+    font-size: 12px;
+    line-height: 1.35;
+    word-break: break-word;
+}
+.act-comment-toggle {
+    display: inline-block;
+    margin-top: 4px;
+    border: none;
+    background: transparent;
+    color: #93c5fd;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 0;
+    text-decoration: underline;
+    text-decoration-color: rgba(147, 197, 253, 0.3);
+    text-underline-offset: 2px;
+}
+.act-comment-toggle:hover {
+    color: #bfdbfe;
+    text-decoration-color: rgba(191, 219, 254, 0.6);
+}
+.act-comment-input {
+    margin-top: 6px;
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid #27272a;
+    border-radius: 8px;
+    background: #18181b;
+    color: #fafafa;
+    padding: 8px 10px;
+    font-size: 12px;
+    resize: vertical;
+}
+.act-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.act-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #d4d4d8;
+}
+.act-priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.act-priority-high { background: #ef4444; }
+.act-priority-medium { background: #f59e0b; }
+.act-priority-low { background: #6b7280; }
+.act-status-badge {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+.act-status-pending { background: rgba(113, 113, 122, 0.2); color: #a1a1aa; }
+.act-status-in_progress { background: rgba(234, 179, 8, 0.2); color: #facc15; }
+.act-status-done { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.act-status-blocked { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+.act-status-select {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    font-size: 12px;
+    padding: 6px 8px;
+    box-sizing: border-box;
+}
+.act-completed-date {
+    font-size: 11px;
+    color: #6ee7b7;
+    margin-bottom: 4px;
+}
+.act-overdue-badge {
+    margin-left: 8px;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(239, 68, 68, 0.24);
+    color: #fca5a5;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+.act-created-week {
+    display: inline-block;
+    color: #cbd5e1;
+    font-size: 12px;
+}
+.act-kpi-link {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.14);
+    color: #93c5fd;
+    font-size: 11px;
+    line-height: 1.4;
+}
+.act-kpi-link.muted {
+    background: rgba(113, 113, 122, 0.14);
+    color: #a1a1aa;
+}
+.act-edit-btn {
+    border: 1px solid #3f3f46;
+    background: #18181b;
+    color: #d4d4d8;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    margin-right: 6px;
+}
+.act-edit-btn:hover {
+    border-color: #3b82f6;
+    color: #93c5fd;
+}
+.act-delete-btn {
+    border: 1px solid #3f3f46;
+    background: #18181b;
+    color: #d4d4d8;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+.act-delete-btn:hover {
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+/* ── Notes ── */
+.mtg-notes-area {
+    width: 100%; min-height: 200px; flex: 1;
+    border: 1px solid #1c1c1e; border-radius: 10px;
+    background: #18181b; color: #fafafa; padding: 14px 16px;
+    font-size: 14px; font-family: inherit; line-height: 1.6;
+    resize: vertical; outline: none; transition: border-color 0.15s;
+}
+.mtg-notes-area:focus { border-color: #3b82f6; }
+.mtg-notes-area::placeholder { color: #3f3f46; }
+.mtg-notes-footer {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 12px; flex-shrink: 0;
+}
+.mtg-save-status { font-size: 12px; color: #6ee7b7; }
+
+/* ── Shared Inputs & Buttons ── */
+.mtg-input {
+    flex: 1; border: 1px solid #1c1c1e; border-radius: 8px;
+    background: #18181b; color: #fafafa; padding: 10px 14px;
+    font-size: 13px; font-family: inherit; outline: none;
+    transition: border-color 0.15s;
+}
+.mtg-input:focus { border-color: #3b82f6; }
+.mtg-input::placeholder { color: #3f3f46; }
+
+.mtg-btn {
+    border: 1px solid #27272a; border-radius: 8px;
+    padding: 9px 16px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+}
+/* DEPRECATED — use .btn .btn-primary */
+.mtg-btn-primary {
+    background: #3b82f6; color: #fff; border-color: #3b82f6;
+}
+.mtg-btn-primary:hover { background: #2563eb; border-color: #2563eb; }
+/* Nothing to save (no unsaved edits): greyed + non-interactive. */
+.mtg-btn-primary:disabled,
+.mtg-btn-primary:disabled:hover { background: #27272a; color: #71717a; border-color: #27272a; cursor: default; }
+/* Already-saved confirmation state ("✓ Saved") — overrides :disabled above. */
+.mtg-btn-primary.is-saved,
+.mtg-btn-primary.is-saved:hover { background: #14532d; color: #86efac; border-color: #166534; cursor: default; }
+.mtg-btn-secondary {
+    background: #18181b; color: #a1a1aa; border-color: #27272a;
+}
+.mtg-btn-secondary:hover { background: #27272a; color: #fafafa; border-color: #3f3f46; }
+.mtg-btn-reset-template {
+    flex-shrink: 0;
+}
+
+/* ── Agenda answer (read-only, AI-filled) ── */
+.mtg-agenda-answer-display {
+    position: relative;
+    border: 1px solid #1c1c1e; border-radius: 8px;
+    background: #0f0f11; color: #d4d4d8; padding: 10px 12px;
+    font-size: 13px; font-family: inherit; line-height: 1.5;
+    min-height: 36px; white-space: pre-wrap; word-break: break-word;
+}
+.mtg-agenda-answer-display.mtg-agenda-answer-empty {
+    color: #3f3f46; font-style: italic; border-style: dashed;
+}
+.mtg-agenda-ai-badge {
+    display: inline-block; margin-left: 8px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #a78bfa; background: rgba(167,139,250,0.1);
+    padding: 1px 6px; border-radius: 4px; vertical-align: middle;
+}
+.mtg-agenda-generating {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; margin-bottom: 10px;
+    color: #a78bfa; font-size: 13px; font-weight: 500;
+    background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.15);
+    border-radius: 10px;
+}
+.mtg-agenda-generating-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: #a78bfa; border-radius: 50%;
+    animation: mtgAgendaPulse 1s ease-in-out infinite;
+}
+@keyframes mtgAgendaPulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* legacy overrides for shared form elements */
+textarea, input, select {
+    border: 1px solid #27272a; border-radius: 8px;
+    background: #18181b; color: #fafafa; padding: 10px 12px;
+    font-family: inherit; font-size: 13px; outline: none;
+}
+textarea:focus, input:focus, select:focus { border-color: #3b82f6; }
+
+/* ── Meeting Actions ── */
+.meeting-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.meeting-action-edit,
+.meeting-action-delete {
+    border: 1px solid #1c1c1e;
+    background: rgba(255, 255, 255, 0.03);
+    color: #fafafa;
+    border-radius: 7px;
+    padding: 5px 9px;
+    font-size: 0.68rem;
+    cursor: pointer;
+}
+
+.mtg-guest-badge {
+    margin-top: 6px;
+    font-size: 10px;
+    color: #71717a;
+    font-weight: 500;
+}
+
+/* ── Add Meeting Button ── */
+#addMeetingBtn {
+    width: 100%;
+    align-self: stretch;
+    margin-top: 0;
+    padding: 7px 11px;
+    border-radius: 8px;
+    border: 1px solid #3f3f46;
+    background: #27272a;
+    color: #f4f4f5;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#addMeetingBtn:hover {
+    background: #3f3f46;
+    border-color: #52525b;
+}
+
+/* ── Modal ── */
+.mtg-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.mtg-modal {
+    width: 100%;
+    max-width: 580px;
+    background: #0f0f11;
+    border: 1px solid #1c1c1e;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.48);
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+}
+.mtg-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #1c1c1e;
+    flex-shrink: 0;
+}
+
+.mtg-modal-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.mtg-modal-close {
+    border: 1px solid #1c1c1e;
+    background: rgba(255, 255, 255, 0.03);
+    color: #fafafa;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.mtg-modal-body {
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    overflow-y: auto;
+    min-height: 0;
+    flex: 1 1 auto;
+}
+
+.mtg-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mtg-modal-field-full {
+    grid-column: 1 / -1;
+}
+
+.mtg-modal-field label {
+    font-size: 11px;
+    color: #71717a;
+}
+
+.mtg-modal-field input,
+.mtg-modal-field select {
+    width: 100%;
+    border: 1px solid #1c1c1e;
+    border-radius: 8px;
+    background: #18181b;
+    color: #fafafa;
+    padding: 9px 10px;
+}
+
+.mtg-modal-footer {
+    border-top: 1px solid #1c1c1e;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.mtg-modal-btn {
+    border: 1px solid #1c1c1e;
+    background: rgba(255, 255, 255, 0.03);
+    color: #fafafa;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+/* DEPRECATED — use .btn .btn-primary .btn-lg */
+.mtg-modal-btn-primary {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.mtg-modal-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px 8px 8px 2px;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid #1c1c1e;
+    border-radius: 8px;
+    background: #131316;
+}
+
+@media (max-width: 520px) {
+    .mtg-modal {
+        max-height: 96vh;
+    }
+    .mtg-modal-body {
+        grid-template-columns: 1fr;
+    }
+    .mtg-modal-chips {
+        max-height: 180px;
+    }
+}
+
+.mtg-modal-chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid #3a3a3a;
+    background: #1e1e22;
+    color: #aaa;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    line-height: 1.4;
+    font-family: inherit;
+}
+
+.mtg-modal-chip:hover {
+    border-color: #666;
+    color: #fff;
+    background: #2a2a30;
+}
+
+.mtg-modal-chip.selected {
+    background: #4f8ef7;
+    border-color: #4f8ef7;
+    color: #fff;
+}
+
+.mtg-modal-hint {
+    font-size: 0.72rem;
+    color: #666;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.mtg-modal-template-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mtg-modal-template-row select { flex: 1; }
+.mtg-modal-btn-sm { padding: 6px 12px; font-size: 12px; }
+
+.mtg-modal-wide { max-width: 640px; }
+.mtg-tpl-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.mtg-tpl-card {
+    border: 1px solid #1c1c1e;
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #111113;
+}
+.mtg-tpl-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.mtg-tpl-del { background: none; border: none; color: #52525b; font-size: 18px; cursor: pointer; padding: 0 4px; }
+.mtg-tpl-del:hover { color: #ef4444; }
+.mtg-tpl-card-body { font-size: 13px; color: #a1a1aa; margin-bottom: 10px; }
+.mtg-tpl-card-body ul { margin: 4px 0 0 16px; padding: 0; }
+.mtg-tpl-section { margin-bottom: 8px; }
+.mtg-tpl-card-edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+.mtg-tpl-add-section, .mtg-tpl-add-point {
+    flex: 1;
+    min-width: 120px;
+    padding: 6px 10px;
+    font-size: 13px;
+    border: 1px solid #27272a;
+    border-radius: 6px;
+    background: #0f0f11;
+    color: #fafafa;
+}
+.mtg-tpl-add-section-btn, .mtg-tpl-add-point-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #27272a;
+    border-radius: 6px;
+    background: #18181b;
+    color: #a1a1aa;
+    cursor: pointer;
+}
+.mtg-tpl-add-section-btn:hover, .mtg-tpl-add-point-btn:hover { background: #27272a; color: #fafafa; }
+.mtg-tpl-empty { color: #52525b; font-size: 14px; }
+.mtg-tpl-create { display: flex; gap: 8px; align-items: center; }
+.mtg-tpl-create input { flex: 1; }
+
+/* ── Previous Minutes ── */
+.last-mom-content {
+    background: #121216;
+    border-radius: 8px;
+    border: 1px solid #1c1c1e;
+    border-left: 3px solid #3f3f46;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    min-height: 0;
+    flex: 1;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: #a1a1aa;
+}
+.last-mom-content p {
+    margin: 0;
+}
+.mom-scroll-inner {
+    padding: 24px;
+}
+.mom-section {
+    margin: 0 0 10px;
+    padding: 0 0 8px;
+    border-bottom: 1px solid #1c1c1e;
+    color: #e4e4e7;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+}
+.mom-list {
+    margin: 0 0 14px 18px;
+    padding: 0;
+    color: #a1a1aa;
+}
+.mom-item {
+    margin: 0 0 8px;
+    line-height: 1.6;
+}
+.mom-item:last-child {
+    margin-bottom: 0;
+}
+.mom-divider {
+    margin: 10px 0 8px;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+.mom-mention {
+    color: #93c5fd;
+    font-weight: 600;
+}
+.mom-timestamp {
+    color: #52525b;
+    font-size: 0.82em;
+}
+
+.no-data {
+    color: #666666;
+    font-style: italic;
+}
+
+.last-mom-date {
+    font-size: 0.75rem;
+    color: #666666;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Now Marker ── */
+.mtg-now-marker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    margin: 2px 0;
+    height: 16px;
+    position: relative;
+    pointer-events: none;
+    user-select: none;
+}
+.mtg-now-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ea4335;
+    flex-shrink: 0;
+}
+.mtg-now-line-bar {
+    flex: 1;
+    height: 2px;
+    background: #ea4335;
+    border-radius: 1px;
+}
+.mtg-now-time {
+    font-size: 10px;
+    font-weight: 600;
+    color: #ea4335;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .mtg-layout { flex-direction: column; }
+    .mtg-sidebar { width: auto; max-height: 200px; }
+    .mtg-page { height: auto; min-height: calc(100vh - 56px); }
+    .mtg-agenda-add { flex-direction: column; align-items: stretch; }
+    .act-summary { grid-template-columns: 1fr 1fr; }
+    .act-form-grid { grid-template-columns: 1fr; }
+    .act-form-field-task,
+    .act-form-field-kpi { grid-column: auto; }
+    .act-table-wrap { overflow-x: auto; }
+}

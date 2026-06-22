@@ -1,0 +1,30 @@
+{
+  "name": "tessa-mcp-server",
+  "version": "0.2.0",
+  "description": "MCP server that exposes the Tessa portal to Claude Desktop",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "package": "bash scripts/package.sh",
+    "package:mcpb": "bash scripts/package-mcpb.sh"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "dotenv": "^16.4.5",
+    "undici": "^6.21.0",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.23.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.3"
+  }
+}

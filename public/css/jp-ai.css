@@ -1,0 +1,208 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   JP AI Command Center
+   Loaded only when jp_ai_mode is set (JP, user_id=1). Message rows reuse the
+   existing .tessa-msg / .tessa-msg-content classes from app.css so all markdown,
+   table and list styling is inherited — this file only styles the shell, input,
+   chips, floating "Back to AI" button, and the typing indicator.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Sidebar collapse: every section link stays in the DOM (navigation machinery
+   needs them) but only Dashboard + AI are shown. The rest are hidden here. */
+.jp-ai-nav-hidden {
+    display: none !important;
+}
+
+.jp-ai-view {
+    height: calc(100vh - 56px);
+    overflow: hidden;
+}
+.jp-ai-chat-main {
+    display: flex;
+    flex-direction: column;
+    background: #09090b;
+    height: 100%;
+    position: relative;
+}
+.jp-ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+/* Empty state */
+.jp-ai-empty {
+    max-width: 760px;
+    margin: 8vh auto 0;
+    text-align: center;
+    color: #71717a;
+}
+.jp-ai-empty .jp-ai-empty-spark {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 14px;
+    opacity: 0.85;
+}
+.jp-ai-empty h3 {
+    color: #e4e4e7;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+.jp-ai-empty p {
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Input area — mirrors .tessa-input-area / .tessa-input-wrap */
+.jp-ai-input-area {
+    padding: 12px 24px 28px;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+}
+.jp-ai-input-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    background: #131313;
+    border: 1px solid #3f3f46;
+    border-radius: 28px;
+    padding: 12px 12px 12px 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.jp-ai-input-wrap:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+#jpAiInput {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    resize: none;
+    color: #f4f4f5;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    max-height: 160px;
+    padding: 6px 0;
+}
+#jpAiInput::placeholder {
+    color: #71717a;
+}
+.jp-ai-send-btn {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 0;
+    background: #3b82f6;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+}
+.jp-ai-send-btn:hover:not(:disabled) {
+    background: #2563eb;
+}
+.jp-ai-send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Quick-action chips */
+.jp-ai-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+    justify-content: center;
+}
+.jp-ai-chip {
+    background: #18181b;
+    color: #a1a1aa;
+    border: 1px solid #27272a;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.jp-ai-chip:hover {
+    background: #27272a;
+    color: #fafafa;
+    border-color: #3f3f46;
+}
+.jp-ai-chip-clear {
+    margin-left: auto;
+    color: #71717a;
+}
+
+/* Floating "Back to AI" button — injected on document.body when JP opens a
+   section from the chat. Sits above everything so it's always reachable. */
+.jp-ai-back-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 99999;
+    background: #3b82f6;
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    transition: background 0.15s, transform 0.12s;
+    animation: jpAiBackIn 0.22s ease;
+}
+.jp-ai-back-btn:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+.jp-ai-back-btn svg {
+    width: 16px;
+    height: 16px;
+}
+@keyframes jpAiBackIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing indicator — three pulsing dots */
+.jp-ai-dots {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+    padding: 4px 0;
+}
+.jp-ai-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #52525b;
+    animation: jpAiBlink 1.3s infinite ease-in-out both;
+}
+.jp-ai-dots span:nth-child(2) { animation-delay: 0.18s; }
+.jp-ai-dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes jpAiBlink {
+    0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); }
+    40%           { opacity: 1;    transform: scale(1); }
+}
+
+@media (max-width: 640px) {
+    .jp-ai-messages { padding: 16px; }
+    .jp-ai-input-area { padding: 12px 14px 22px; }
+    .jp-ai-chips { justify-content: flex-start; }
+}

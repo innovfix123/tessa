@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Innovfix Meeting System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #000;
+    --bg-1: #0a0a0a;
+    --bg-2: #111;
+    --text: #fff;
+    --text-70: rgba(255, 255, 255, 0.7);
+    --text-50: rgba(255, 255, 255, 0.5);
+    --text-30: rgba(255, 255, 255, 0.3);
+    --text-15: rgba(255, 255, 255, 0.15);
+    --line: rgba(255, 255, 255, 0.08);
+    --line-2: rgba(255, 255, 255, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+  }
+
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace; }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 64px 32px 100px;
+  }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .header-meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .header .subtitle {
+    font-size: 15px;
+    color: var(--text-50);
+    max-width: 700px;
+    line-height: 1.6;
+  }
+  .header .nav { margin-top: 20px; font-size: 13px; }
+  .header .nav a {
+    color: var(--text-70);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-30);
+    padding-bottom: 1px;
+  }
+  .header .nav a:hover { color: var(--text); border-color: var(--text); }
+
+  /* STATS STRIP */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 48px;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .stat {
+    padding: 24px 28px;
+    border-right: 1px solid var(--line-2);
+  }
+  .stat:last-child { border-right: none; }
+  .stat .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .stat .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+  }
+  .stat.primary { background: var(--text); }
+  .stat.primary .value { color: var(--bg); }
+  .stat.primary .label { color: rgba(0, 0, 0, 0.55); }
+
+  /* APP TABS */
+  .app-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    margin-bottom: 48px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .app-tab {
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-50);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+  }
+  .app-tab:hover { color: var(--text); background: var(--bg-2); }
+  .app-tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .app-tab .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    margin-left: 6px;
+    opacity: 0.6;
+  }
+
+  /* PERSON */
+  .person {
+    margin-bottom: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .person:first-of-type { border-top: none; padding-top: 0; }
+  .person-name {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+  }
+  .person-role {
+    font-size: 13px;
+    color: var(--text-50);
+    margin-top: 4px;
+    margin-bottom: 24px;
+  }
+
+  /* CADENCE LABEL */
+  .cadence {
+    margin-top: 28px;
+  }
+  .cadence-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 12px;
+  }
+
+  /* TABLE */
+  table.m-table {
+    width: 100%;
+    border: 1px solid var(--line-2);
+    border-collapse: collapse;
+    border-radius: 2px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .m-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-30);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--line-2);
+  }
+  .m-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-70);
+    vertical-align: top;
+  }
+  .m-table td.meeting { color: var(--text); font-weight: 500; }
+  .agenda {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-50);
+    line-height: 1.4;
+  }
+  .m-table td.host { color: var(--text); font-weight: 500; }
+  .m-table td.mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .m-table tbody tr:last-child td { border-bottom: none; }
+
+  /* CALLOUT */
+  .callout {
+    border-left: 2px solid var(--text);
+    padding: 14px 22px;
+    font-size: 13px;
+    color: var(--text-70);
+    line-height: 1.7;
+  }
+  .callout.muted { border-left-color: var(--text-30); }
+  .callout strong { color: var(--text); font-weight: 600; }
+
+  /* CLICKABLE MEETING NAME (opens agenda modal) */
+  .meeting-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: inherit;
+    display: inline;
+    border-bottom: 1px dotted var(--text-30);
+    padding-bottom: 1px;
+    transition: border-color 0.15s ease;
+  }
+  .meeting-btn:hover {
+    color: var(--text);
+    border-bottom: 1px solid var(--text);
+  }
+  .meeting-btn::after {
+    content: "›";
+    margin-left: 6px;
+    color: var(--text-50);
+    font-weight: 400;
+  }
+  .meeting-btn:hover::after { color: var(--text); }
+
+  /* AGENDA MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-content {
+    background: var(--bg-1);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 32px 36px;
+    position: relative;
+    animation: modalFadeIn 0.2s ease;
+  }
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: 1px solid var(--text-30);
+    color: var(--text-70);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover { color: var(--text); border-color: var(--text); }
+  .modal-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    padding-right: 40px;
+  }
+  .modal-body {
+    font-size: 13px;
+    color: var(--text-70);
+    line-height: 1.75;
+  }
+  .modal-body strong, .modal-body b { color: var(--text); font-weight: 600; }
+
+  /* CASCADE */
+  .cascade-wrap {
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    padding: 24px;
+    background: var(--bg-1);
+  }
+  .cascade-tier { margin-bottom: 16px; }
+  .cascade-tier:last-child { margin-bottom: 0; }
+  .tier-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--text-30);
+    margin-bottom: 10px;
+  }
+  .tier-row { display: grid; gap: 8px; }
+  .tier-1 { grid-template-columns: 1fr; }
+  .tier-2 { grid-template-columns: repeat(2, 1fr); }
+  .tier-3 { grid-template-columns: repeat(3, 1fr); }
+  .tier-5 { grid-template-columns: repeat(5, 1fr); }
+  .node {
+    border: 1px solid var(--line-2);
+    background: var(--bg);
+    padding: 12px 14px;
+    border-radius: 2px;
+  }
+  .node.primary {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .node.primary .node-sub { color: rgba(0, 0, 0, 0.55); }
+  .node-name { font-weight: 600; font-size: 13px; line-height: 1.3; }
+  .node-sub {
+    font-size: 11px;
+    color: var(--text-50);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .node-tag {
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+    color: var(--text-30);
+    margin-bottom: 6px;
+  }
+  .cascade-arrow {
+    text-align: center;
+    color: var(--text-30);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    margin: 6px 0;
+    letter-spacing: 2px;
+  }
+
+  /* BLOCK */
+  .block { margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--line); }
+  .block-eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-30);
+    margin-bottom: 12px;
+  }
+  .block-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.6px;
+    margin-bottom: 8px;
+  }
+  .block-subtitle {
+    font-size: 13px;
+    color: var(--text-50);
+    margin-bottom: 24px;
+    line-height: 1.7;
+    max-width: 700px;
+  }
+
+  .person.hidden { display: none; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-30);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* RESPONSIVE */
+  .tbl-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  @media (max-width: 720px) {
+    .container { padding: 40px 20px 60px; }
+    .header h1 { font-size: 28px; }
+    .person-name { font-size: 22px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat { border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); }
+    .stat:nth-child(even) { border-right: none; }
+    .stat:nth-last-child(-n+2) { border-bottom: none; }
+    .tier-3, .tier-5, .tier-2 { grid-template-columns: 1fr; }
+    /* Daily Cascade / Parallel Streams use INLINE grid-template-columns (repeat 5/3),
+       which override class CSS — !important reflows them so names don't overflow. */
+    .tier-row { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important; }
+    .node { min-width: 0; }
+    .node-name, .node-sub { overflow-wrap: anywhere; word-break: break-word; }
+    .m-table { font-size: 12px; min-width: 600px; }
+    .m-table th, .m-table td { padding: 10px 12px; }
+    .modal-content { padding: 24px 20px; }
+    .modal-overlay { padding: 14px; }
+    .app-tab { padding: 7px 11px; font-size: 11px; }
+  }
+
+  @media (max-width: 420px) {
+    .header h1 { font-size: 24px; }
+    .stats { grid-template-columns: 1fr; }
+    .stat:nth-child(even) { border-right: none; }
+    .stat { border-right: none; }
+    .tier-row { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-meta">Innovfix · Operating Cadence</div>
+    <h1>Meeting System</h1>
+    <div class="subtitle">
+      Operating cadence across all Innovfix products — Hima · Only Care · BLR Connect · Sudar · Unman · AI Platform. Leadership standups at 10:30 AM cascade into parallel team standups at 11:00 AM. New apps onboard into the same rhythm.
+    </div>
+    <div class="nav">
+      <a href="/kpis.html">KPI Scorecards →</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat primary"><div class="value">22</div><div class="label">People Designed</div></div>
+    <div class="stat"><div class="value">13</div><div class="label">Daily Meetings</div></div>
+    <div class="stat"><div class="value">13</div><div class="label">Weekly Meetings</div></div>
+    <div class="stat"><div class="value">26</div><div class="label">Monthly Reviews</div></div>
+  </div>
+
+  <!-- CASCADE -->
+  <div class="cascade-wrap" style="margin-bottom: 48px;">
+    <div class="cadence-label" style="margin-bottom: 16px;">Daily Cascade · Parallel Streams</div>
+
+    <div class="cascade-tier">
+      <div class="tier-label">10:30 · Leadership Standups (Parallel)</div>
+      <div class="tier-row" style="grid-template-columns: repeat(5, 1fr);">
+        <div class="node"><div class="node-name">Sneha</div><div class="node-sub">Hima · 4 ppl</div></div>
+        <div class="node"><div class="node-name">Fida</div><div class="node-sub">AI · 4 ppl</div></div>
+        <div class="node"><div class="node-name">Bala</div><div class="node-sub">Only Care · 5 ppl</div></div>
+        <div class="node"><div class="node-name">Krishnan</div><div class="node-sub">Creative · 5 ppl</div></div>
+        <div class="node"><div class="node-name">Dhanush</div><div class="node-sub">BLR · 2 ppl</div></div>
+      </div>
+    </div>
+    <div class="cascade-arrow">↓</div>
+
+    <div class="cascade-tier">
+      <div class="tier-label">11:00 · Functional Standups (Parallel)</div>
+      <div class="tier-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="node"><div class="node-tag">Ops Support</div><div class="node-name">Deeksha</div><div class="node-sub">Nisha · Gousia · Reshma · Anjali</div></div>
+        <div class="node"><div class="node-tag">Engineering</div><div class="node-name">Rishabh</div><div class="node-sub">Perumal · Maari · Sumit · Barkha</div></div>
+        <div class="node"><div class="node-tag">Hima Content</div><div class="node-name">Kishore</div><div class="node-sub">Nehal · Fathima · Tiyasa · Haripriya · Disha</div></div>
+        <div class="node"><div class="node-tag">Performance</div><div class="node-name">Anirudh</div><div class="node-sub">Swapna M</div></div>
+        <div class="node"><div class="node-tag">Data</div><div class="node-name">Saran</div><div class="node-sub">Prajwal</div></div>
+        <div class="node"><div class="node-tag">QA</div><div class="node-name">Ranjini</div><div class="node-sub">Laxmi · Iksha · Priya</div></div>
+      </div>
+    </div>
+    <div class="cascade-arrow">↓</div>
+
+    <div class="cascade-tier">
+      <div class="tier-label">11:30 · Growth</div>
+      <div class="tier-row" style="grid-template-columns: 1fr;">
+        <div class="node"><div class="node-tag">Growth</div><div class="node-name">Anindita</div><div class="node-sub">Gargi</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP TABS -->
+  <div class="app-tabs">
+    <button class="app-tab active" data-filter="all">All <span class="count">22</span></button>
+    <button class="app-tab" data-filter="hima">Hima <span class="count">12</span></button>
+    <button class="app-tab" data-filter="only-care">Only Care <span class="count">6</span></button>
+    <button class="app-tab" data-filter="blr-connect">BLR Connect <span class="count">2</span></button>
+    <button class="app-tab" data-filter="unman">Unman <span class="count">2</span></button>
+    <button class="app-tab" data-filter="ai">AI <span class="count">2</span></button>
+    <button class="app-tab" data-filter="finance">Finance <span class="count">1</span></button>
+    <button class="app-tab" data-filter="data">Data <span class="count">3</span></button>
+    <button class="app-tab" data-filter="leadership">Leadership <span class="count">7</span></button>
+  </div>
+
+  <!-- ============ SNEHA ============ -->
+  <div class="person" data-apps="hima leadership">
+    <div class="person-name">Sneha Sunoj</div>
+    <div class="person-role">Hima PM (acting) · Reports to JP · Manages Deeksha, Meghana, Anindita</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('daily')">Hima Daily Standup</button><span class="agenda">Revenue drops/spikes · user issues · blockers · unusual behavior · N. India growth · today's priorities</span></td><td class="host">Sneha</td><td>Anirudh · Anindita · Deeksha · Meghana</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Features to ship · bugs to fix · scope commit · owners · release target</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini · Anirudh</td><td class="mono">60 min</td></tr>
+          <tr><td class="mono">Mon</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Plan new features · revenue/CCR/UX actions · marketing/tech/ops ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Review week · what's working/not · adjust + new ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('review')">Hima Sprint Review</button><span class="agenda">Demo features + bug fixes · QA verify · changes needed · release decision</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+
+          </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_deeksha')">Sneha ↔ Deeksha — KPI Review</button><span class="agenda">Score 4 KPIs · resolution · FRT · re-open · resolution time</span></td><td class="host">Sneha</td><td>Deeksha</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_meghana')">Sneha ↔ Meghana — KPI Review</button><span class="agenda">Score 4 KPIs · recs · adoption · memo speed · weekly report</span></td><td class="host">Sneha</td><td>Meghana</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_anindita')">Sneha ↔ Anindita — KPI Review</button><span class="agenda">Regional scorecard · gaps · next focus</span></td><td class="host">Sneha</td><td>Anindita</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sneha')">JP ↔ Sneha — KPI Review</button><span class="agenda">Score 4 KPIs · revenue · CCR · D7 · creator retention · gaps · next-month plan</span></td><td class="host">JP</td><td>Sneha</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Sneha <strong>hosts 3 reviews on 1st Mon</strong> (Deeksha 3:30 · Meghana 4:30 · Anindita 5:00) — fresh team scores feed her own review. <strong>JP reviews Sneha 1st Thu 3:00 PM.</strong> Formal scoring against documented scorecards.</div>
+    </div>
+  </div>
+
+  <!-- ============ DEEKSHA ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Deeksha</div>
+    <div class="person-role">Team Lead — Operations · Reports to Sneha · Manages Nisha (Tamil), Gousia (Telugu), Reshma (Malayalam), Anjali (Bengali + Hindi) · Handles Kannada herself</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('daily')">Hima Daily Standup</button><span class="agenda">Ops issues · support blockers · user voice</span></td><td class="host">Sneha</td><td>Deeksha — ops pulse</td><td class="mono">15 min</td></tr>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('support')">Support Team Standup</button><span class="agenda">Tickets · top user issues · language flags · app rating · tech escalations</span></td><td class="host">Deeksha</td><td>Nisha · Gousia · Reshma · Anjali</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="callout muted">No weekly 1:1. Daily standup with Sneha (10:30 AM) covers operational sync. Ad-hoc escalations via Slack or in-person.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_deeksha')">Sneha ↔ Deeksha — KPI Review</button><span class="agenda">Score 4 KPIs · resolution · FRT · re-open · resolution time · gaps · fixes</span></td><td class="host">Sneha</td><td>Deeksha</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Ticket Resolution Rate · First Response Time · CSAT · Avg Resolution Time. Reviews team performance across 6 languages. Held on 1st Mon so previous month's data is final — gives Sneha fresh ops scores for her own KPI review on 1st Fri.</div>
+    </div>
+  </div>
+
+  <!-- ============ MEGHANA ============ -->
+  <div class="person" data-apps="hima data">
+    <div class="person-name">Meghana</div>
+    <div class="person-role">Business Analyst — Hima · Reports to Sneha · Peer to Saran (Data)</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('daily')">Hima Daily Standup</button><span class="agenda">User behavior signals · funnel flags · experiment readouts</span></td><td class="host">Sneha</td><td>Meghana — data/insights</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted">Also posts EOD data summary in Slack (DAU · revenue · retention flags).</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">User behavior insights · funnel ideas · supports planning</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Mid-week behavior flags · funnel adjusts · new experiments</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_meghana')">Sneha ↔ Meghana — KPI Review</button><span class="agenda">Score 4 KPIs · recs delivered · adoption · memo speed · weekly report · gaps</span></td><td class="host">Sneha</td><td>Meghana</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Recommendations Delivered · Adoption Rate · Decision Memo Turnaround · Weekly Business Report. Tactical sync now happens 2x/week via Hima Leaders Sync — monthly review here is pure scoring.</div>
+    </div>
+  </div>
+
+  <!-- ============ RISHABH ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Rishabh</div>
+    <div class="person-role">Team Lead — Hima Product · Reports to Yuvanesh · Manages Perumal · Maari (Only Care) · Sumit (BLR Connect) · Barkha (Astro) · Coordinates QA via Slack</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('engineering')">Engineering Standup</button><span class="agenda">Dev progress · blockers · bugs · code/mentorship across apps</span></td><td class="host">Rishabh</td><td>Perumal · Maari · Sumit · Barkha</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">No longer attends Sneha's 10:30 standup. Tech pulse flows to Sneha via <strong>Mon Sprint Planning</strong> + <strong>Fri Sprint Review</strong> + Slack.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (Hima · Only Care · BLR Connect)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Scope · estimates · dependencies</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini · Anirudh</td><td class="mono">60 min</td></tr>
+          <tr><td class="mono">Mon</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_review')">Only Care Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_planning')">Only Care Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini · Swapna</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_review')">BLR Connect Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Wed</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_planning')">BLR Connect Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('review')">Hima Sprint Review</button><span class="agenda">Demo · bugs · release readiness</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Rishabh <b>hosts 2 app sprint cycles</b> — <b>Only Care</b> (Mon Review + Tue Plan) · <b>BLR Connect</b> (Tue Review + Wed Plan). For <b>Hima</b> he attends as Team Lead (Yuvanesh hosts). PMs attend as roadmap/priority owners. Total weekly sprint load: 3.5 hrs.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">2:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_rishabh')">Yuvanesh ↔ Rishabh — KPI Review</button><span class="agenda">Score 4 KPIs · sprint compliance · bugs · crash-free · app rating · gaps</span></td><td class="host">Yuvanesh</td><td>Rishabh</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_maari')">Rishabh ↔ Maari — KPI Review</button><span class="agenda">Only Care engineering · sprint · bugs · reliability</span></td><td class="host">Rishabh</td><td>Maari</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_perumal')">Rishabh ↔ Perumal — KPI Review</button><span class="agenda">Hima engineering · sprint · bugs · crash-free · rating</span></td><td class="host">Rishabh</td><td>Perumal</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against engineering KPIs (Sprint Compliance · Critical Bugs · Crash-Free Rate · App Store Rating) — weighted 80% Hima · 20% Only Care. <strong>Rishabh reviews Maari</strong> (Only Care) right after his own review — he manages her directly. Barkha + Sumit get mentorship via daily Engineering Standup.</div>
+    </div>
+  </div>
+
+  <!-- ============ RANJINI ============ -->
+  <div class="person" data-apps="hima only-care">
+    <div class="person-name">Ranjini</div>
+    <div class="person-role">QA Lead — All Apps · Reports to Yuvanesh · Manages Laxmi, Iksha (QA Interns), Priya (Content Moderator &amp; QA) · Cross-app QA constant</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('qa_standup')">QA Standup</button><span class="agenda">Bugs to verify · regressions · content moderation · release blockers · coverage gaps</span></td><td class="host">Ranjini</td><td>Laxmi · Iksha · Priya</td><td class="mono">10 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">QA team sync across all 4 apps. Detailed bug flow still async via Slack (#hima-bugs, #onlycare-bugs, #blr-bugs, #unman-bugs). Runs parallel to the 11:00 Engineering Standup — Ranjini syncs with dev via sprint meetings + Slack.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (attendee · all 4 apps)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Role</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Test scope · risks · QA capacity</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini · Anirudh</td><td class="mono">60 min</td></tr>
+          <tr><td class="mono">Mon</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_review')">Only Care Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_planning')">Only Care Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini · Swapna</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_review')">BLR Connect Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Wed</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_planning')">BLR Connect Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Wed</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('unman_review')">Unman Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Sneha Prathap</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('unman_planning')">Unman Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Sneha Prathap</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('review')">Hima Sprint Review</button><span class="agenda">QA sign-off · open bugs · release call</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Cross-app QA constant — Ranjini attends every sprint cycle. Total: ~4.5 hrs/week in sprint meetings. Bugs still flow async via Slack. Critical issues escalated via DM.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_ranjini')">Yuvanesh ↔ Ranjini — KPI Review</button><span class="agenda">Score 3 KPIs · defect escape · coverage · verification turnaround</span></td><td class="host">Yuvanesh</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against QA KPIs (Defect Escape Rate · Test Coverage · Bug Verification Turnaround) — weighted 70% Hima · 20% Only Care · 10% Unman.</div>
+    </div>
+  </div>
+
+  <!-- ============ YUVANESH ============ -->
+  <div class="person" data-apps="hima leadership">
+    <div class="person-name">Yuvanesh</div>
+    <div class="person-role">Tech Lead — All Apps + Hima Strategist · Reports to JP · Manages Rishabh, Ranjini, Saran, Tamil Arasan, Sneha Prathap · Hosts Hima Sprint Planning + Review</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="callout muted">No daily standup. Product leads run their own (Rishabh runs Hima dev). Daily for a Tech Lead = overhead.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Hima Sprint Cycle (host)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Features to ship · bugs to fix · scope commit · owners · release target</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini · Anirudh</td><td class="mono">60 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('review')">Hima Sprint Review</button><span class="agenda">Demo features + bug fixes · QA verify · changes needed · release decision</span></td><td class="host">Yuvanesh</td><td>Sneha · Rishabh · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;"><strong>Yuvanesh hosts Hima sprints only.</strong> Only Care & BLR Connect ceremonies hosted by Rishabh · Unman hosted by Sneha Prathap — Yuvanesh covers all three via monthly KPI reviews, not sprint attendance.</div>
+
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Hima Leaders Sync</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Plan new features · revenue/CCR/UX actions · marketing/tech/ops ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Review week · what's working/not · adjust + new ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">2:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_rishabh')">Yuvanesh ↔ Rishabh — KPI Review</button><span class="agenda">Score 4 KPIs · sprint compliance · bugs · crash-free · app rating · gaps</span></td><td class="host">Yuvanesh</td><td>Rishabh</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sneha_prathap')">Yuvanesh ↔ Sneha Prathap — KPI Review</button><span class="agenda">Unman engineering · sprint · model quality · reliability</span></td><td class="host">Yuvanesh</td><td>Sneha Prathap</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_ranjini')">Yuvanesh ↔ Ranjini — KPI Review</button><span class="agenda">Score 3 KPIs · defect escape · coverage · verification turnaround</span></td><td class="host">Yuvanesh</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_tamil')">Yuvanesh ↔ Tamil Arasan — KPI Review</button><span class="agenda">Designs shipped · first-pass approval · system adoption</span></td><td class="host">Yuvanesh</td><td>Tamil Arasan</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_saran')">Yuvanesh ↔ Saran — KPI Review</button><span class="agenda">Dashboard coverage · anomaly speed · deep-dives · A/B</span></td><td class="host">Yuvanesh</td><td>Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_yuvanesh')">JP ↔ Yuvanesh — KPI Review</button><span class="agenda">Engineering scorecard · sprint · bugs · crash-free · rating</span></td><td class="host">JP</td><td>Yuvanesh</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">1st Wed: Yuvanesh reviews 4 direct reports back-to-back (Rishabh 2:30 · Sneha Prathap 3:00 · Ranjini 3:30 · Tamil 4:00). Maari is reviewed by Rishabh (her Team Lead), not Yuvanesh. 1st Thu 11 AM: Saran review (split day). 1st Thu 3:30 PM: Yuvanesh reviewed by JP — walks in with all team scores fresh.</div>
+    </div>
+  </div>
+
+  <!-- ============ NANDHA ============ -->
+  <div class="person" data-apps="hima leadership">
+    <div class="person-name">Nandha</div>
+    <div class="person-role">CMO — Marketing &amp; Content · Reports to JP · Manages Anirudh · Krishnan</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="callout muted">No daily standup. His two sub-function leads (Anirudh, Krishnan) run their own dailies. Anindita moved to Sneha's reporting line — her N. India growth is now a regional product function.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Plan new features · revenue/CCR/UX actions · marketing/tech/ops ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('mktg_sync')">Marketing Leadership Sync</button><span class="agenda">CAC · creative winners · next tests</span></td><td class="host">Nandha</td><td>Anirudh · Krishnan</td><td class="mono">45 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Review week · what's working/not · adjust + new ideas</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Tue / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_anirudh')">Nandha ↔ Anirudh — KPI Review</button><span class="agenda">CAC · ROAS · installs · conversion</span></td><td class="host">Nandha</td><td>Anirudh</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Tue / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_krishnan')">Nandha ↔ Krishnan — KPI Review</button><span class="agenda">Output · CTR · CVR · hit rate</span></td><td class="host">Nandha</td><td>Krishnan</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_nandha')">JP ↔ Nandha — KPI Review</button><span class="agenda">Marketing scorecard · gaps · next bets</span></td><td class="host">JP</td><td>Nandha</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">1st Tue afternoon: Nandha reviews his team (Anirudh paid, Krishnan creative) — gets fresh marketing scores. 1st Fri 4 PM: Nandha presents marketing roll-up to JP. N. India growth (Anindita) now reviewed by Sneha.</div>
+    </div>
+  </div>
+
+  <!-- ============ ANIRUDH ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Anirudh</div>
+    <div class="person-role">Performance Marketing Lead · Reports to Nandha · Manages Swapna M</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('daily')">Hima Daily Standup</button><span class="agenda">Spend · CAC · install pulse</span></td><td class="host">Sneha</td><td>Anirudh — spend/CAC/installs</td><td class="mono">15 min</td></tr>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('perf_standup')">Performance Marketing Standup</button><span class="agenda">Budget · campaign issues · tests</span></td><td class="host">Anirudh</td><td>Swapna M</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Paid launch needs · tracking · campaigns</span></td><td class="host">Yuvanesh</td><td>Anirudh — paid plan visibility</td><td class="mono">60 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('mktg_sync')">Marketing Leadership Sync</button><span class="agenda">CAC · creative winners · next tests</span></td><td class="host">Nandha</td><td>Krishnan</td><td class="mono">45 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('ad_review')">Ad Performance Review</button><span class="agenda">Winners · kill list · next briefs</span></td><td class="host">Anirudh</td><td>Krishnan</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Tue / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_anirudh')">Nandha ↔ Anirudh — KPI Review</button><span class="agenda">CAC · ROAS · installs · conversion</span></td><td class="host">Nandha</td><td>Anirudh</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_swapna')">Anirudh ↔ Swapna — KPI Review</button><span class="agenda">Non-Hima CAC · ROAS · installs · conversion</span></td><td class="host">Anirudh</td><td>Swapna M</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Tue 3 PM: Anirudh reviewed by Nandha (Hima KPIs). Wed 4 PM: Anirudh reviews Swapna (Only Care + Sudar + Unman KPIs) — same afternoon Krishnan reviews Kishore + Sivaranjani.</div>
+    </div>
+  </div>
+
+  <!-- ============ SWAPNA M ============ -->
+  <div class="person" data-apps="only-care">
+    <div class="person-name">Swapna M</div>
+    <div class="person-role">Performance Marketer · Reports to Anirudh · Runs Only Care + Sudar + Unman paid ads</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('perf_standup')">Performance Marketing Standup</button><span class="agenda">Non-Hima spend · CAC · installs · campaign issues</span></td><td class="host">Anirudh</td><td>Swapna — brings non-Hima spend/CAC/installs</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (attendee)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Role</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_planning')">Only Care Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini · Swapna</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_swapna')">Anirudh ↔ Swapna — KPI Review</button><span class="agenda">Non-Hima CAC · ROAS · installs · conversion</span></td><td class="host">Anirudh</td><td>Swapna M</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against CAC · ROAS · Install Volume · Register→First Purchase Conversion — weighted 70% Only Care · 20% Sudar · 10% Unman.</div>
+    </div>
+  </div>
+
+  <!-- ============ ANINDITA ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Anindita</div>
+    <div class="person-role">Growth Manager — North India · Reports to Sneha · Manages Gargi Bisht</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('daily')">Hima Daily Standup</button><span class="agenda">N. India revenue · retention · blockers</span></td><td class="host">Sneha</td><td>Anindita — N. India growth</td><td class="mono">15 min</td></tr>
+          <tr><td class="mono">11:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('growth_standup')">Growth Standup</button><span class="agenda">Regional posts · leads · creator issues</span></td><td class="host">Anindita</td><td>Gargi Bisht</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="callout muted">No weekly meetings. Daily standup with Sneha covers operational pulse. No Marketing Leadership Sync attendance — Anindita's KPIs are 100% Hima product (same scorecard as Sneha, regional scope), not marketing function.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_gargi')">Anindita ↔ Gargi — KPI Review</button><span class="agenda">Organic growth · engagement · posts · reach</span></td><td class="host">Anindita</td><td>Gargi Bisht</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Mon / month</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_anindita')">Sneha ↔ Anindita — KPI Review</button><span class="agenda">Regional scorecard · gaps · next focus</span></td><td class="host">Sneha</td><td>Anindita</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against N. India Revenue Growth · Call Connection · Day 7 Retention · Creator Retention. Reviewed by Sneha (KPI owner) since Anindita's scorecard mirrors Sneha's, scoped to North India.</div>
+    </div>
+  </div>
+
+  <!-- ============ KRISHNAN ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Krishnan</div>
+    <div class="person-role">Creative Head — Ad Creative Engine · Reports to Nandha · Manages Kishore, Sivaranjani, Sooraj, Anaz</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('creative_standup')">Creative Standup</button><span class="agenda">Output status · blockers · ad priorities</span></td><td class="host">Krishnan</td><td>Kishore · Sivaranjani · Sooraj · Anaz</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('mktg_sync')">Marketing Leadership Sync</button><span class="agenda">CAC · creative winners · next tests</span></td><td class="host">Nandha</td><td>Anirudh</td><td class="mono">45 min</td></tr>
+          <tr><td class="mono">Fri</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('ad_review')">Ad Performance Review</button><span class="agenda">Winners · kill list · next briefs</span></td><td class="host">Anirudh</td><td>Krishnan</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Fri Ad Performance Review is critical — 75% of Krishnan's KPI (CTR · Ad→Install · Hit Rate) lives in Anirudh's ad accounts. Anirudh shows top 5 winners · kill list · spend by creative. Krishnan's team plans next week's production based on the data.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Tue / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_krishnan')">Nandha ↔ Krishnan — KPI Review</button><span class="agenda">Output · CTR · CVR · hit rate</span></td><td class="host">Nandha</td><td>Krishnan</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_kishore')">Krishnan ↔ Kishore — KPI Review</button><span class="agenda">Hima output · CTR · hit rate</span></td><td class="host">Krishnan</td><td>Kishore</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sivaranjani')">Krishnan ↔ Sivaranjani — KPI Review</button><span class="agenda">Only Care creatives · CTR · install · hit rate</span></td><td class="host">Krishnan</td><td>Sivaranjani</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sooraj')">Krishnan ↔ Sooraj — KPI Review</button><span class="agenda">Graphics output · cycle time · approval · coverage</span></td><td class="host">Krishnan</td><td>Sooraj</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_anaz')">Krishnan ↔ Anaz — KPI Review</button><span class="agenda">Video output · cycle time · approval · coverage</span></td><td class="host">Krishnan</td><td>Anaz</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Tue 4 PM: Krishnan reviewed by Nandha. Wed afternoon: Krishnan reviews his content leads (Kishore for Hima, Sivaranjani for Only Care) using fresh perspective from Nandha's feedback.</div>
+    </div>
+  </div>
+
+  <!-- ============ KISHORE ============ -->
+  <div class="person" data-apps="hima">
+    <div class="person-name">Kishore</div>
+    <div class="person-role">Hima Content Lead · Reports to Krishnan · Manages Nehal, Fathima, Tiyasa, Haripriya, Disha</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('creative_standup')">Creative Standup</button><span class="agenda">Hima content status · blockers</span></td><td class="host">Krishnan</td><td>Kishore — Hima content status</td><td class="mono">20 min</td></tr>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('hima_content')">Hima Content Standup</button><span class="agenda">Today's creatives · owners · approvals</span></td><td class="host">Kishore</td><td>Nehal · Fathima · Tiyasa · Haripriya · Disha</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_kishore')">Krishnan ↔ Kishore — KPI Review</button><span class="agenda">Hima output · CTR · hit rate</span></td><td class="host">Krishnan</td><td>Kishore</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Hima Ad Creatives Shipped · Hima CTR · Hima Ad→Install · Hima Hit Rate. Held 1st Wed so Krishnan walks in with Nandha's KPI feedback (from 1st Tue 4 PM) fresh in mind.</div>
+    </div>
+  </div>
+
+  <!-- ============ SIVARANJANI ============ -->
+  <div class="person" data-apps="only-care">
+    <div class="person-name">Sivaranjani</div>
+    <div class="person-role">Only Care Content · Reports to Krishnan · Solo content owner · Collaborates with Sooraj (graphics) + Anaz (video)</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('creative_standup')">Creative Standup</button><span class="agenda">Only Care content status · blockers · ad priorities</span></td><td class="host">Krishnan</td><td>Sivaranjani — Only Care content status</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Only Care content status posted async in Slack daily — no separate standup needed since she's solo. Sooraj (graphics) + Anaz (video) are shared resources, work async on her briefs.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sivaranjani')">Krishnan ↔ Sivaranjani — KPI Review</button><span class="agenda">Only Care creatives · CTR · install · hit rate</span></td><td class="host">Krishnan</td><td>Sivaranjani</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Only Care Ad Creatives Shipped · Only Care CTR · Only Care Ad→Install · Only Care Hit Rate. Right after Kishore's review (3:00 PM) — Krishnan reviews both content leads on 1st Wed afternoon.</div>
+    </div>
+  </div>
+
+  <!-- ============ SARAN ============ -->
+  <div class="person" data-apps="data leadership">
+    <div class="person-name">Saran</div>
+    <div class="person-role">Data Analyst — Hima · Reports to Yuvanesh · Manages Prajwal · Strategic data partner to CEO</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('data_standup')">Data Standup</button><span class="agenda">Yesterday's numbers · anomalies · today's data tasks</span></td><td class="host">Saran</td><td>Prajwal</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Quick data sync — Saran + Prajwal review yesterday's revenue/retention/funnel, flag anomalies, split today's analysis tasks. EOD dashboard + Slack flags to JP/Sneha continue async. <strong>On 1st Thu, Data Standup is async</strong> — Saran is in his KPI review at 11:00.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Data deep-dives · anomalies · improvement targets</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('leaders')">Hima Leaders Sync</button><span class="agenda">Mid-week metrics · A/B reads · adjust experiments</span></td><td class="host">Nandha</td><td>Sneha · Yuvanesh · Meghana · Saran</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_saran')">Yuvanesh ↔ Saran — KPI Review</button><span class="agenda">Dashboard coverage · anomaly speed · deep-dives · A/B</span></td><td class="host">Yuvanesh</td><td>Saran</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Dashboard Coverage · Anomaly Detection Speed · Strategic Deep-Dives · A/B Test Throughput. Strategic data discussion happens in Hima Leaders Sync (Mon + Thu) — monthly Yuvanesh review handles admin/career/scoring.</div>
+    </div>
+  </div>
+
+  <!-- ============ PRAJWAL ============ -->
+  <div class="person" data-apps="data">
+    <div class="person-name">Prajwal</div>
+    <div class="person-role">Data Analyst Intern — Hima · Reports to Saran</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('data_standup')">Data Standup</button><span class="agenda">Yesterday's numbers · anomalies · today's data tasks</span></td><td class="host">Saran</td><td>Prajwal — brings dashboard/pipeline updates</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="callout muted">No weekly 1:1. Daily Data Standup with Saran (11:00 AM) covers sync · skill-building + deeper collaboration happen ad-hoc and async via Slack.</div>
+    </div>
+  </div>
+
+  <!-- ============ FIDA ============ -->
+  <div class="person" data-apps="ai leadership">
+    <div class="person-name">Fida Taneem</div>
+    <div class="person-role">Lead AI Engineer · Reports to JP · Manages Bhuvan Prasad, Bhoomika, Soundarya Balaraddi</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('ai_standup')">AI Standup</button><span class="agenda">Build priorities · blockers · intern team sync</span></td><td class="host">Fida</td><td>Bhuvan · Bhoomika · Soundarya</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="callout muted">No fixed weekly syncs with JP. Tactical alignment + build priorities handled async (Slack) and in the monthly KPI review. Daily AI Standup covers intern team coordination.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_fida')">JP ↔ Fida — KPI Review</button><span class="agenda">AI features · adoption · hours saved · reliability</span></td><td class="host">JP</td><td>Fida</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">AI features shipped · adoption rate · internal requests delivered · system reliability. Held 1st Thu 2:00 PM — before JP's leadership block at 3 PM, avoids clashing with Ayush's 5–6 PM MBR.</div>
+    </div>
+  </div>
+
+  <!-- ============ BALA ============ -->
+  <div class="person" data-apps="only-care leadership">
+    <div class="person-name">Bala</div>
+    <div class="person-role">COO · Reports to JP · Acting PM for Only Care · Manages Suwetha, Rachita, Dhanalakshmi + Dhanush (BLR Connect PM — Rishabh hosts BLR sprint ceremony)</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_standup')">Only Care Standup</button><span class="agenda">Product · dev · support sync · top issues · priorities</span></td><td class="host">Bala</td><td>Maari · Suwetha · Rachita · Dhanalakshmi · Smrithy</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (attendee · Only Care PM · BLR oversight)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Role</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_review')">Only Care Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_planning')">Only Care Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini · Swapna</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_review')">BLR Connect Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Wed</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_planning')">BLR Connect Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Bala is acting PM for Only Care — brings priorities + release call. <strong>Rishabh hosts all engineering ceremonies</strong> (Only Care: Mon Review + Tue Planning · BLR Connect: Wed Planning + Tue Review). Bala now also attends BLR Connect sprints as COO oversight (Dhanush drives as PM); monthly KPI review continues on top.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Other</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Wed</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('jp_bala_1on1')">JP ↔ Bala 1:1</button><span class="agenda">Only Care · BLR oversight · cross-app ops · escalations</span></td><td class="host">JP</td><td>Bala</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_dhanush')">Bala ↔ Dhanush — KPI Review</button><span class="agenda">BLR Connect product KPIs · TBD</span></td><td class="host">Bala</td><td>Dhanush</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_bala')">JP ↔ Bala — KPI Review</button><span class="agenda">COO scope · Only Care · BLR oversight · ops</span></td><td class="host">JP</td><td>Bala</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">1st Wed 4:30 PM: Bala reviews Dhanush (BLR Connect PM). 1st Thu 4:30 PM: Bala reviewed by JP. <strong>Pending:</strong> Sudar product status review cadence.</div>
+    </div>
+  </div>
+
+  <!-- ============ DHANUSH ============ -->
+  <div class="person" data-apps="blr-connect">
+    <div class="person-name">Dhanush</div>
+    <div class="person-role">Product Manager — Bangalore Connect · Reports to Bala · Functional lead for Sumit (Dev — engineering reports to Rishabh)</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_standup')">Bangalore Connect Standup</button><span class="agenda">Build progress · blockers · priorities</span></td><td class="host">Dhanush</td><td>Sumit</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (attendee · BLR PM)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Tue</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_review')">BLR Connect Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Wed</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('blr_planning')">BLR Connect Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">BLR Connect: weekly Wed plan + Tue review. <strong>Sprint = 2 weeks → release every 2nd Tue 4 PM</strong> (2 / month). <strong>Rishabh hosts the engineering ceremony</strong> — Dhanush attends as PM (priorities · roadmap · release call). Sumit commits scope as dev. Bala attends as COO oversight.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:30 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_dhanush')">Bala ↔ Dhanush — KPI Review</button><span class="agenda">BLR Connect product KPIs · TBD</span></td><td class="host">Bala</td><td>Dhanush</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against BLR Connect product KPIs (TBD — user growth, engagement, retention for Bangalore market).</div>
+    </div>
+  </div>
+
+  <!-- ============ MAARI ============ -->
+  <div class="person" data-apps="only-care">
+    <div class="person-name">Maari</div>
+    <div class="person-role">Full Stack Developer — Only Care · Reports to Rishabh · Sole Only Care dev</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_standup')">Only Care Standup</button><span class="agenda">Product · dev · support sync · top issues · priorities</span></td><td class="host">Bala</td><td>Maari — dev pulse</td><td class="mono">20 min</td></tr>
+          <tr><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('engineering')">Engineering Standup</button><span class="agenda">Dev peer sync — Rishabh · Perumal · Sumit · Barkha</span></td><td class="host">Rishabh</td><td>Maari — Only Care dev context</td><td class="mono">20 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Sprint Cycle (attendee)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Role</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_review')">Only Care Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Tue</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('oc_planning')">Only Care Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Rishabh</td><td>Bala · Maari · Ranjini · Swapna</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Only Care: weekly Mon review + Tue planning. <strong>Sprint = 2 weeks → release every 2nd Mon 4 PM</strong> (2 / month, right after the sprint-end review). Maari executes solo across the sprint. Daily cross-app code/bug peer sync via <strong>Engineering Standup</strong> with Rishabh · Perumal · Sumit · Barkha.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_maari')">Rishabh ↔ Maari — KPI Review</button><span class="agenda">Only Care engineering · sprint · bugs · reliability</span></td><td class="host">Rishabh</td><td>Maari</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against engineering KPIs (Sprint Compliance · Critical Bugs · Crash-Free Rate · App Store Rating) scoped to Only Care. <strong>Reviewed by Rishabh</strong> (her Team Lead) — Yuvanesh sees Only Care quality via Rishabh's own KPI review.</div>
+    </div>
+  </div>
+
+  <!-- ============ SNEHA PRATHAP ============ -->
+  <div class="person" data-apps="unman ai">
+    <div class="person-name">Sneha Prathap</div>
+    <div class="person-role">Gen AI Developer — Unman · Reports to Yuvanesh · Owns Unman product end-to-end</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="callout muted">No daily standup — solo on Unman. Async status to Fida in AI standup attendance + Slack EOD post.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly — Unman Sprint Cycle (co-host with JP)</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Wed</td><td class="mono">2:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('unman_review')">Unman Sprint Review</button><span class="agenda">Demo · QA sign-off · release call</span></td><td class="host">Sneha Prathap</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">Thu</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('unman_planning')">Unman Sprint Planning</button><span class="agenda">Scope · estimates · commits</span></td><td class="host">Sneha Prathap</td><td>Ranjini</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Unman: weekly Wed review + Thu planning. <strong>Sprint = 2 weeks → release every 2nd Wed 4 PM</strong> (2 / month). Solo execution across the sprint. <strong>JP co-hosts</strong> (AI Lead · direct oversight) — Yuvanesh removed, covers via monthly KPI only. Ranjini provides QA sign-off.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">3:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_sneha_prathap')">Yuvanesh ↔ Sneha Prathap — KPI Review</button><span class="agenda">Unman engineering · sprint · model quality · reliability</span></td><td class="host">Yuvanesh</td><td>Sneha Prathap</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">She owns Unman fully — JP reviews her directly. 2:30 PM on 1st Thu, right after Fida's KPI (2:00) — keeps both AI reviews back-to-back before JP's leadership block at 3 PM.</div>
+    </div>
+  </div>
+
+  <!-- ============ TAMIL ARASAN ============ -->
+  <div class="person" data-apps="hima only-care blr-connect unman">
+    <div class="person-name">Tamil Arasan</div>
+    <div class="person-role">Product Designer · All Apps · Reports to Yuvanesh · Solo designer · Bottleneck IC</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="callout muted">No daily standup. Design briefs received in Mon Sprint Planning. Async work + Figma comments throughout the week.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Role</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Mon</td><td class="mono">12:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('planning')">Hima Sprint Planning</button><span class="agenda">Design briefs · screens needed · scope</span></td><td class="host">Yuvanesh</td><td>Tamil Arasan — design briefs</td><td class="mono">60 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Attends Hima Sprint Planning weekly (flagship app). Joins Only Care / BLR / Unman sprint plannings on-demand when design work is in scope.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_tamil')">Yuvanesh ↔ Tamil Arasan — KPI Review</button><span class="agenda">Designs shipped · first-pass approval · system adoption</span></td><td class="host">Yuvanesh</td><td>Tamil Arasan</td><td class="mono">30 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Formal scoring against Designs Shipped · First-Pass Approval · Cycle Time · Design System Adoption. Weighted Hima 60% · Only Care 20% · BLR Connect 10% · Unman+Sudar 10%.</div>
+    </div>
+  </div>
+
+  <!-- ============ AYUSH ============ -->
+  <div class="person" data-apps="finance leadership">
+    <div class="person-name">Ayush</div>
+    <div class="person-role">Co-founder · CFO — Finance · Reports to JP · Manages Shoyab · Irisha (Founder's Office, ad-hoc — leaving end-of-month)</div>
+
+    <div class="cadence">
+      <div class="cadence-label">Daily</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10:30 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('finance_standup')">Finance Standup</button><span class="agenda">Cash position · payouts · GST/tax · reconciliation flags</span></td><td class="host">Ayush</td><td>Shoyab</td><td class="mono">10 min</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Weekly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 60px;">Day</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Tue</td><td class="mono">4:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('jp_ayush_checkin')">JP ↔ Ayush CFO Check-in</button><span class="agenda">Cash flow · runway · spend approvals · tactical finance decisions</span></td><td class="host">JP</td><td>Ayush</td><td class="mono">15 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">One weekly tactical 1:1 — the <strong>Tue 4:00 PM JP ↔ Ayush CFO Check-in</strong> covers cash flow, runway, and spend approvals (15 min/wk). Deeper financial review happens in the monthly KPI + MBR.</div>
+    </div>
+
+    <div class="cadence">
+      <div class="cadence-label">Monthly</div>
+      <div class="tbl-scroll"><table class="m-table">
+        <thead><tr><th style="width: 140px;">When</th><th style="width: 90px;">Time</th><th>Meeting</th><th style="width: 130px;">Host</th><th>Attendees</th><th style="width: 70px;">Length</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1st Wed / month</td><td class="mono">11:00 AM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_shoyab')">Ayush ↔ Shoyab — KPI Review</button><span class="agenda">Payout accuracy · tax filing · books close · recon</span></td><td class="host">Ayush</td><td>Shoyab</td><td class="mono">30 min</td></tr>
+          <tr><td class="mono">1st Thu / month</td><td class="mono">5:00 PM</td><td class="meeting"><button class="meeting-btn" onclick="openAgenda('kpi_ayush')">JP ↔ Ayush — KPI Review + MBR</button><span class="agenda">MBR + scoring · payout · GST · books close · reconciliation</span></td><td class="host">JP</td><td>Ayush</td><td class="mono">60 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout muted" style="margin-top: 14px;">Combined Monthly Business Review (P&amp;L presentation) + KPI scoring. Payout accuracy · GST/tax compliance · books close time · bank reconciliation cadence.</div>
+    </div>
+  </div>
+
+  <!-- ============ SPRINT CYCLE ============ -->
+  <div class="block">
+    <div class="block-eyebrow">Operational Cycle · All 4 Apps</div>
+    <div class="block-title">Rolling Sprint Schedule</div>
+    <div class="block-subtitle">
+      Planning + Review meetings run <strong>weekly</strong> for each app (offset by a day, so no two apps clash). A full sprint spans <strong>2 weeks</strong> — each app ships a production <strong>release every 2 weeks</strong> (2 sprints / month, matching the Sprint Release Compliance KPI of 2/2). Weekly reviews on off-weeks are progress checkpoints; the sprint-end review ships the build.
+    </div>
+
+    <div class="tbl-scroll"><table class="m-table">
+      <thead><tr><th style="width: 90px;">App</th><th>Planning (weekly)</th><th>Review (weekly)</th><th>Release (bi-weekly)</th><th style="width: 130px;">Plan Host</th><th>Devs</th></tr></thead>
+      <tbody>
+        <tr><td class="meeting">Hima</td><td class="mono">Mon 12:00 PM (60 min)</td><td class="mono">Fri 2:00 PM (30 min)</td><td class="mono">Every 2nd Fri · 4 PM</td><td class="host">Yuvanesh</td><td>Rishabh + Perumal</td></tr>
+        <tr><td class="meeting">Only Care</td><td class="mono">Tue 12:00 PM (30 min)</td><td class="mono">Mon 2:00 PM (30 min)</td><td class="mono">Every 2nd Mon · 4 PM</td><td class="host">Rishabh</td><td>Maari</td></tr>
+        <tr><td class="meeting">BLR Connect</td><td class="mono">Wed 12:00 PM (30 min)</td><td class="mono">Tue 2:00 PM (30 min)</td><td class="mono">Every 2nd Tue · 4 PM</td><td class="host">Rishabh</td><td>Bala · Dhanush · Sumit · Ranjini</td></tr>
+        <tr><td class="meeting">Unman</td><td class="mono">Thu 12:00 PM (30 min)</td><td class="mono">Wed 2:00 PM (30 min)</td><td class="mono">Every 2nd Wed · 4 PM</td><td class="host">Sneha Prathap</td><td>Sneha Prathap</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout muted" style="margin-top: 16px;">
+      <strong>Constants:</strong> Ranjini (QA) attends every planning + review across all 4 apps. Yuvanesh hosts Hima. Rishabh hosts Only Care + BLR Connect (attends Hima). Sneha Prathap hosts Unman. <strong>Meetings weekly, releases bi-weekly</strong> — each 2-week sprint ends with a release review, and the build ships 2 hours later (2 releases / month per app).
+    </div>
+  </div>
+
+  <!-- ============ OPEN DECISIONS ============ -->
+  <div class="block">
+    <div class="block-eyebrow">Pending JP Decisions</div>
+    <div class="block-title">Open Items</div>
+
+    <div class="tbl-scroll"><table class="m-table">
+      <thead><tr><th style="width: 50px;">#</th><th>Decision needed</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">01</td><td>Rename Sneha's title to Product Manager — Hima?</td></tr>
+        <tr><td class="mono">02</td><td>Promote Deeksha to Ops Lead formally?</td></tr>
+        <tr><td class="mono">03</td><td>Sudar product status review — needs separate touchpoint or rolled into Bala's monthly?</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="footer">
+    Hima Meeting System · Innovfix · Designed by JP &amp; AI · Last updated <span id="last-updated"></span>
+  </div>
+
+</div>
+
+<div id="agenda-modal" class="modal-overlay" onclick="if(event.target===this)closeAgenda()">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeAgenda()" aria-label="Close">×</button>
+    <div id="agenda-modal-title" class="modal-title"></div>
+    <div id="agenda-modal-body" class="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  const tabs = document.querySelectorAll('.app-tab');
+  const persons = document.querySelectorAll('.person');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      persons.forEach(p => {
+        if (filter === 'all') {
+          p.classList.remove('hidden');
+        } else {
+          const apps = (p.dataset.apps || '').split(/\s+/);
+          if (apps.includes(filter)) p.classList.remove('hidden');
+          else p.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  const HIMA_AGENDAS = {
+    daily: {
+      title: 'Hima Daily Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 10:30 AM · Sneha hosts</strong><br><br>
+<strong>Each attendee · ~3 min:</strong><br>
+• <b>Sneha</b> (host) — strategic priorities · decisions blocked · cross-team asks<br>
+• <b>Anirudh</b> — performance ads: spend · CAC · install volume · ROAS flags<br>
+• <b>Anindita</b> — N. India growth: creators available · revenue · day 0 / day 7 retention · call connection · call length · user behavior<br>
+• <b>Deeksha</b> — support pulse: top issues · ticket volume · language flags (6 langs) · app rating trend · tech escalations<br>
+• <b>Meghana</b> — data/insights: user behavior signals · funnel flags · experiment readouts · key metric movements<br><br>
+<strong>Standing items — anyone flags:</strong><br>
+• Revenue drops/spikes (≥10% escalates)<br>
+• Big-impact bugs / outages<br>
+• Unusual user behavior · fraud signals<br>
+• User issues · bad reviews · support spike<br>
+• N. India experiments status<br>
+• Today's commitments<br><br>
+<strong>Out of scope:</strong> deep-dives → Hima Leaders Sync · sprint scope → Sprint Planning · KPI scoring → monthly review.`
+    },
+    planning: {
+      title: 'Hima Sprint Planning — Agenda',
+      body: `<strong>Mon 12 PM · 60 min · Yuvanesh hosts</strong><br><br>
+<strong>Inputs (5 min):</strong> last sprint outcomes · open bugs · backlog priorities from Sneha<br><br>
+<strong>Discuss + Decide (45 min):</strong><br>
+• <b>Features to ship</b> — new features in priority order<br>
+• <b>Bugs to fix</b> — P0/P1 bugs, regressions, crash fixes<br>
+• <b>Scope commit</b> — effort estimates · IN / OUT<br>
+• <b>Owners</b> — who builds what (Rishabh · Perumal)<br>
+• <b>Dependencies</b> — design (Tamil) · paid (Anirudh) · QA (Ranjini)<br>
+• <b>Release target</b> — Fri 4 PM commit<br><br>
+<strong>Wrap (10 min):</strong> risks · blockers needing JP/Yuvanesh decisions · async follow-ups`
+    },
+    review: {
+      title: 'Hima Sprint Review — Agenda',
+      body: `<strong>Fri 2 PM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Demo (15 min):</strong><br>
+• <b>Features shipped</b> — Rishabh + Perumal demo on real device (not just code)<br>
+• <b>Bugs fixed</b> — verify each P0/P1 with Ranjini<br>
+• <b>Any last-minute changes?</b> — UX tweaks · copy fixes · ship blockers<br><br>
+<strong>QA Sign-off (10 min):</strong><br>
+• Ranjini verifies regression · critical paths · sign-off doc<br>
+• Open bugs — must-fix vs ship-with-known-issue<br><br>
+<strong>Release Decision (5 min):</strong><br>
+• Go / Hold / Partial — Yuvanesh + Sneha jointly decide<br>
+• If <b>Go</b>: release at <b>Fri 4 PM</b> (2-hr buffer)<br>
+• If <b>Hold</b>: rollover · communicate to JP`
+    },
+    kpi_rishabh: {
+      title: 'Yuvanesh ↔ Rishabh — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 2:30 PM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Rishabh's 4 engineering KPIs — weighted 80% Hima · 20% Only Care. Yuvanesh reviews all team leads on 1st Wed afternoon (after the 2:00 Unman Review), then walks into JP's 1st Thu review with fresh scores.<br><br>
+<strong>Pre-read (Rishabh sends 24h before):</strong> Sprint log · bug count · crash-free data · App Store rating · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Sprint Release Compliance</b> — Target <b>2 / 2</b> · Weight <b>32</b> · Both sprints ship on planned date (Hima 90% · Astro 10%)<br>
+• <b>Critical Bugs in Production (P0/P1)</b> — Target <b>0</b> · Weight <b>26</b> · Security · payment · fraud · user-impacting bugs<br>
+• <b>Crash-Free Session Rate</b> — Target <b>95%</b> · Weight <b>22</b> · % sessions without app crash<br>
+• <b>App Store Rating</b> — Target <b>4.5 ★</b> · Weight <b>20</b> · Play Store rating maintained or trending up<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (code quality · estimation · infra · dependencies)<br>
+• Sprint misses — scope creep vs genuine blockers<br>
+• Bug root causes — systemic vs one-off<br>
+• How Maari · Sumit · Barkha are performing under Rishabh's leadership<br>
+• Only Care sprint quality (Rishabh now hosts OC sprints too)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 engineering actions to close gaps<br>
+• Targets same or adjusted<br>
+• Yuvanesh decisions — architecture · hiring · tech debt investment<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Yuvanesh's 1st Thu 3:30 PM review with JP.`
+    },
+    kpi_ranjini: {
+      title: 'Yuvanesh ↔ Ranjini — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:30 PM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Ranjini's 3 QA KPIs — weighted 70% Hima · 20% Only Care · 10% Unman. Cross-app QA quality across all sprint cycles she attends.<br><br>
+<strong>Pre-read (Ranjini sends 24h before):</strong> Escaped bug log · test coverage report · verification turnaround data · self-assessment.<br><br>
+<strong>Score the 3 KPIs (15 min · ~5 min each):</strong><br>
+• <b>Defect Escape Rate</b> — Target <b>0</b> · Weight <b>41</b> · Critical bugs that reached prod despite QA (Hima 29 · OC 9 · Unman 3)<br>
+• <b>Test Coverage (Critical Paths)</b> — Target <b>80%</b> · Weight <b>32</b> · Payment · call · auth flows with automated tests<br>
+• <b>Bug Verification Turnaround</b> — Target <b>≤ 2 days</b> · Weight <b>27</b> · Avg time to verify a dev's bug fix<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Any P0/P1 that escaped to production · root cause · which app<br>
+• Coverage gaps on critical paths (payment · calls · auth · fraud)<br>
+• Slow verification — bottleneck or dev rework loops<br>
+• How Laxmi (Hima QA) + Iksha (Only Care QA) + Priya (Content Mod &amp; QA) are performing<br>
+• Which app is riskiest right now (Hima · Only Care · BLR · Unman)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 QA actions (automation · process · coverage targets)<br>
+• Targets same or adjusted<br>
+• Yuvanesh decisions — tooling · QA headcount · test infra<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Yuvanesh's 1st Thu 3:30 PM review with JP.`
+    },
+    kpi_meghana: {
+      title: 'Sneha ↔ Meghana — Monthly KPI Review',
+      body: `<strong>1st Mon / month · 4:30 PM · 30 min · Sneha hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Meghana's 4 BA KPIs. Held right after Sneha ↔ Deeksha review (3:30 PM) — keeps Sneha's monthly rhythm tight.<br><br>
+<strong>Pre-read (Meghana sends 24h before):</strong> Last month's recommendation log · adoption status · decision memos shipped · weekly report archive · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Business Recommendations Delivered</b> — Target <b>6 / month</b> · Weight <b>30</b> · Action proposals to Sneha/JP (not findings, but what to DO)<br>
+• <b>Recommendation Adoption Rate</b> — Target <b>60%</b> · Weight <b>30</b> · % of recs Sneha actually acted on<br>
+• <b>Decision Memo Turnaround</b> — Target <b>≤ 3 days</b> · Weight <b>20</b> · Speed when Sneha/JP ask "Should we do X?"<br>
+• <b>Weekly Hima Business Report</b> — Target <b>4 / 4 weeks</b> · Weight <b>20</b> · Synthesized exec intel for Sneha + JP<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which recommendations got rejected · why<br>
+• Recommendations that should have been made but weren't<br>
+• Sub-metrics — top rec of the week · adoption status of last month's recs · open decision memos · weekly report contents · Saran collaboration cadence<br>
+• BA vs DA boundary — is she stuck doing data work instead of business work?<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 business questions to drive next month<br>
+• Memo backlog priorities<br>
+• Sneha decisions / asks — tools · access · escalations<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 priorities logged · Sneha walks into 1st Thu JP review with fresh BA insights.`
+    },
+    kpi_deeksha: {
+      title: 'Sneha ↔ Deeksha — Monthly KPI Review',
+      body: `<strong>1st Mon / month · 3:30 PM · 30 min · Sneha hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Deeksha's 4 support KPIs against targets. Held 1st Mon so previous month's data is final — gives Sneha fresh ops scores for her own KPI review on 1st Thu.<br><br>
+<strong>Pre-read (Deeksha sends 24h before):</strong> Last month's actuals · sub-metrics breakdown · self-assessment notes.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Ticket Resolution Rate</b> — Target <b>90%</b> · Weight <b>30</b> · % resolved by support without escalating to dev/JP<br>
+• <b>First Response Time (FRT)</b> — Target <b>80%</b> · Weight <b>25</b> · % tickets first-responded within SLA<br>
+• <b>Ticket Re-open Rate</b> — Target <b>≤ 5%</b> · Weight <b>25</b> · % resolved tickets reopened by same user (proxy for satisfaction)<br>
+• <b>Average Resolution Time</b> — Target <b>100%</b> · Weight <b>20</b> · % tickets resolved within SLA window<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause<br>
+• Sub-metrics — tickets by language (Ta · Te · Ml · Bn · Hi · Kn) · per-rep response time · top 5 issue categories · repeat issue rate · refund volume<br>
+• Coverage gaps — language load imbalance · OOO impact<br>
+• Recurring issues that should become product fixes (escalate to Sneha → Tech)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions to close gaps (training · process · staffing)<br>
+• Targets for next month — same or adjusted<br>
+• Sneha decisions / asks — hiring · tooling · escalations<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds into Sneha's 1st Thu KPI review with JP.`
+    },
+    oc_planning: {
+      title: 'Only Care Sprint Planning — Agenda',
+      body: `<strong>Tue 12:00 PM · 30 min · Rishabh hosts (engineering) · Bala drives product</strong><br><br>
+<strong>Purpose:</strong> Commit scope for the next Only Care sprint. <b>Bala is the main voice</b> — he decides which features + bugs the sprint works on (acting PM for Only Care). Rishabh runs the engineering side (estimates, commits).<br><br>
+<strong>Inputs (5 min):</strong> last sprint outcomes · open bugs · <b>Bala's product priorities + roadmap</b><br><br>
+<strong>Discuss + Decide (20 min):</strong><br>
+• <b>Features to ship</b> — <b>Bala presents + prioritizes</b> what goes in this sprint<br>
+• <b>Bugs to fix</b> — Bala flags user-impacting issues · P0/P1 · regressions<br>
+• <b>Scope commit</b> — effort estimates · what's IN, what's OUT (Maari commits with Rishabh)<br>
+• <b>Dependencies</b> — QA capacity (Ranjini) · paid coordination (Swapna)<br>
+• <b>Release target</b> — Monday 4 PM commit<br><br>
+<strong>Wrap (5 min):</strong> risks · blockers → Rishabh escalates to Yuvanesh if needed<br><br>
+<strong>Attendees:</strong> Bala (PM · drives features/bugs) · Rishabh (host · engineering) · Maari (dev) · Ranjini (QA) · Swapna (paid coordination)`
+    },
+    oc_review: {
+      title: 'Only Care Sprint Review — Agenda',
+      body: `<strong>Mon 2:00 PM · 30 min · Rishabh hosts (engineering) · Bala owns release call</strong><br><br>
+<strong>Purpose:</strong> Review what shipped in the Only Care sprint. <b>Bala accepts/rejects features</b> and makes the release call as PM. QA sign-off. Releases Mon 4 PM (2-hr buffer).<br><br>
+<strong>Demo (15 min):</strong><br>
+• <b>Features shipped</b> — Maari demos on real device · <b>Bala accepts or sends back</b><br>
+• <b>Bugs fixed</b> — verify each P0/P1 with Ranjini<br>
+• <b>Any last-minute changes?</b> — Bala flags UX tweaks · copy fixes · ship blockers<br><br>
+<strong>QA Sign-off (10 min):</strong><br>
+• Ranjini verifies regression · critical paths · sign-off doc<br>
+• Open bugs — must-fix vs ship-with-known-issue<br><br>
+<strong>Release Decision (5 min):</strong><br>
+• Go / Hold / Partial — <b>Bala decides</b> (PM), Rishabh confirms engineering readiness<br>
+• If <b>Go</b>: release at <b>Mon 4 PM</b><br>
+• If <b>Hold</b>: rollover scope · push to next sprint<br><br>
+<strong>Attendees:</strong> Bala (PM · accepts features · release call) · Rishabh (host · engineering) · Maari (dev · demo) · Ranjini (QA sign-off)`
+    },
+    blr_planning: {
+      title: 'BLR Connect Sprint Planning — Agenda',
+      body: `<strong>Wed 12:00 PM · 30 min · Rishabh hosts (engineering) · Dhanush drives product</strong><br><br>
+<strong>Purpose:</strong> Commit scope for the next BLR Connect sprint. <b>Dhanush is the main voice</b> — he decides which features + bugs the sprint works on (BLR Connect PM). Rishabh runs the engineering side (estimates, commits).<br><br>
+<strong>Inputs (5 min):</strong> last sprint outcomes · open bugs · <b>Dhanush's Bangalore-market priorities + roadmap</b><br><br>
+<strong>Discuss + Decide (20 min):</strong><br>
+• <b>Features to ship</b> — <b>Dhanush presents + prioritizes</b> Bangalore-market features<br>
+• <b>Bugs to fix</b> — Dhanush flags user-impacting issues · P0/P1 · regressions<br>
+• <b>Scope commit</b> — effort estimates · IN / OUT (Sumit commits with Rishabh)<br>
+• <b>Dependencies</b> — QA capacity (Ranjini)<br>
+• <b>Release target</b> — Tuesday 4 PM commit<br><br>
+<strong>Wrap (5 min):</strong> risks · blockers → Rishabh escalates to Yuvanesh if needed<br><br>
+<strong>Attendees:</strong> Bala (COO · oversight) · Dhanush (PM · drives features/bugs) · Rishabh (host · engineering) · Sumit (dev) · Ranjini (QA)`
+    },
+    blr_review: {
+      title: 'BLR Connect Sprint Review — Agenda',
+      body: `<strong>Tue 2:00 PM · 30 min · Rishabh hosts (engineering) · Dhanush owns release call</strong><br><br>
+<strong>Purpose:</strong> Review what shipped in the BLR Connect sprint. <b>Dhanush accepts/rejects features</b> and makes the release call as PM. QA sign-off. Releases Tue 4 PM (2-hr buffer).<br><br>
+<strong>Demo (15 min):</strong><br>
+• <b>Features shipped</b> — Sumit demos on real device · <b>Dhanush accepts or sends back</b><br>
+• <b>Bugs fixed</b> — verify each P0/P1 with Ranjini<br>
+• <b>Any last-minute changes?</b> — Dhanush flags UX tweaks · copy fixes · ship blockers<br><br>
+<strong>QA Sign-off (10 min):</strong><br>
+• Ranjini verifies regression · critical paths · sign-off doc<br>
+• Open bugs — must-fix vs ship-with-known-issue<br><br>
+<strong>Release Decision (5 min):</strong><br>
+• Go / Hold / Partial — <b>Dhanush decides</b> (PM), Rishabh confirms engineering readiness<br>
+• If <b>Go</b>: release at <b>Tue 4 PM</b><br>
+• If <b>Hold</b>: rollover scope · next sprint<br><br>
+<strong>Attendees:</strong> Bala (COO · oversight) · Dhanush (PM · accepts features · release call) · Rishabh (host · engineering) · Sumit (dev · demo) · Ranjini (QA sign-off)`
+    },
+    unman_planning: {
+      title: 'Unman Sprint Planning — Agenda',
+      body: `<strong>Thu 12:00 PM · 30 min · Sneha Prathap hosts</strong><br><br>
+<strong>Purpose:</strong> Commit scope for the next Unman sprint. <b>Sneha Prathap owns Unman end-to-end</b> (solo dev) and hosts the ceremony. Reports to Yuvanesh; Yuvanesh covers via monthly KPI review, not sprint attendance.<br><br>
+<strong>Inputs (5 min):</strong> last sprint outcomes · open bugs · AI model performance<br><br>
+<strong>Discuss + Decide (20 min):</strong><br>
+• <b>Features to ship</b> — <b>Sneha Prathap prioritizes</b> AI features · model improvements<br>
+• <b>Bugs to fix</b> — P0/P1 bugs, model regressions, accuracy issues<br>
+• <b>Scope commit</b> — effort estimates · IN / OUT (Sneha Prathap commits)<br>
+• <b>QA</b> — Ranjini on test capacity<br>
+• <b>Release target</b> — Wednesday 4 PM commit<br><br>
+<strong>Wrap (5 min):</strong> risks · blockers → JP decides · escalate to Fida if technical<br><br>
+<strong>Attendees:</strong> Sneha Prathap (host · owns Unman) · Ranjini (QA)`
+    },
+    unman_review: {
+      title: 'Unman Sprint Review — Agenda',
+      body: `<strong>Wed 2:00 PM · 30 min · Sneha Prathap hosts</strong><br><br>
+<strong>Purpose:</strong> Review what shipped in the Unman sprint. <b>JP accepts/rejects features</b> as AI Lead. QA sign-off. Release decision. Releases Wed 4 PM (2-hr buffer).<br><br>
+<strong>Demo (15 min):</strong><br>
+• <b>Features shipped</b> — Sneha Prathap demos on real device<br>
+• <b>Model quality</b> — accuracy · latency · hallucination/error rate<br>
+• <b>Any last-minute changes?</b> — UX tweaks · prompt fixes · ship blockers<br><br>
+<strong>QA Sign-off (10 min):</strong><br>
+• Ranjini verifies regression · critical paths · sign-off doc<br>
+• Open bugs — must-fix vs ship-with-known-issue<br><br>
+<strong>Release Decision (5 min):</strong><br>
+• Go / Hold / Partial — <b>Sneha Prathap decides</b> with Ranjini's QA sign-off; escalate to Yuvanesh if scope risk<br>
+• If <b>Go</b>: release at <b>Wed 4 PM</b><br>
+• If <b>Hold</b>: rollover scope · escalate to Fida if technical<br><br>
+<strong>Attendees:</strong> Sneha Prathap (host · dev · demo · release call) · Ranjini (QA sign-off)`
+    },
+    qa_standup: {
+      title: 'QA Standup — Agenda',
+      body: `<strong>10 min · Mon–Fri 11:00 AM · Ranjini hosts</strong><br><br>
+<strong>Purpose:</strong> Daily QA pulse across all 4 apps — what needs verifying, what's blocking release, where coverage is thin. Runs parallel to the 11:00 Engineering Standup; QA↔dev coordination flows via sprint meetings + Slack bug channels.<br><br>
+<strong>Each member · ~2-3 min:</strong><br>
+• <b>Ranjini</b> (host · QA Lead) — cross-app priorities · release blockers · today's verification queue<br>
+• <b>Laxmi</b> (Hima QA) — Hima bugs to verify · regression status · test gaps<br>
+• <b>Iksha</b> (Only Care QA) — Only Care bugs to verify · regression status · test gaps<br>
+• <b>Priya</b> (Content Moderator &amp; QA) — flagged user/creator content · moderation queue · QA verification support<br><br>
+<strong>Standing items — flag if present:</strong><br>
+• <b>Bugs to verify</b> — dev-fixed tickets awaiting QA sign-off (target turnaround ≤ 2 days)<br>
+• <b>Critical/escaped bugs</b> — anything P0/P1 that slipped to prod → escalate to Rishabh/Yuvanesh<br>
+• <b>Release blockers</b> — open issues on this sprint's release (which app, which day)<br>
+• <b>Coverage gaps</b> — critical paths (payment · calls · auth · fraud) lacking tests<br><br>
+<strong>Out of scope:</strong> sprint scope (sprint planning) · KPI scoring (1st Wed Yuvanesh review). Detailed bug triage stays async in Slack.`
+    },
+    engineering: {
+      title: 'Engineering Standup — Agenda',
+      body: `<strong>20 min · Mon–Fri 11:00 AM · Rishabh hosts</strong><br><br>
+<strong>Purpose:</strong> Daily engineering pulse across all 5 product surfaces — Hima · Only Care · BLR Connect · Astro. Code review · bug triage · cross-app peer sync · mentorship for juniors.<br><br>
+<strong>Each dev · ~3 min (15 min total):</strong><br>
+• <b>Rishabh</b> (host · Hima Team Lead) — release status · P0/P1 bugs · sprint blockers · today's priorities<br>
+• <b>Perumal</b> (Hima Dev) — yesterday's commits · today's plan · code review needed · stuck on<br>
+• <b>Maari</b> (Only Care Dev) — Only Care progress · release status · cross-app peer asks<br>
+• <b>Sumit</b> (BLR Connect Dev intern) — BLR progress · code review needs · learning blockers<br>
+• <b>Barkha</b> (Astro intern) — Astro progress · async questions · mentorship asks<br><br>
+<strong>Cross-cutting (3 min · Rishabh):</strong><br>
+• <b>Critical bugs / outages</b> — anything affecting production users<br>
+• <b>Shared infrastructure</b> — auth · payments · analytics · anything used across apps<br>
+• <b>Code review backlog</b> — open PRs · who reviews what<br>
+• <b>Tech debt flags</b> — patterns getting worse · escalate to Yuvanesh<br><br>
+<strong>Wrap (2 min · Rishabh):</strong><br>
+• Today's commitments — what each dev ships by EOD<br>
+• Async follow-ups → Slack threads<br>
+• Anything blocking → escalate to Yuvanesh<br><br>
+<strong>Out of scope:</strong> sprint scope (Mon Sprint Planning) · architecture decisions (1:1 with Yuvanesh) · KPI scoring (monthly review).`
+    },
+    support: {
+      title: 'Support Team Standup — Agenda',
+      body: `<strong>20 min · Mon–Fri 11:00 AM · Deeksha hosts</strong><br><br>
+<strong>Purpose:</strong> Daily support pulse across 6 languages. Surface user issues fast → escalate to Tech / Product. Feeds Deeksha's input to Hima Daily Standup at 10:30 (next day cycle).<br><br>
+<strong>Each rep · ~3 min (12 min total):</strong><br>
+• <b>Nisha</b> (Tamil) — ticket count · top issues · payment/login fails<br>
+• <b>Gousia</b> (Telugu) — ticket count · top issues · creator complaints<br>
+• <b>Reshma</b> (Malayalam) — ticket count · top issues · regional flags<br>
+• <b>Anjali</b> (Bengali + Hindi) — ticket count · top issues · N. India signals · Hindi market flags<br><br>
+<strong>Cross-cutting items (5 min):</strong><br>
+• <b>Kannada</b> — handled by Deeksha directly · key flags shared<br>
+• <b>Recurring issues</b> — same complaint across 3+ languages → product flag<br>
+• <b>App Store / Play Store ratings</b> — new bad reviews · trend signals<br>
+• <b>Payment / call connection / login fails</b> — escalate to Yuvanesh / Rishabh<br>
+• <b>Creator complaints</b> — pay issues · platform bugs → flag to Sneha<br><br>
+<strong>Wrap (3 min · Deeksha):</strong><br>
+• Top 3 issues to escalate today (Tech · Product · Marketing)<br>
+• Today's coverage — anyone OOO · backup<br>
+• What goes to Hima Daily Standup tomorrow<br><br>
+<strong>Out of scope:</strong> individual ticket coaching (1:1 ad-hoc) · monthly KPI scoring (1st Mon 3:30 PM Sneha review).`
+    },
+    kpi_sneha: {
+      title: 'JP ↔ Sneha — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 3:00 PM · 30 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Sneha's 4 Hima PM KPIs against targets. Documented scorecard. Bonus/incentive input.<br><br>
+<strong>Pre-read (Sneha sends 24h before):</strong> Last month's actuals · sub-metrics dashboard · self-assessment notes.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Monthly Revenue Growth</b> — Target <b>₹7.5 Cr</b> · Weight <b>35</b> · Hima MoM revenue growth from ₹6 Cr baseline<br>
+• <b>Call Connection Rate</b> — Target <b>45%</b> · Weight <b>25</b> · % of attempts that connect + complete (not dropped)<br>
+• <b>Day 7 User Retention</b> — Target <b>2%</b> · Weight <b>20</b> · % new users active on day 7 after install<br>
+• <b>Creator Retention (MAU)</b> — Target <b>75%</b> · Weight <b>20</b> · % creators active this month vs last<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed target · root cause<br>
+• Sub-metrics that explain the move (ARPU · calls per user · drop rate · match time · D30 retention · top-creator concentration)<br>
+• What's blocking — tech · marketing · ops · creator supply<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions to close gaps<br>
+• Targets for next month — same or adjusted<br>
+• JP decisions / asks — hiring · spend · escalations<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · next review date.`
+    },
+    leaders: {
+      title: 'Hima Leaders Sync — Agenda',
+      body: `<strong>Mon + Thu 5 PM · 30 min · Nandha hosts both</strong><br><br>
+<strong>Purpose:</strong> Plan new features · implement actions to improve <b>Revenue · Call Connection Rate · App Experience · N. India growth</b>. Introduce ideas from each leader's domain.<br><br>
+<strong>Each leader brings (5 min · ~25 min total):</strong><br>
+• <b>Nandha</b> (host · Marketing) — campaign learnings · creative ideas · ad performance · paid funnel insights<br>
+• <b>Sneha</b> (Product · Ops) — user feedback · feature gaps · ops issues · roadmap priorities<br>
+• <b>Yuvanesh</b> (Tech) — feasibility · architecture · what we can ship · tech debt impact<br>
+• <b>Meghana</b> (BA) — user behavior insights · funnel drop-offs · experiment ideas<br>
+• <b>Saran</b> (Data) — metrics deep-dives · anomalies · revenue/CCR/retention analysis<br><br>
+<strong>Standard outputs (5 min wrap):</strong><br>
+• New features → next sprint<br>
+• Actions to improve revenue (CCR · ARPU · conversion)<br>
+• Actions to improve app experience (UX · performance · onboarding)<br>
+• Experiments to introduce (success metric · 1-week timebox)<br>
+• N. India growth experiments status<br><br>
+<strong>Mon (Plan) ↔ Thu (Adjust):</strong><br>
+• Mon = introduce ideas · decide actions for the week<br>
+• Thu = review what's working, course-correct, refine experiments<br><br>
+<strong>Skips 1st Mon</strong> — Sneha is in Anindita KPI Review at 5 PM.`
+    },
+    mktg_sync: {
+      title: 'Marketing Leadership Sync — Agenda',
+      body: `<strong>Tue 12:00 PM · 45 min · Nandha hosts</strong><br><br>
+<strong>Purpose:</strong> Weekly marketing alignment — connect paid performance (Anirudh) with creative output (Krishnan) and set next week's bets.<br><br>
+• <b>CAC + spend review</b> — Anirudh on spend · CAC · ROAS · install pace vs target<br>
+• <b>Creative winners</b> — Krishnan on top-performing ads · what's resonating · fatigue signals<br>
+• <b>Next tests</b> — which creative angles + audiences to test next week<br>
+• <b>Production plan</b> — creative volume needed to feed the ad accounts<br>
+• <b>Blockers</b> — budget approvals · tracking gaps · escalations to Nandha<br><br>
+<strong>Attendees:</strong> Nandha (host · CMO) · Anirudh (paid) · Krishnan (creative)<br><br>
+<strong>Out of scope:</strong> formal KPI scoring → monthly reviews · ad-by-ad reads → Fri Ad Performance Review.`
+    },
+    growth_standup: {
+      title: 'Growth Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 11:30 AM · Anindita hosts</strong><br><br>
+<strong>Purpose:</strong> Daily North India growth pulse — keep regional posts, leads, and the creator pipeline moving.<br><br>
+• <b>Anindita</b> (host) — N. India revenue · creator pipeline · regional priorities<br>
+• <b>Gargi Bisht</b> — social posts shipped · regional leads · engagement<br>
+• <b>Creator issues</b> — onboarding blockers · payout questions · supply gaps<br>
+• <b>Today's plan</b> — posts to ship · outreach · experiments<br><br>
+<strong>Out of scope:</strong> company-wide growth strategy → Hima Daily Standup · KPI scoring → monthly Sneha review.`
+    },
+    ad_review: {
+      title: 'Ad Performance Review — Agenda',
+      body: `<strong>Fri 11:00 AM · 30 min · Anirudh hosts</strong><br><br>
+<strong>Purpose:</strong> Weekly read of paid ad performance so Krishnan's team plans next week's creative production from real data — 75% of Krishnan's KPI lives in Anirudh's ad accounts.<br><br>
+• <b>Winners</b> — top 5 performing creatives · spend to scale<br>
+• <b>Kill list</b> — fatigued / underperforming ads to cut<br>
+• <b>Spend by creative</b> — CTR · CVR · CAC per creative<br>
+• <b>Next briefs</b> — what to produce next week · angles to test<br><br>
+<strong>Attendees:</strong> Anirudh (host · paid) · Krishnan (creative)<br><br>
+<strong>Out of scope:</strong> budget strategy → Marketing Leadership Sync · KPI scoring → monthly reviews.`
+    },
+    hima_content: {
+      title: 'Hima Content Standup — Agenda',
+      body: `<strong>20 min · Mon–Fri 11:00 AM · Kishore hosts</strong><br><br>
+<strong>Purpose:</strong> Daily Hima ad creative production sync — keep the 5-person content team shipping videos + scripts that feed Anirudh's campaigns.<br><br>
+• <b>Today's creatives</b> — videos · scripts · graphics in production<br>
+• <b>Owners</b> — who's on what (Nehal · Fathima · Tiyasa · Haripriya · Disha)<br>
+• <b>Approvals</b> — drafts needing Kishore sign-off · ready-to-ship<br>
+• <b>Blockers</b> — asset gaps · tool issues · brief clarity<br>
+• <b>Handoff</b> — what ships to the ads team today<br><br>
+<strong>Out of scope:</strong> creative strategy → Creative Standup (Krishnan) · KPI scoring → monthly Krishnan review.`
+    },
+    creative_standup: {
+      title: 'Creative Standup — Agenda',
+      body: `<strong>20 min · Mon–Fri 10:30 AM · Krishnan hosts</strong><br><br>
+<strong>Purpose:</strong> Daily ad creative pulse across Hima + Only Care — output status, blockers, and ad priorities for the AI creative engine.<br><br>
+• <b>Kishore</b> — Hima content status · today's creatives · blockers<br>
+• <b>Sivaranjani</b> — Only Care content status · today's creatives · blockers<br>
+• <b>Sooraj</b> (graphics) — design asset queue · priorities<br>
+• <b>Anaz</b> (video) — edits in progress · render queue<br>
+• <b>Ad priorities</b> — Krishnan aligns output to what the ads need most<br><br>
+<strong>Out of scope:</strong> per-team detail → Hima Content Standup (Kishore) · KPI scoring → monthly reviews.`
+    },
+    data_standup: {
+      title: 'Data Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 11:00 AM · Saran hosts</strong><br><br>
+<strong>Purpose:</strong> Quick data sync — review yesterday's numbers, flag anomalies, split today's analysis tasks. EOD dashboard + Slack flags to JP/Sneha continue async.<br><br>
+• <b>Saran</b> (host) — revenue · retention · funnel reads · anomalies to chase<br>
+• <b>Prajwal</b> — dashboard / pipeline updates · today's queries<br>
+• <b>Anomalies</b> — anything off vs expected (revenue · CAC · retention)<br>
+• <b>Today's tasks</b> — deep-dives · A/B reads · ad-hoc requests split<br><br>
+<strong>Note:</strong> On 1st Thu, Data Standup is async — Saran is in his KPI review at 11:00.<br><br>
+<strong>Out of scope:</strong> strategic deep-dive discussion → Hima Leaders Sync · KPI scoring → monthly Yuvanesh review.`
+    },
+    perf_standup: {
+      title: 'Performance Marketing Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 11:00 AM · Anirudh hosts</strong><br><br>
+<strong>Purpose:</strong> Daily paid acquisition pulse — budget, live campaign issues, and tests across Hima (Anirudh) and non-Hima apps (Swapna).<br><br>
+• <b>Anirudh</b> (host) — Hima spend · CAC · install pace · ROAS flags<br>
+• <b>Swapna M</b> — Only Care · Sudar · Unman spend · CAC · installs<br>
+• <b>Budget</b> — pacing vs plan · reallocation needs<br>
+• <b>Campaign issues</b> — tracking errors · disapprovals · sudden CAC spikes<br>
+• <b>Tests</b> — what's live · what to launch next<br><br>
+<strong>Out of scope:</strong> creative production → Creative Standup · KPI scoring → monthly reviews.`
+    },
+    ai_standup: {
+      title: 'AI Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 10:30 AM · Fida hosts</strong><br><br>
+<strong>Purpose:</strong> Daily AI team coordination — internal AI tooling (Tessa · Finance · HR · Ops) progress, blockers, and intern direction.<br><br>
+• <b>Fida</b> (host) — build priorities · releases · cross-team requests<br>
+• <b>Bhuvan · Bhoomika · Soundarya</b> — yesterday's progress · today's plan · blockers<br>
+• <b>Tool health</b> — uptime · bugs in internal systems · adoption signals<br>
+• <b>Today's commitments</b> — what each intern ships by EOD<br><br>
+<strong>Out of scope:</strong> Unman product (Sneha Prathap owns) · KPI scoring → monthly JP review.`
+    },
+    oc_standup: {
+      title: 'Only Care Standup — Agenda',
+      body: `<strong>20 min · Mon–Fri 10:30 AM · Bala hosts</strong><br><br>
+<strong>Purpose:</strong> Daily Only Care pulse — product, dev, and support sync for the growth app. Bala runs it as acting PM.<br><br>
+• <b>Maari</b> (dev) — build progress · release status · blockers<br>
+• <b>Suwetha · Rachita · Dhanalakshmi</b> (support) — tickets · top user issues · escalations<br>
+• <b>Smrithy</b> — content / ops updates<br>
+• <b>Bala</b> (host) — priorities · release call · cross-team asks<br>
+• <b>Today's plan</b> — what ships · what's escalated<br><br>
+<strong>Out of scope:</strong> sprint scope → Tue Sprint Planning (Rishabh) · KPI scoring → monthly reviews.`
+    },
+    blr_standup: {
+      title: 'Bangalore Connect Standup — Agenda',
+      body: `<strong>15 min · Mon–Fri 10:30 AM · Dhanush hosts</strong><br><br>
+<strong>Purpose:</strong> Daily BLR Connect pulse — keep the Bangalore-market product moving day to day.<br><br>
+• <b>Dhanush</b> (host · PM) — priorities · roadmap · user feedback<br>
+• <b>Sumit</b> (dev) — build progress · blockers · code review needs<br>
+• <b>Today's plan</b> — what ships · what's stuck<br><br>
+<strong>Out of scope:</strong> sprint ceremony → Wed Planning / Tue Review (Rishabh hosts) · KPI scoring → monthly Bala review.`
+    },
+    finance_standup: {
+      title: 'Finance Standup — Agenda',
+      body: `<strong>10 min · Mon–Fri 10:30 AM · Ayush hosts</strong><br><br>
+<strong>Purpose:</strong> Quick daily finance pulse — cash position, payouts, and compliance flags.<br><br>
+• <b>Ayush</b> (host · CFO) — cash position · approvals · priorities<br>
+• <b>Shoyab</b> — payouts processed · pending invoices · reconciliation status<br>
+• <b>Compliance flags</b> — GST · tax deadlines · bank reconciliation<br>
+• <b>Today's tasks</b> — what closes today<br><br>
+<strong>Out of scope:</strong> monthly P&amp;L / MBR → JP ↔ Ayush monthly · KPI scoring → monthly review.`
+    },
+    jp_bala_1on1: {
+      title: 'JP ↔ Bala 1:1 — Agenda',
+      body: `<strong>Wed 11:00 AM · 15 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Weekly COO tactical sync — Only Care product, BLR Connect oversight, and cross-app operations.<br><br>
+• <b>Only Care</b> — release status · product priorities · team health<br>
+• <b>BLR Connect</b> — Dhanush's progress · Bangalore-market signals<br>
+• <b>Cross-app ops</b> — support · hiring · process blockers<br>
+• <b>Escalations</b> — anything needing JP's decision this week<br><br>
+<strong>Out of scope:</strong> formal KPI scoring → monthly JP ↔ Bala review (1st Thu 4:30 PM).`
+    },
+    jp_ayush_checkin: {
+      title: 'JP ↔ Ayush CFO Check-in — Agenda',
+      body: `<strong>Weekly · Tue 4:00 PM · 15 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Weekly tactical finance alignment between CEO and CFO — cash flow, runway, and spend decisions. Deeper review happens in the monthly KPI + MBR.<br><br>
+• <b>Cash flow</b> — current position · inflows · outflows this week<br>
+• <b>Runway</b> — burn vs plan · any course corrections<br>
+• <b>Spend approvals</b> — pending decisions · budget asks<br>
+• <b>Compliance flags</b> — GST · tax · payout issues needing CEO awareness<br><br>
+<strong>Out of scope:</strong> full P&amp;L / MBR → monthly JP ↔ Ayush KPI Review + MBR (1st Thu 5:00 PM).`
+    },
+    kpi_anirudh: {
+      title: 'Nandha ↔ Anirudh — Monthly KPI Review',
+      body: `<strong>1st Tue / month · 3:00 PM · 30 min · Nandha hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Anirudh's 4 performance-marketing KPIs (Hima paid acquisition). Nandha reviews his team on 1st Tue, then rolls up to JP.<br><br>
+<strong>Score the 4 KPIs (15 min):</strong><br>
+• <b>CAC (Cost per Paid User)</b> — Target <b>₹450</b> · Weight <b>30</b> · Ad spend ÷ paying users acquired<br>
+• <b>ROAS (30-day Return on Ad Spend)</b> — Target <b>3x</b> · Weight <b>25</b> · Revenue from acquired users ÷ ad spend<br>
+• <b>Monthly Install Volume</b> — Target <b>40% MoM</b> · Weight <b>25</b> · New installs driven by paid ads<br>
+• <b>Register → First Purchase Conversion</b> — Target <b>28%</b> · Weight <b>20</b> · % registered users buying coins within 7 days<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (targeting · creative · landing · budget)<br>
+• Sub-metrics — LTV:CAC · spend by region/language · top creatives · platform split (Meta vs Google)<br>
+• Creative supply — is Krishnan's output enough to fight fatigue?<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions to close gaps · budget reallocation · new tests<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Nandha's roll-up to JP (1st Thu 4:00 PM).`
+    },
+    kpi_swapna: {
+      title: 'Anirudh ↔ Swapna — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 4:00 PM · 30 min · Anirudh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Swapna's 4 performance-marketing KPIs across non-Hima apps — weighted 70% Only Care · 20% Sudar · 10% Unman. Same framework as Anirudh.<br><br>
+<strong>Score the 4 KPIs (15 min):</strong><br>
+• <b>CAC (Cost per Paid User)</b> — Target <b>TBD</b> · Weight <b>30</b> · Ad spend ÷ paying users (non-Hima apps)<br>
+• <b>ROAS (30-day Return on Ad Spend)</b> — Target <b>TBD</b> · Weight <b>25</b> · Revenue ÷ ad spend, 30-day window<br>
+• <b>Monthly Install Volume</b> — Target <b>TBD</b> · Weight <b>25</b> · New installs from paid ads<br>
+• <b>Register → First Purchase Conversion</b> — Target <b>TBD</b> · Weight <b>20</b> · % registered users buying coins within 7 days<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Per-app CAC trends (Only Care · Sudar · Unman) · which app is dragging<br>
+• Sub-metrics — spend by region · top creatives (Sivaranjani's) · day 1/7/30 revenue per cohort<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions · budget split across apps · tests<br>
+• Set / confirm targets (currently TBD on scorecard)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Anirudh's review with Nandha.`
+    },
+    kpi_krishnan: {
+      title: 'Nandha ↔ Krishnan — Monthly KPI Review',
+      body: `<strong>1st Tue / month · 4:00 PM · 30 min · Nandha hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Krishnan's 4 ad-creative KPIs. Held right after Anirudh's review so paid + creative scores land the same afternoon.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Ad Creatives Shipped Monthly</b> — Target <b>140</b> · Weight <b>25</b> · AI videos + scripts + graphics handed to ads team<br>
+• <b>Average Ad CTR (Meta + Google)</b> — Target <b>2.5%</b> · Weight <b>25</b> · CTR across all his creatives in paid ads<br>
+• <b>Ad → Install Conversion</b> — Target <b>40%</b> · Weight <b>25</b> · % ad clicks that convert to installs<br>
+• <b>Hit Rate (Ads with CTR > 3%)</b> — Target <b>9.5%</b> · Weight <b>25</b> · % shipped ads above CTR benchmark<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (concept · format · volume · fatigue)<br>
+• Sub-metrics — winners to scale · kill list · Hima vs Only Care split · AI generation cycle time<br>
+• Team output — Kishore (Hima) vs Sivaranjani (Only Care)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 creative actions · angles to test · production targets<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · informs Krishnan's reviews of Kishore + Sivaranjani (1st Wed).`
+    },
+    kpi_kishore: {
+      title: 'Krishnan ↔ Kishore — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:00 PM · 30 min · Krishnan hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Kishore's 4 Hima ad-creative KPIs — 100% Hima focus. Held 1st Wed so Krishnan walks in with Nandha's feedback (1st Tue 4 PM) fresh.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Hima Ad Creatives Shipped Monthly</b> — Target <b>130</b> · Weight <b>25</b> · Hima AI videos + scripts + graphics<br>
+• <b>Hima Ad CTR (Meta + Google)</b> — Target <b>2%</b> · Weight <b>25</b> · CTR of Hima creatives in paid ads<br>
+• <b>Hima Ad → Install Conversion</b> — Target <b>35%</b> · Weight <b>25</b> · % Hima ad clicks that install<br>
+• <b>Hima Hit Rate (Ads with CTR > 3%)</b> — Target <b>9%</b> · Weight <b>25</b> · % Hima ads above CTR benchmark<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause · which creator (Nehal · Fathima · Tiyasa · Haripriya · Disha)<br>
+• Sub-metrics — top Hima winners · kill list · script-to-publish cycle time · AI cost per video<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions · angles to test · per-creator focus<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Krishnan's roll-up.`
+    },
+    kpi_sivaranjani: {
+      title: 'Krishnan ↔ Sivaranjani — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:30 PM · 30 min · Krishnan hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Sivaranjani's 4 Only Care ad-creative KPIs — 100% Only Care focus. Right after Kishore's review (3:00 PM).<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Only Care Ad Creatives Shipped Monthly</b> — Target <b>TBD</b> · Weight <b>25</b> · Only Care AI videos + scripts + graphics<br>
+• <b>Only Care Ad CTR (Meta + Google)</b> — Target <b>TBD</b> · Weight <b>25</b> · CTR of Only Care creatives in paid ads<br>
+• <b>Only Care Ad → Install Conversion</b> — Target <b>TBD</b> · Weight <b>25</b> · % Only Care ad clicks that install<br>
+• <b>Only Care Hit Rate (Ads with CTR > 3%)</b> — Target <b>TBD</b> · Weight <b>25</b> · % Only Care ads above CTR benchmark<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause<br>
+• Sub-metrics — top Only Care winners · kill list · script-to-publish cycle time · AI cost per video<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions · angles to test<br>
+• Set / confirm targets (currently TBD on scorecard)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Krishnan's roll-up.`
+    },
+    kpi_anindita: {
+      title: 'Sneha ↔ Anindita — Monthly KPI Review',
+      body: `<strong>1st Mon / month · 5:00 PM · 30 min · Sneha hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Anindita's 4 North India growth KPIs — same scorecard as Sneha, scoped to North India (Hindi-speaking states + Bengali region).<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>N. India Revenue Growth (MoM)</b> — Target <b>TBD</b> · Weight <b>35</b> · Hima MoM revenue from N. India users<br>
+• <b>N. India Call Connection Rate</b> — Target <b>TBD</b> · Weight <b>25</b> · % NI call attempts that connect + complete<br>
+• <b>N. India Day 7 User Retention</b> — Target <b>TBD</b> · Weight <b>20</b> · % new NI users active on day 7<br>
+• <b>N. India Creator Retention (MAU)</b> — Target <b>TBD</b> · Weight <b>20</b> · % NI creators active this month vs last<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause · regional supply vs demand<br>
+• Sub-metrics — Saran's N. India breakout from the same dashboards<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 regional actions · creator pipeline · experiments<br>
+• Set / confirm targets (currently TBD on scorecard)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · regional view feeds Sneha's JP review.`
+    },
+    kpi_maari: {
+      title: 'Rishabh ↔ Maari — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:00 PM · 30 min · Rishabh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Maari's engineering KPIs scoped to Only Care. Reviewed by Rishabh (her Team Lead) right after his own review — Yuvanesh sees Only Care quality via Rishabh.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Sprint Release Compliance</b> — Target <b>2 / 2</b> · Weight <b>32</b> · Both Only Care sprints ship on planned date<br>
+• <b>Critical Bugs in Production (P0/P1)</b> — Target <b>0</b> · Weight <b>26</b> · Security · payment · user-impacting bugs<br>
+• <b>Crash-Free Session Rate</b> — Target <b>95%</b> · Weight <b>22</b> · % Only Care sessions without crash<br>
+• <b>App Store Rating</b> — Target <b>4.5 ★</b> · Weight <b>20</b> · Only Care Play Store rating maintained or up<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (estimation · infra · solo-dev capacity)<br>
+• Sprint misses — scope creep vs genuine blockers · bug root causes (systemic vs one-off)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 engineering actions · Rishabh support / mentorship<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · Only Care quality rolls into Rishabh's own review.<br><br>
+<strong>Scorecard:</strong> Maari has her own scorecard in kpis.html (mirrors the engineering template scoped 100% to Only Care).`
+    },
+    kpi_tamil: {
+      title: 'Yuvanesh ↔ Tamil Arasan — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 4:00 PM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Tamil Arasan's 3 design KPIs — weighted Hima 60% · Only Care 20% · BLR Connect 10% · Unman+Sudar 10%. Bottleneck IC — leverage matters more than raw volume.<br><br>
+<strong>Score the 3 KPIs (15 min · ~5 min each):</strong><br>
+• <b>Designs Shipped Monthly</b> — Target <b>20</b> · Weight <b>40</b> · Figma-final screens/flows handed to dev<br>
+• <b>First-Pass Approval Rate</b> — Target <b>60%</b> · Weight <b>35</b> · % designs approved by PM without major revisions<br>
+• <b>Design System Adoption</b> — Target <b>90%</b> · Weight <b>25</b> · % new features using shared design system components<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause · which app is starving for design<br>
+• Sub-metrics — revisions per design · time-to-first-iteration · components reused across apps · handoff quality<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions · prioritization across 4 apps · design system investment<br>
+• Yuvanesh decisions — design headcount · tooling<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Yuvanesh's 1st Thu 3:30 PM review with JP.`
+    },
+    kpi_saran: {
+      title: 'Yuvanesh ↔ Saran — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 11:00 AM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Saran's 4 data KPIs — 100% Hima. Strategic data discussion happens in Hima Leaders Sync; this review handles scoring + admin/career.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Self-Serve Dashboard / MCP Coverage</b> — Target <b>75%</b> · Weight <b>30</b> · % standard questions answerable without asking Saran<br>
+• <b>Anomaly Detection Speed</b> — Target <b>≤ 4 hrs</b> · Weight <b>25</b> · Time to flag revenue/CAC/retention anomalies<br>
+• <b>Strategic Deep-Dives Delivered</b> — Target <b>2 / month</b> · Weight <b>25</b> · Major investigations that move decisions<br>
+• <b>A/B Test Throughput</b> — Target <b>2 / month</b> · Weight <b>20</b> · A/B tests designed + analyzed with rigor<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause<br>
+• Sub-metrics — ad-hoc query volume (lower = better dashboards) · JP insight-quality rating · Prajwal output<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 data actions · dashboards to build · deep-dives queued<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Yuvanesh's 1st Thu 3:30 PM review with JP.`
+    },
+    kpi_yuvanesh: {
+      title: 'JP ↔ Yuvanesh — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 3:30 PM · 30 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Yuvanesh's 4 engineering KPIs, applied per app and weighted Hima 70% · Only Care 20% · BLR Connect 10%. He walks in with all team-lead scores fresh from 1st Wed.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Sprint Release Compliance</b> — Target <b>2 / 2</b> · Weight <b>31</b> · Both sprints ship on planned date (Hima 22 · OC 6 · BLR 3)<br>
+• <b>Critical Bugs in Production (P0/P1)</b> — Target <b>0</b> · Weight <b>27</b> · Security · payment · fraud · user-impacting (Hima 18 · OC 6 · BLR 3)<br>
+• <b>Crash-Free Session Rate</b> — Target <b>95%</b> · Weight <b>23</b> · % sessions without crash (Hima 16 · OC 5 · BLR 2)<br>
+• <b>App Store Rating</b> — Target <b>4.5 ★</b> · Weight <b>19</b> · Play Store rating maintained or up (Hima 14 · OC 3 · BLR 2)<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which app/KPI missed · root cause · cross-app resource allocation<br>
+• Team-lead performance — Rishabh · Ranjini · Tamil · Saran · Maari (via Rishabh)<br>
+• Tech debt · architecture · hiring needs<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions across the app portfolio<br>
+• JP decisions — headcount · infra · investment<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · ties off the monthly engineering review chain.`
+    },
+    kpi_fida: {
+      title: 'JP ↔ Fida — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 2:00 PM · 30 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Fida's 4 internal-AI-tooling KPIs — impact measured in work hours saved across the company, not external revenue. Held before JP's 3 PM leadership block.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>AI Features Shipped Monthly</b> — Target <b>6</b> · Weight <b>30</b> · Tessa releases + Finance/HR/Ops AI tools built<br>
+• <b>Internal Tool Adoption Rate</b> — Target <b>95%</b> · Weight <b>30</b> · % employees actively using her tools weekly<br>
+• <b>Hours Saved Across Company (monthly)</b> — Target <b>TBD</b> · Weight <b>25</b> · Manual work hours eliminated by her tools<br>
+• <b>System Reliability (Uptime + Bug-free)</b> — Target <b>98%</b> · Weight <b>15</b> · Internal tools uptime + critical bug count<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · shipping vs adoption gap · which tool underused<br>
+• Sub-metrics — Tessa releases · Finance AI (Shoyab) · HR automations (Akshara) · Ops AI (Deeksha) · intern output<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 tooling actions · adoption pushes · reliability fixes<br>
+• Set / confirm Hours Saved target (currently TBD)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · next review date.`
+    },
+    kpi_dhanush: {
+      title: 'Bala ↔ Dhanush — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 4:30 PM · 30 min · Bala hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Dhanush's 4 BLR Connect PM KPIs — mirrors Sneha Sunoj's PM scorecard, scoped to BLR Connect (Bangalore market). Targets TBD — to be set as the product matures.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Monthly Revenue / User Growth (BLR Connect)</b> — Target <b>TBD</b> · Weight <b>35</b> · Core business outcome — PM owns the roadmap that drives BLR Connect growth<br>
+• <b>Call Connection Rate (BLR Connect)</b> — Target <b>TBD</b> · Weight <b>25</b> · The revenue driver — failed connections = lost revenue<br>
+• <b>Day 7 User Retention (BLR Connect)</b> — Target <b>TBD</b> · Weight <b>20</b> · Product stickiness<br>
+• <b>Provider/Creator Retention (MAU)</b> — Target <b>TBD</b> · Weight <b>20</b> · Two-sided marketplace health<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Early-market signals · what's resonating · what's not<br>
+• Product priorities vs engineering capacity (Sumit · Rishabh-hosted sprints)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 product actions · roadmap for the Bangalore market<br>
+• Define KPI targets once baseline data is in (currently TBD)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Bala's COO review with JP.`
+    },
+    kpi_bala: {
+      title: 'JP ↔ Bala — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 4:30 PM · 30 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Bala's 4 Only Care PM KPIs (acting PM) — mirrors Sneha Sunoj's Hima PM scorecard, scoped to Only Care. Targets TBD — JP to set for Only Care scale. COO-level org/ops duties reviewed separately.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Monthly Revenue Growth (Only Care)</b> — Target <b>TBD</b> · Weight <b>35</b> · Core business outcome — PM owns the roadmap that drives Only Care growth<br>
+• <b>Call Connection Rate (Only Care)</b> — Target <b>TBD</b> · Weight <b>25</b> · The revenue driver — failed connections = lost revenue<br>
+• <b>Day 7 User Retention (Only Care)</b> — Target <b>TBD</b> · Weight <b>20</b> · Product stickiness<br>
+• <b>Provider/Creator Retention (MAU)</b> — Target <b>TBD</b> · Weight <b>20</b> · Two-sided marketplace health<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause — dev (Maari, via Rishabh) · support · marketing<br>
+• Sub-metrics — ARPU · calls per provider · drop rate · D30 retention · provider supply<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 Only Care actions to close gaps<br>
+• Set / confirm Only Care targets (currently TBD)<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · next review date. COO org/ops duties reviewed separately.`
+    },
+    kpi_sneha_prathap: {
+      title: 'Yuvanesh ↔ Sneha Prathap — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:00 PM · 30 min · Yuvanesh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Sneha Prathap's 4 engineering KPIs — 100% Unman. She reports to Yuvanesh; he reviews her in his 1st-Wed team-review block (Rishabh 2:30 → SP 3:00 → Ranjini 3:30 → Tamil 4:00).<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Sprint Release Compliance</b> — Target <b>2 / 2</b> · Weight <b>32</b> · Both Unman sprints ship on planned date<br>
+• <b>Critical Bugs in Production (P0/P1)</b> — Target <b>0</b> · Weight <b>26</b> · Includes AI model issues — accuracy failures · hallucinations · generation errors<br>
+• <b>Crash-Free Session Rate</b> — Target <b>95%</b> · Weight <b>22</b> · % Unman sessions without crash<br>
+• <b>App Store Rating</b> — Target <b>4.5 ★</b> · Weight <b>20</b> · Unman Play Store rating maintained or up<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (solo-dev capacity · model quality · infra)<br>
+• Sub-metrics — model accuracy · inference latency · API cost per query · hallucination rate · user satisfaction<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 actions · model improvements · ship priorities<br>
+• JP decisions — direction · escalate technical to Fida<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · next review date.`
+    },
+    kpi_ayush: {
+      title: 'JP ↔ Ayush — Monthly KPI Review + MBR',
+      body: `<strong>1st Thu / month · 5:00 PM · 60 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Combined Monthly Business Review (P&amp;L) + formal KPI scoring. Ayush is scored on strategic / co-founder contribution (network · investors · events), not on finance ops (those are Shoyab's scorecard).<br><br>
+<strong>Pre-read (Ayush sends 24h before):</strong> New connections log · meetings held · events attended · pipeline update · P&amp;L deck.<br><br>
+<strong>Part 1 — Score the 4 KPIs (20 min):</strong><br>
+• <b>New Strategic Connections</b> — Target <b>1</b> · Weight <b>30</b> · Investors · advisors · domain experts · partners introduced<br>
+• <b>Expert / Advisor Meetings Conducted</b> — Target <b>1</b> · Weight <b>25</b> · Meetings held with investors / advisors / domain experts<br>
+• <b>Investment Events &amp; Conferences Attended</b> — Target <b>1</b> · Weight <b>25</b> · Startup summits · VC events · industry conferences<br>
+• <b>Investor / Partner Pipeline Advanced</b> — Target <b>1</b> · Weight <b>20</b> · Conversations moved to next stage (term sheets · LOIs · partnerships)<br><br>
+<strong>Part 2 — MBR (30 min):</strong> P&amp;L walkthrough · revenue vs baseline · creator payout (34%) · GST (18%) · gross margin (48%) · burn + runway · Shoyab ops scorecard review.<br><br>
+<strong>Diagnose gaps (5 min):</strong> Which network KPI missed · why · what's blocking pipeline momentum.<br><br>
+<strong>Next-month plan (5 min):</strong> 1 target connection · 1 event to attend · pipeline next step · JP support needed.<br><br>
+<strong>Outputs:</strong> Updated scorecard · P&amp;L reviewed · 3 actions logged.`
+    },
+    kpi_nandha: {
+      title: 'JP ↔ Nandha — Monthly KPI Review',
+      body: `<strong>1st Thu / month · 4:00 PM · 30 min · JP hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Nandha's 4 performance-marketing KPIs, applied across the portfolio (60% Hima · 20% Only Care · 10% Unman · 10% BLR Connect). Rolls up Anirudh (Hima paid) + Swapna (non-Hima paid) + Krishnan (creative). Uses fresh scores from 1st Tue (Anirudh 3 PM · Krishnan 4 PM).<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>CAC (Cost per Paid User)</b> — Target <b>₹450</b> · Weight <b>30</b> · Ad spend ÷ paying users — real efficiency across the portfolio<br>
+• <b>ROAS (30-day Return on Ad Spend)</b> — Target <b>3x</b> · Weight <b>25</b> · Profitability signal per ad rupee<br>
+• <b>Monthly Install Volume</b> — Target <b>40% MoM</b> · Weight <b>25</b> · Top-of-funnel growth across all apps<br>
+• <b>Register → First Purchase Conversion</b> — Target <b>28%</b> · Weight <b>20</b> · Registrations becoming payers<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · which sub-function dragged (paid vs creative) · which app dragged<br>
+• Sub-metrics — per-app CAC/ROAS · creative win rate · content output · spend by region/language<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 marketing bets · budget direction across the portfolio · creative strategy<br>
+• Targets same or adjusted per the 60/20/10/10 product weighting<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 bets logged · next review date.`
+    },
+    kpi_shoyab: {
+      title: 'Ayush ↔ Shoyab — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 11:00 AM · 30 min · Ayush hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Shoyab's 4 finance-operations KPIs — payouts, tax, books close, reconciliation. He's the single-point dependency for all of Innovfix's finance ops. Held 1st Wed so Ayush walks into his own MBR + KPI review with JP (1st Thu) with fresh ops scores.<br><br>
+<strong>Pre-read (Shoyab sends 24h before):</strong> Payout log · tax filing status · books close timeline · reconciliation tracker · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Creator Payout Accuracy &amp; Timeliness</b> — Target <b>100%</b> · Weight <b>30</b> · % creators paid correct amount on schedule (Hima payouts ₹2 Cr/mo — one mistake = creator trust gone)<br>
+• <b>Tax Filing Compliance (GST + TDS)</b> — Target <b>0 penalties · 0 late</b> · Weight <b>25</b> · all filings completed on/before due date<br>
+• <b>Monthly Books Close Time</b> — Target <b>≤ 5 days</b> · Weight <b>25</b> · days from month-end to closed books<br>
+• <b>Daily Bank Reconciliation Cadence</b> — Target <b>22 / 22 days</b> · Weight <b>20</b> · PhonePe + Cashfree + bank statement reconciled daily<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (volume spike · process · tooling · bandwidth)<br>
+• Sub-metrics — payout volume (₹ + creator count) · PhonePe vs Cashfree recon status · pending vendor invoices · outstanding tax deadlines · payroll accuracy<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 finance-ops actions · automation · process fixes<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Ayush's 1st Thu MBR + KPI review with JP.`
+    },
+    kpi_perumal: {
+      title: 'Rishabh ↔ Perumal — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 3:30 PM · 30 min · Rishabh hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Perumal's 4 engineering KPIs — 100% Hima (mirrors Rishabh's Hima column). Reviewed by Rishabh (his Team Lead) right after the Maari review (3:00 PM) — Yuvanesh sees Hima IC quality via Rishabh.<br><br>
+<strong>Pre-read (Perumal sends 24h before):</strong> Sprint log · bug count · crash-free data · App Store rating · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Sprint Release Compliance</b> — Target <b>2 / 2</b> · Weight <b>32</b> · both Hima sprints ship on planned Friday<br>
+• <b>Critical Bugs in Production (P0/P1)</b> — Target <b>0</b> · Weight <b>26</b> · security · payment · fraud · user-impacting bugs<br>
+• <b>Crash-Free Session Rate</b> — Target <b>95%</b> · Weight <b>22</b> · % sessions without app crash<br>
+• <b>App Store Rating</b> — Target <b>4.5 ★</b> · Weight <b>20</b> · Play Store rating maintained or trending up<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (code quality · estimation · infra · dependencies)<br>
+• Sprint misses — scope creep vs genuine blockers · bug root causes (systemic vs one-off)<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 engineering actions · Rishabh support / mentorship<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · Hima IC quality rolls into Rishabh's own review.`
+    },
+    kpi_sooraj: {
+      title: 'Krishnan ↔ Sooraj — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 4:00 PM · 30 min · Krishnan hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Sooraj's 4 graphic-design KPIs. Single-point dependency for visual design across all products — held right after Sivaranjani's review (3:30 PM).<br><br>
+<strong>Pre-read (Sooraj sends 24h before):</strong> Assets shipped log · cycle-time data · approval rate · backlog depth · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Graphics Designed Per Month</b> — Target <b>80</b> · Weight <b>35</b> · final graphic assets shipped to ads / marketing<br>
+• <b>Design Cycle Time</b> — Target <b>≤ 2 days</b> · Weight <b>25</b> · avg hours from brief to final asset<br>
+• <b>First-Pass Approval Rate</b> — Target <b>60%</b> · Weight <b>25</b> · % designs Krishnan approves without revision<br>
+• <b>Output Coverage Across Products</b> — Target <b>20</b> · Weight <b>15</b> · Hima / Only Care / Unman split matches demand<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (volume · brief quality · revisions · bandwidth)<br>
+• Sub-metrics — ad banners · app store screenshots · thumbnails · brand assets · social graphics (Gargi requests) · backlog depth<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 design actions · template / reuse investment · prioritization across products<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Krishnan's roll-up.`
+    },
+    kpi_anaz: {
+      title: 'Krishnan ↔ Anaz — Monthly KPI Review',
+      body: `<strong>1st Wed / month · 4:30 PM · 30 min · Krishnan hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Anaz's 4 video-edit KPIs. Single-point dependency for video output across Hima + Only Care + Unman ads — last of Krishnan's 1st Wed review block.<br><br>
+<strong>Pre-read (Anaz sends 24h before):</strong> Videos shipped log · cycle-time data · approval rate · backlog depth · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Videos Edited Per Month</b> — Target <b>130</b> · Weight <b>35</b> · final edited videos shipped to ads team<br>
+• <b>Edit Cycle Time</b> — Target <b>≤ 2 days</b> · Weight <b>25</b> · avg hours from script / raw footage to final video<br>
+• <b>First-Pass Approval Rate</b> — Target <b>50%</b> · Weight <b>25</b> · % of edits Krishnan approves without revision<br>
+• <b>Output Coverage Across Products</b> — Target <b>—</b> · Weight <b>15</b> · Hima / Only Care / Unman split matches demand<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (backlog · brief quality · revisions · bandwidth)<br>
+• Sub-metrics — backlog depth (pending edits) · AI tool usage efficiency · video styles experimented · template reuse<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 video actions · workflow / template investment · product prioritization<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Krishnan's roll-up.`
+    },
+    kpi_gargi: {
+      title: 'Anindita ↔ Gargi — Monthly KPI Review',
+      body: `<strong>1st Mon / month · 4:00 PM · 30 min · Anindita hosts</strong><br><br>
+<strong>Purpose:</strong> Formal monthly scoring of Gargi's 4 organic social-media KPIs (Instagram · YouTube · Facebook · Threads) — no paid promotion (that's Anirudh's domain). Held right before Anindita's own review with Sneha (5:00 PM).<br><br>
+<strong>Pre-read (Gargi sends 24h before):</strong> Follower + reach data · engagement breakdown · posting log · top posts · self-assessment.<br><br>
+<strong>Score the 4 KPIs (15 min · ~4 min each):</strong><br>
+• <b>Organic Follower Growth (MoM)</b> — Target <b>60%</b> · Weight <b>35</b> · net new followers across all platforms, without paid push<br>
+• <b>Avg Engagement Rate per Post</b> — Target <b>3%</b> · Weight <b>30</b> · (likes + comments + shares + saves) / views<br>
+• <b>Posts Per Week (multi-platform)</b> — Target <b>20</b> · Weight <b>20</b> · consistent posting cadence across all platforms<br>
+• <b>Reach / Impressions Growth (MoM)</b> — Target <b>20%</b> · Weight <b>15</b> · total people seeing Hima content organically<br><br>
+<strong>Diagnose gaps (10 min):</strong><br>
+• Which KPI missed · root cause (content quality · cadence · trend-catching · platform mix)<br>
+• Sub-metrics — platform breakdown (IG / YT / FB / Threads) · top post · trending topics caught early · Hindi vs Bengali split · best time to post<br><br>
+<strong>Next-month plan (5 min):</strong><br>
+• Top 3 content actions · platform focus · experiments<br>
+• Targets same or adjusted<br><br>
+<strong>Outputs:</strong> Updated scorecard · 3 actions logged · feeds Anindita's 1st Mon review with Sneha.`
+    }
+  };
+
+  function openAgenda(key) {
+    const agenda = HIMA_AGENDAS[key];
+    if (!agenda) return;
+    document.getElementById('agenda-modal-title').textContent = agenda.title;
+    document.getElementById('agenda-modal-body').innerHTML = agenda.body;
+    document.getElementById('agenda-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAgenda() {
+    document.getElementById('agenda-modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAgenda();
+  });
+</script>
+</body>
+</html>

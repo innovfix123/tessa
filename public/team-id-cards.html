@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hima Team — Employee ID Cards</title>
+<link rel="icon" href="/favicon.ico" />
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #000;
+    --bg-soft: #050607;
+    --card-bg: #0d1014;
+    --card-border: #2a2d32;
+    --text: #f1f1f1;
+    --text-muted: #6f6f6f;
+    --text-dim: #50565d;
+
+    --c-founder: #c9a24a;
+    --c-engineering: #3b82f6;
+    --c-ai: #8b5cf6;
+    --c-marketing: #ec4899;
+    --c-ops: #14b8a6;
+    --c-product: #f59e0b;
+    --c-finance: #10b981;
+    --c-support: #64748b;
+  }
+
+  /* ---------- Page shell (natural height, no squeeze) ---------- */
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ---------- Header (compact) ---------- */
+  .page-header {
+    padding: 14px 28px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #15171a;
+  }
+  .brand { display: flex; align-items: baseline; gap: 14px; }
+  .brand-main {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .brand-sub {
+    color: var(--text-muted);
+    font-size: 0.66rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+  .stats { display: flex; gap: 26px; }
+  .stat { text-align: center; }
+  .stat span { display: block; font-size: 1.2rem; font-weight: 700; line-height: 1.1; }
+  .stat small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Hint / filter / legend (one compact row) ---------- */
+  .toolbar {
+    padding: 8px 28px;
+    color: var(--text-dim);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .toolbar .arrows { color: #2c2c2c; letter-spacing: 0.4em; font-weight: 700; }
+  .toolbar .sep { width: 1px; height: 14px; background: #1f2227; }
+  .toolbar .filter {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .toolbar .filter button {
+    background: #0d1014;
+    border: 1px solid #1f2227;
+    color: #8a8a8a;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+  }
+  .toolbar .filter button .dot {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--btn-color, #555);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--btn-color, #555) 60%, transparent);
+  }
+  .toolbar .filter button:hover { color: #f1f1f1; border-color: #3a3a3a; }
+  .toolbar .filter button.active {
+    background: color-mix(in srgb, var(--btn-color, #444) 15%, #0d1014);
+    color: #f1f1f1;
+    border-color: color-mix(in srgb, var(--btn-color, #444) 50%, #1f2227);
+  }
+
+  /* ---------- Grid: 2 rows × horizontal scroll (natural-height cards) ---------- */
+  .id-grid-wrap {
+    padding-bottom: 8px;
+  }
+  .id-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, 360px);
+    grid-auto-columns: 240px;
+    gap: 18px;
+    padding: 18px 28px 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a2a #050607;
+  }
+  .id-grid::-webkit-scrollbar { height: 8px; }
+  .id-grid::-webkit-scrollbar-track { background: #050607; }
+  .id-grid::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+  .id-grid::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+  /* ---------- ID badge card ---------- */
+  .id-card {
+    position: relative;
+    width: 240px;
+    height: 100%;
+    min-height: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 22px 12px 12px;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto auto;
+    gap: 6px;
+    scroll-snap-align: start;
+    overflow: hidden;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .id-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
+      0 12px 30px rgba(0, 0, 0, 0.55);
+  }
+  .id-card.dim { opacity: 0.16; filter: grayscale(0.6); }
+
+  /* Top dept color stripe */
+  .id-card .stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+    opacity: 0.95;
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  /* Lanyard hole pill */
+  .id-card::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 6px;
+    background: #000;
+    border: 1px solid #1d1f23;
+    border-radius: 999px;
+    z-index: 2;
+  }
+
+  /* ---------- Card header ---------- */
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+  }
+  .card-head .logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    color: var(--text);
+  }
+  .card-head .logo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .card-head .id-num {
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  .id-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.34em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* ---------- Photo: fills the 1fr row, always-visible initials behind ---------- */
+  .photo-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #060809;
+    box-shadow:
+      inset 0 0 0 1px #1f2227,
+      inset 0 0 30px rgba(0, 0, 0, 0.55);
+  }
+  .photo-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 2;
+  }
+  .initials-fallback {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 32% 28%,
+        color-mix(in srgb, var(--accent) 78%, #000) 0%,
+        color-mix(in srgb, var(--accent) 32%, #060809) 45%,
+        #050607 90%);
+    color: #fff;
+    font-size: clamp(2.4rem, 8vh, 5.5rem);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-shadow:
+      0 2px 18px rgba(0, 0, 0, 0.55),
+      0 0 32px color-mix(in srgb, var(--accent) 40%, transparent);
+    text-transform: uppercase;
+  }
+  .initials-fallback::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 70% 90%, rgba(0,0,0,0.45), transparent 55%),
+      linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.04) 100%);
+    pointer-events: none;
+  }
+
+  /* ---------- Name & role ---------- */
+  .card-name {
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text);
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-role {
+    font-size: 0.66rem;
+    color: var(--text-muted);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---------- Footer ---------- */
+  .card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px dashed #1f2227;
+  }
+  .dept-tag {
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    font-weight: 700;
+  }
+  .valid-thru {
+    font-size: 0.5rem;
+    color: var(--text-dim);
+    letter-spacing: 0.14em;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+  .barcode {
+    width: 100%;
+    height: 12px;
+    display: block;
+    color: var(--text);
+    opacity: 0.85;
+  }
+
+  /* ---------- Founder polish ---------- */
+  .id-card.founder {
+    background: linear-gradient(180deg, #100a02 0%, #0d1014 60%);
+    border-color: color-mix(in srgb, var(--c-founder) 40%, var(--card-border));
+  }
+  .id-card.founder .card-name {
+    background: linear-gradient(135deg, #f5d97e, #c9a24a 60%, #a07626);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ---------- Scroll progress bar ---------- */
+  .scroll-progress {
+    position: relative;
+    height: 3px;
+    background: #0a0a0a;
+    margin: 0 28px 16px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .scroll-progress .bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+    transition: width 0.06s linear;
+  }
+
+  /* ---------- Upload UI ---------- */
+  .upload-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+  .upload-btn {
+    background: #0d1014;
+    border: 1px solid #2a2d32;
+    color: #d2d2d2;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+  .upload-btn:hover { background: #15191e; border-color: #3a3f47; color: #fff; }
+  .upload-btn.primary {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-color: transparent;
+    color: #fff;
+  }
+  .upload-btn.primary:hover { filter: brightness(1.1); }
+  .upload-btn.ghost { background: transparent; }
+  .upload-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .upload-btn .ic {
+    width: 11px; height: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Drop overlay */
+  .drop-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .drop-overlay.active { display: flex; }
+  .drop-overlay .box {
+    border: 2px dashed #3b82f6;
+    border-radius: 18px;
+    padding: 60px 80px;
+    text-align: center;
+    background: rgba(13, 16, 20, 0.9);
+    color: #fff;
+    pointer-events: none;
+  }
+  .drop-overlay .box strong {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .drop-overlay .box span {
+    color: #8a8a8a;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Loading bar shown while zip processes */
+  .upload-status {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: #0a0a0a;
+    z-index: 1001;
+    display: none;
+  }
+  .upload-status.active { display: block; }
+  .upload-status .bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+    transition: width 0.18s ease;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: #0d1014;
+    border: 1px solid #2a2d32;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    color: #f1f1f1;
+    font-size: 0.78rem;
+    z-index: 1002;
+    max-width: 360px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .toast strong { display: block; margin-bottom: 4px; font-weight: 700; letter-spacing: 0.02em; }
+  .toast .muted { color: #8a8a8a; font-size: 0.7rem; }
+  .toast.success { border-color: #14593f; }
+  .toast.warn { border-color: #533a14; }
+  .toast.error { border-color: #5a1f1f; }
+
+  /* Unmatched panel */
+  .unmatched-panel {
+    margin: 0 28px 22px;
+    padding: 14px 16px;
+    background: #0d1014;
+    border: 1px solid #2a2d32;
+    border-radius: 12px;
+    display: none;
+  }
+  .unmatched-panel.show { display: block; }
+  .unmatched-panel h3 {
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f59e0b;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .unmatched-panel .um-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 8px;
+  }
+  .um-row {
+    display: grid;
+    grid-template-columns: 50px 1fr 160px;
+    gap: 10px;
+    align-items: center;
+    padding: 6px;
+    border-radius: 8px;
+    background: #060809;
+    border: 1px solid #1f2227;
+  }
+  .um-row .um-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #000;
+  }
+  .um-row .um-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .um-row .um-name {
+    font-size: 0.72rem;
+    color: #d2d2d2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+  }
+  .um-row select {
+    background: #0d1014;
+    border: 1px solid #2a2d32;
+    color: #d2d2d2;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 0.72rem;
+    width: 100%;
+    cursor: pointer;
+  }
+  .um-row select:hover { border-color: #3a3f47; }
+
+  /* Card photo "assigned" indicator */
+  .id-card.has-photo .photo-wrap::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #14b8a6;
+    box-shadow: 0 0 8px #14b8a6;
+    z-index: 3;
+  }
+
+  /* ---------- Print: A4, 2 per row ---------- */
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    html, body {
+      height: auto;
+      background: #fff;
+      color: #000;
+      overflow: visible;
+    }
+    .page-header, .toolbar, .scroll-progress, .unmatched-panel, .toast, .drop-overlay, .upload-status { display: none !important; }
+    .id-card.has-photo .photo-wrap::after { display: none !important; }
+    .id-grid-wrap { display: block; }
+    .id-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: none;
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      gap: 8mm;
+      padding: 0;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+    .id-card {
+      width: 85mm;
+      height: 120mm;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      background: #fff !important;
+      color: #000 !important;
+      border: 1px solid #aaa;
+      box-shadow: none !important;
+    }
+    .id-card .card-name {
+      color: #000 !important;
+      -webkit-text-fill-color: #000 !important;
+      background: none !important;
+    }
+    .id-card .card-role { color: #444 !important; }
+    .id-card .id-num,
+    .id-card .valid-thru { color: #555 !important; }
+    .id-card .card-head .logo { color: #000 !important; }
+    .id-card::before { background: #fff; border-color: #aaa; }
+    .card-foot { border-top-color: #ccc; }
+    .barcode { color: #000 !important; opacity: 1; }
+  }
+
+  /* ---------- Responsive: Tablet (<=900px) ---------- */
+  @media (max-width: 900px) {
+    .page-header { padding: 12px 18px 8px; }
+    .brand-main { font-size: 1.5rem; }
+    .brand-sub { font-size: 0.6rem; letter-spacing: 0.26em; }
+    .stats { gap: 18px; }
+    .stat span { font-size: 1rem; }
+    .toolbar { padding: 8px 18px; gap: 10px; }
+    .id-grid {
+      grid-template-rows: repeat(2, 320px);
+      grid-auto-columns: 210px;
+      gap: 14px;
+      padding: 14px 18px;
+    }
+    .id-card { width: 210px; }
+    .scroll-progress { margin: 0 18px 12px; }
+    .unmatched-panel { margin: 0 18px 16px; }
+  }
+
+  /* ---------- Responsive: Mobile (<=640px) ---------- */
+  @media (max-width: 640px) {
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px 8px;
+    }
+    .brand { gap: 10px; flex-wrap: wrap; }
+    .brand-main { font-size: 1.4rem; }
+    .brand-sub { font-size: 0.55rem; letter-spacing: 0.22em; }
+    .stats { width: 100%; justify-content: space-between; gap: 8px; }
+    .stat span { font-size: 0.95rem; }
+    .stat small { font-size: 0.52rem; letter-spacing: 0.18em; }
+
+    .toolbar {
+      padding: 8px 14px;
+      gap: 8px 10px;
+    }
+    .toolbar > span:first-child,   /* "Scroll" label */
+    .toolbar .arrows,
+    .toolbar .sep { display: none; }
+    .toolbar .filter {
+      width: 100%;
+      gap: 4px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .toolbar .filter::-webkit-scrollbar { display: none; }
+    .toolbar .filter button {
+      flex-shrink: 0;
+      padding: 5px 9px;
+      font-size: 0.58rem;
+    }
+    .upload-actions {
+      width: 100%;
+      margin-left: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .upload-btn { padding: 6px 10px; font-size: 0.6rem; }
+
+    .id-grid {
+      grid-template-rows: repeat(2, 280px);
+      grid-auto-columns: 180px;
+      gap: 12px;
+      padding: 14px 14px 14px;
+      /* iOS momentum scroll */
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      scroll-padding-left: 14px;
+    }
+    .id-grid::-webkit-scrollbar { height: 4px; }
+    .id-card {
+      width: 180px;
+      padding: 20px 10px 10px;
+      gap: 5px;
+      scroll-snap-stop: always;
+    }
+    .id-card:hover { transform: none; box-shadow: none; border-color: var(--card-border); }
+    .id-card .card-head { margin-top: 4px; }
+    .card-head .logo { font-size: 0.55rem; }
+    .card-head .id-num { font-size: 0.54rem; }
+    .id-label { font-size: 0.48rem; letter-spacing: 0.28em; }
+    .card-name { font-size: 0.78rem; }
+    .card-role { font-size: 0.6rem; }
+    .dept-tag { font-size: 0.48rem; padding: 2px 6px; }
+    .valid-thru { font-size: 0.46rem; }
+    .barcode { height: 10px; }
+    .initials-fallback { font-size: clamp(2rem, 14vw, 3rem); }
+
+    .scroll-progress { margin: 0 14px 12px; }
+    .unmatched-panel { margin: 0 14px 14px; padding: 12px 14px; }
+    .unmatched-panel .um-list { grid-template-columns: 1fr; }
+    .um-row {
+      grid-template-columns: 44px 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas: 'thumb name' 'thumb select';
+      gap: 6px 10px;
+    }
+    .um-row .um-thumb { grid-area: thumb; width: 44px; height: 44px; }
+    .um-row .um-name { grid-area: name; }
+    .um-row select { grid-area: select; width: 100%; }
+
+    .toast { left: 14px; right: 14px; bottom: 14px; max-width: none; font-size: 0.74rem; padding: 12px 14px; }
+    .drop-overlay .box { padding: 36px 28px; margin: 16px; }
+    .drop-overlay .box strong { font-size: 1.15rem; }
+    .drop-overlay .box span { font-size: 0.65rem; }
+  }
+
+  /* ---------- Responsive: Tiny phones (<=380px) ---------- */
+  @media (max-width: 380px) {
+    .id-grid {
+      grid-template-rows: repeat(2, 260px);
+      grid-auto-columns: 165px;
+    }
+    .id-card { width: 165px; }
+    .stats { gap: 4px; }
+    .stat span { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="brand">
+    <span class="brand-main">Hima</span>
+    <span class="brand-sub">Team Directory · Employee ID · 2026</span>
+  </div>
+  <div class="stats">
+    <div class="stat"><span id="statTotal">0</span><small>People</small></div>
+    <div class="stat"><span id="statGrid">2 × 21</span><small>Grid</small></div>
+    <div class="stat"><span id="statDepts">0</span><small>Depts</small></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <span>Scroll</span>
+  <span class="arrows">→ → →</span>
+  <span class="sep"></span>
+  <span class="filter" id="deptFilter"></span>
+  <span class="upload-actions">
+    <button class="upload-btn primary" id="btnUpload"><span class="ic">⬆</span>Upload Photos Zip</button>
+    <button class="upload-btn ghost" id="btnDownload" disabled><span class="ic">⬇</span>Download Renamed Zip</button>
+    <button class="upload-btn ghost" id="btnClear" disabled><span class="ic">✕</span>Clear</button>
+    <input type="file" id="zipInput" accept=".zip,application/zip,application/x-zip-compressed" hidden />
+  </span>
+</div>
+
+<div class="id-grid-wrap">
+  <div class="id-grid" id="idGrid"></div>
+</div>
+
+<div class="scroll-progress"><div class="bar" id="scrollBar"></div></div>
+
+<div class="unmatched-panel" id="unmatchedPanel">
+  <h3 id="unmatchedTitle">Unmatched photos</h3>
+  <div class="um-list" id="unmatchedList"></div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay">
+  <div class="box">
+    <strong>Drop the photos zip anywhere</strong>
+    <span>I'll auto-match each photo to an employee</span>
+  </div>
+</div>
+
+<div class="upload-status" id="uploadStatus"><div class="bar" id="uploadStatusBar"></div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// -------------------------------------------------------------
+// Source: public/shared/org.js — keep in sync if org changes.
+// -------------------------------------------------------------
+const employees = [
+  { name: 'JP',                role: 'CEO',                    dept: 'founder',     deptLabel: 'Founder',     slug: 'jp',                 idNum: 'HIM-000' },
+  { name: 'Bala',              role: 'COO',                    dept: 'ops',         deptLabel: 'Ops',         slug: 'bala',               idNum: 'HIM-001' },
+  { name: 'Sneha Sunoj',       role: 'Ops Manager',            dept: 'ops',         deptLabel: 'Ops',         slug: 'sneha-sunoj',        idNum: 'HIM-002' },
+  { name: 'Nandha',            role: 'CMO + BLR PM',           dept: 'marketing',   deptLabel: 'Marketing',   slug: 'nandha',             idNum: 'HIM-003' },
+  { name: 'Ayush',             role: 'CFO · Co-founder',       dept: 'finance',     deptLabel: 'Finance',     slug: 'ayush',              idNum: 'HIM-004' },
+  { name: 'Yuvanesh',          role: 'Tech Lead',              dept: 'engineering', deptLabel: 'Engineering', slug: 'yuvanesh',           idNum: 'HIM-005' },
+  { name: 'Fida',              role: 'Lead AI Engineer',       dept: 'ai',          deptLabel: 'AI R&D',      slug: 'fida',               idNum: 'HIM-006' },
+  { name: 'Sneha Prathap',     role: 'Gen AI Developer',       dept: 'ai',          deptLabel: 'AI R&D',      slug: 'sneha-prathap',      idNum: 'HIM-007' },
+  { name: 'Meghana',           role: 'Business Analyst',       dept: 'ops',         deptLabel: 'Ops',         slug: 'meghana',            idNum: 'HIM-008' },
+  { name: 'Gousia',            role: 'Telugu Support',         dept: 'support',     deptLabel: 'Support',     slug: 'gousia',             idNum: 'HIM-010' },
+  { name: 'Deeksha',           role: 'Kannada Support',        dept: 'support',     deptLabel: 'Support',     slug: 'deeksha',            idNum: 'HIM-011' },
+  { name: 'Reshma',            role: 'Malayalam Support',      dept: 'support',     deptLabel: 'Support',     slug: 'reshma',             idNum: 'HIM-012' },
+  { name: 'Suwetha S',         role: 'Technical Support',      dept: 'support',     deptLabel: 'Support',     slug: 'suwetha-s',          idNum: 'HIM-013' },
+  { name: 'Tamil Arasan',      role: 'Product Manager',        dept: 'product',     deptLabel: 'Product',     slug: 'tamil-arasan',       idNum: 'HIM-014' },
+  { name: 'Dhanush',           role: 'Product Manager',        dept: 'product',     deptLabel: 'Product',     slug: 'dhanush',            idNum: 'HIM-015' },
+  { name: 'Anirudh',           role: 'Performance Marketing',  dept: 'marketing',   deptLabel: 'Marketing',   slug: 'anirudh',            idNum: 'HIM-016' },
+  { name: 'Anindita',          role: 'Growth Manager · North', dept: 'marketing',   deptLabel: 'Marketing',   slug: 'anindita',           idNum: 'HIM-017' },
+  { name: 'Anjali Bhatt',      role: 'Bengali Support',        dept: 'support',     deptLabel: 'Support',     slug: 'anjali-bhatt',       idNum: 'HIM-018' },
+  { name: 'Krishnan',          role: 'Content Lead',           dept: 'marketing',   deptLabel: 'Marketing',   slug: 'krishnan',           idNum: 'HIM-019' },
+  { name: 'Disha',             role: 'Content Creator',        dept: 'marketing',   deptLabel: 'Marketing',   slug: 'disha',              idNum: 'HIM-020' },
+  { name: 'Tiyasa',            role: 'Content Creator · BLR',  dept: 'marketing',   deptLabel: 'Marketing',   slug: 'tiyasa',             idNum: 'HIM-021' },
+  { name: 'Maansi',            role: 'Content Creator · BLR',  dept: 'marketing',   deptLabel: 'Marketing',   slug: 'maansi',             idNum: 'HIM-022' },
+  { name: 'Haripriya',         role: 'Content Creator',        dept: 'marketing',   deptLabel: 'Marketing',   slug: 'haripriya',          idNum: 'HIM-023' },
+  { name: 'Kishore Prabakaran', role: 'Content Creator',       dept: 'marketing',   deptLabel: 'Marketing',   slug: 'kishore-prabakaran', idNum: 'HIM-024' },
+  { name: 'Fathima K P',       role: 'Content Creator',        dept: 'marketing',   deptLabel: 'Marketing',   slug: 'fathima-k-p',        idNum: 'HIM-025' },
+  { name: 'Anaz',              role: 'Video Editor',           dept: 'marketing',   deptLabel: 'Marketing',   slug: 'anaz',               idNum: 'HIM-026' },
+  { name: 'Sooraj',            role: 'Graphic Designer',       dept: 'marketing',   deptLabel: 'Marketing',   slug: 'sooraj',             idNum: 'HIM-027' },
+  { name: 'Swapna M',          role: 'Performance Marketer',   dept: 'marketing',   deptLabel: 'Marketing',   slug: 'swapna-m',           idNum: 'HIM-028' },
+  { name: 'Shoyab',            role: 'Accountant',             dept: 'finance',     deptLabel: 'Finance',     slug: 'shoyab',             idNum: 'HIM-029' },
+  { name: 'Karuna Behal',      role: 'Finance Intern',         dept: 'finance',     deptLabel: 'Finance',     slug: 'karuna-behal',       idNum: 'HIM-030' },
+  { name: 'Irisha',            role: "Founder's Office",       dept: 'finance',     deptLabel: 'Finance',     slug: 'irisha',             idNum: 'HIM-031' },
+  { name: 'Ranjini',           role: 'AI-QA',                  dept: 'ai',          deptLabel: 'AI R&D',      slug: 'ranjini',            idNum: 'HIM-032' },
+  { name: 'Rishabh',           role: 'Full Stack Dev',         dept: 'engineering', deptLabel: 'Engineering', slug: 'rishabh',            idNum: 'HIM-033' },
+  { name: 'Barkha Agarwal',    role: 'Intern',                 dept: 'engineering', deptLabel: 'Engineering', slug: 'barkha-agarwal',     idNum: 'HIM-034' },
+  { name: 'Raksha',            role: 'QA Analyst',             dept: 'engineering', deptLabel: 'Engineering', slug: 'raksha',             idNum: 'HIM-035' },
+  { name: 'Laxmi',             role: 'QA Intern',              dept: 'engineering', deptLabel: 'Engineering', slug: 'laxmi',              idNum: 'HIM-036' },
+  { name: 'Perumal',           role: 'Full Stack Dev',         dept: 'engineering', deptLabel: 'Engineering', slug: 'perumal',            idNum: 'HIM-037' },
+  { name: 'Maari',             role: 'Full Stack Dev',         dept: 'engineering', deptLabel: 'Engineering', slug: 'maari',              idNum: 'HIM-038' },
+  { name: 'Saran',             role: 'Data Analyst',           dept: 'engineering', deptLabel: 'Engineering', slug: 'saran',              idNum: 'HIM-039' },
+  { name: 'Iksha H S',         role: 'QA Intern',              dept: 'engineering', deptLabel: 'Engineering', slug: 'iksha-h-s',          idNum: 'HIM-040' },
+  { name: 'Smrithy',           role: 'Tamil Support',          dept: 'support',     deptLabel: 'Support',     slug: 'smrithy',            idNum: 'HIM-041' },
+];
+
+const DEPT_COLORS = {
+  founder:     '#c9a24a',
+  engineering: '#3b82f6',
+  ai:          '#8b5cf6',
+  marketing:   '#ec4899',
+  ops:         '#14b8a6',
+  product:     '#f59e0b',
+  finance:     '#10b981',
+  support:     '#64748b',
+};
+
+const DEPT_LABELS = {
+  founder: 'Founder', engineering: 'Engineering', ai: 'AI R&D',
+  marketing: 'Marketing', ops: 'Ops', product: 'Product',
+  finance: 'Finance', support: 'Support',
+};
+
+const PHOTO_BASE = 'img/employees/';
+const PHOTO_EXT  = ['jpg', 'jpeg', 'png', 'webp'];
+
+function initials(name) {
+  return name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+}
+
+// Deterministic faux barcode per slug (stable across reloads)
+function hashStr(s) {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h >>> 0;
+}
+function makeBarcode(seedStr) {
+  let h = hashStr(seedStr);
+  const rand = () => { h = (h * 1664525 + 1013904223) >>> 0; return (h >>> 0) / 4294967296; };
+  const bars = [];
+  let x = 0;
+  while (x < 100) {
+    const w = 0.4 + rand() * 1.8;
+    const opacity = (0.45 + rand() * 0.55).toFixed(2);
+    bars.push(`<rect x="${x.toFixed(2)}" y="0" width="${w.toFixed(2)}" height="12" fill="currentColor" opacity="${opacity}"/>`);
+    x += w + 0.4 + rand() * 1.0;
+  }
+  return `<svg class="barcode" viewBox="0 0 100 12" preserveAspectRatio="none">${bars.join('')}</svg>`;
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function renderCard(emp) {
+  const accent = DEPT_COLORS[emp.dept] || '#666';
+  const ini = initials(emp.name);
+  const isFounder = emp.dept === 'founder';
+  const initialSrc = PHOTO_BASE + emp.slug + '.' + PHOTO_EXT[0];
+
+  return `
+    <article class="id-card${isFounder ? ' founder' : ''}" data-dept="${emp.dept}" data-slug="${emp.slug}" style="--accent: ${accent}">
+      <div class="stripe"></div>
+      <div class="card-head">
+        <div class="logo"><span class="logo-dot"></span>HIMA</div>
+        <div class="id-num">${escapeHtml(emp.idNum)}</div>
+      </div>
+      <div class="id-label">${isFounder ? 'Founder · CEO' : 'Employee ID'}</div>
+      <div class="photo-wrap">
+        <div class="initials-fallback">${ini}</div>
+        <img
+          src="${initialSrc}"
+          alt="${escapeHtml(emp.name)}"
+          data-slug="${emp.slug}"
+          data-ext-idx="0"
+          loading="lazy"
+          onerror="onPhotoError(this)"
+        />
+      </div>
+      <div class="card-name" title="${escapeHtml(emp.name)}">${escapeHtml(emp.name)}</div>
+      <div class="card-role" title="${escapeHtml(emp.role)}">${escapeHtml(emp.role)}</div>
+      <div class="card-foot">
+        <span class="dept-tag">${escapeHtml(emp.deptLabel)}</span>
+        <span class="valid-thru">VALID 2027</span>
+      </div>
+      ${makeBarcode(emp.slug + emp.idNum)}
+    </article>
+  `;
+}
+
+function onPhotoError(img) {
+  const idx = parseInt(img.dataset.extIdx, 10);
+  const slug = img.dataset.slug;
+  const next = idx + 1;
+  if (next < PHOTO_EXT.length) {
+    img.dataset.extIdx = String(next);
+    img.src = PHOTO_BASE + slug + '.' + PHOTO_EXT[next];
+  } else {
+    // Initials are already visible behind. Just hide the broken img.
+    img.style.display = 'none';
+  }
+}
+window.onPhotoError = onPhotoError;
+
+// =============================================================
+// PHOTO UPLOAD: drag-drop a zip, fuzzy-match to employees
+// =============================================================
+
+// Track assigned photos: { slug: { blob, ext, originalName } }
+const assignedPhotos = {};
+const objectUrls = []; // for cleanup
+
+function normalizeForMatch(str) {
+  return String(str)
+    .toLowerCase()
+    .replace(/\.[^.]+$/, '')
+    .replace(/[_\-\s.]+/g, ' ')
+    .replace(/[^a-z0-9 ]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function matchEmployee(filename, alreadyTaken) {
+  const n = normalizeForMatch(filename);
+  if (!n) return null;
+  const tokens = n.split(' ').filter(Boolean);
+
+  let best = null;
+  let bestScore = 0;
+
+  for (const emp of employees) {
+    if (alreadyTaken.has(emp.slug)) continue;
+
+    const empName = normalizeForMatch(emp.name);
+    const empSlug = normalizeForMatch(emp.slug);
+    const empTokens = empName.split(' ').filter(Boolean);
+
+    let score = 0;
+
+    if (n === empName || n === empSlug) {
+      score = 1000;
+    } else if (n === empTokens[0]) {
+      // single-token filename matches first name exactly (e.g. "Bala.jpg")
+      score = 200;
+    } else if (n.startsWith(empName + ' ') || n.endsWith(' ' + empName) || n.includes(' ' + empName + ' ')) {
+      score = 180;
+    } else {
+      // Token overlap scoring
+      for (const t of tokens) {
+        if (t.length < 2) continue;
+        for (const et of empTokens) {
+          if (et === t) score += 50;
+          else if (et.length >= 3 && t.length >= 3 && (et.startsWith(t) || t.startsWith(et))) score += 25;
+          else if (et.length >= 4 && t.length >= 4 && (et.includes(t) || t.includes(et))) score += 15;
+        }
+      }
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = emp;
+    }
+  }
+
+  return bestScore >= 40 ? { emp: best, score: bestScore } : null;
+}
+
+function assignPhoto(slug, blob, ext, originalName) {
+  // Clean up previous if any
+  const prev = assignedPhotos[slug];
+  if (prev && prev.url) {
+    URL.revokeObjectURL(prev.url);
+    const idx = objectUrls.indexOf(prev.url);
+    if (idx >= 0) objectUrls.splice(idx, 1);
+  }
+  const url = URL.createObjectURL(blob);
+  objectUrls.push(url);
+  assignedPhotos[slug] = { blob, ext, url, originalName };
+
+  const card = document.querySelector(`.id-card[data-slug="${CSS.escape(slug)}"]`);
+  if (card) {
+    const img = card.querySelector('img');
+    if (img) {
+      img.style.display = '';
+      img.src = url;
+      img.removeAttribute('data-ext-idx');
+      img.onerror = null;
+    }
+    card.classList.add('has-photo');
+  }
+}
+
+function clearPhoto(slug) {
+  const prev = assignedPhotos[slug];
+  if (!prev) return;
+  if (prev.url) URL.revokeObjectURL(prev.url);
+  delete assignedPhotos[slug];
+  const card = document.querySelector(`.id-card[data-slug="${CSS.escape(slug)}"]`);
+  if (card) {
+    const img = card.querySelector('img');
+    if (img) {
+      img.style.display = 'none';
+      img.removeAttribute('src');
+    }
+    card.classList.remove('has-photo');
+  }
+}
+
+function showToast(html, kind = 'success', ms = 5000) {
+  const t = document.getElementById('toast');
+  t.className = 'toast ' + kind;
+  t.innerHTML = html;
+  requestAnimationFrame(() => t.classList.add('show'));
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function setProgress(pct) {
+  const wrap = document.getElementById('uploadStatus');
+  const bar  = document.getElementById('uploadStatusBar');
+  if (pct === null) {
+    wrap.classList.remove('active');
+    bar.style.width = '0%';
+    return;
+  }
+  wrap.classList.add('active');
+  bar.style.width = Math.max(2, Math.min(100, pct)) + '%';
+}
+
+const IMG_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'avif'];
+
+function isImageEntry(path) {
+  const lower = path.toLowerCase();
+  if (lower.includes('__macosx/') || lower.startsWith('.') || lower.includes('/.')) return false;
+  const ext = lower.split('.').pop();
+  return IMG_EXTS.includes(ext);
+}
+
+async function handleZip(file) {
+  if (!window.JSZip) {
+    showToast('<strong>JSZip not loaded</strong><span class="muted">Check internet connection (CDN)</span>', 'error', 6000);
+    return;
+  }
+  setProgress(5);
+  let zip;
+  try {
+    zip = await JSZip.loadAsync(file);
+  } catch (e) {
+    setProgress(null);
+    showToast('<strong>Could not read zip</strong><span class="muted">' + (e.message || e) + '</span>', 'error', 6000);
+    return;
+  }
+
+  const entries = [];
+  zip.forEach((path, entry) => {
+    if (!entry.dir && isImageEntry(path)) entries.push(entry);
+  });
+
+  if (entries.length === 0) {
+    setProgress(null);
+    showToast('<strong>No images found in zip</strong><span class="muted">Looked for jpg/jpeg/png/webp/gif/bmp/avif</span>', 'warn', 6000);
+    return;
+  }
+
+  const taken = new Set(Object.keys(assignedPhotos));
+  const matched = [];
+  const unmatched = [];
+
+  // First pass: extract & match
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    const baseName = entry.name.split('/').pop();
+    setProgress(5 + (i / entries.length) * 85);
+
+    let blob;
+    try {
+      blob = await entry.async('blob');
+    } catch (e) {
+      console.warn('Failed to extract', entry.name, e);
+      continue;
+    }
+
+    const ext = baseName.split('.').pop().toLowerCase();
+    const match = matchEmployee(baseName, taken);
+
+    if (match) {
+      assignPhoto(match.emp.slug, blob, ext, baseName);
+      taken.add(match.emp.slug);
+      matched.push({ emp: match.emp, file: baseName, score: match.score });
+    } else {
+      unmatched.push({ blob, ext, file: baseName });
+    }
+  }
+
+  setProgress(100);
+  setTimeout(() => setProgress(null), 400);
+
+  renderUnmatched(unmatched);
+
+  document.getElementById('btnDownload').disabled = Object.keys(assignedPhotos).length === 0;
+  document.getElementById('btnClear').disabled = Object.keys(assignedPhotos).length === 0;
+
+  const total = employees.length;
+  const filled = Object.keys(assignedPhotos).length;
+  const missing = total - filled;
+  let kind = 'success';
+  if (unmatched.length > 0) kind = 'warn';
+  showToast(
+    `<strong>Matched ${matched.length} / ${entries.length} photos</strong>` +
+    `<span class="muted">${filled}/${total} cards filled · ${missing} missing · ${unmatched.length} unmatched</span>`,
+    kind, 7000
+  );
+}
+
+function renderUnmatched(unmatched) {
+  const panel = document.getElementById('unmatchedPanel');
+  const list  = document.getElementById('unmatchedList');
+  const title = document.getElementById('unmatchedTitle');
+
+  // Filter out already-handled (in case re-running)
+  const remaining = unmatched.filter(u => !u._handled);
+  if (remaining.length === 0) {
+    panel.classList.remove('show');
+    list.innerHTML = '';
+    return;
+  }
+
+  title.textContent = `Unmatched photos (${remaining.length}) — assign manually:`;
+
+  list.innerHTML = remaining.map((u, i) => {
+    const url = URL.createObjectURL(u.blob);
+    objectUrls.push(url);
+    u._previewUrl = url;
+    const opts = ['<option value="">-- assign to --</option>']
+      .concat(employees.map(e => {
+        const taken = !!assignedPhotos[e.slug];
+        return `<option value="${e.slug}">${e.name} (${e.deptLabel})${taken ? ' · already has photo' : ''}</option>`;
+      }))
+      .join('');
+    return `
+      <div class="um-row" data-um-idx="${i}">
+        <div class="um-thumb"><img src="${url}" alt=""/></div>
+        <div class="um-name" title="${u.file}">${u.file}</div>
+        <select data-um-select="${i}">${opts}</select>
+      </div>
+    `;
+  }).join('');
+
+  panel.classList.add('show');
+
+  list.addEventListener('change', function umChange(e) {
+    const sel = e.target.closest('select[data-um-select]');
+    if (!sel) return;
+    const idx = parseInt(sel.dataset.umSelect, 10);
+    const slug = sel.value;
+    if (!slug) return;
+    const u = remaining[idx];
+    if (!u || u._handled) return;
+    assignPhoto(slug, u.blob, u.ext, u.file);
+    u._handled = true;
+    sel.closest('.um-row').remove();
+    document.getElementById('btnDownload').disabled = false;
+    document.getElementById('btnClear').disabled = false;
+    if (!list.querySelector('.um-row')) {
+      panel.classList.remove('show');
+    }
+  }, { once: false });
+}
+
+async function downloadRenamedZip() {
+  const slugs = Object.keys(assignedPhotos);
+  if (slugs.length === 0) {
+    showToast('<strong>Nothing to download</strong><span class="muted">Upload a photos zip first</span>', 'warn', 4000);
+    return;
+  }
+  const zip = new JSZip();
+  const folder = zip.folder('employees');
+  for (const slug of slugs) {
+    const p = assignedPhotos[slug];
+    folder.file(`${slug}.${p.ext}`, p.blob);
+  }
+  // include the README so user knows where to drop it
+  folder.file('README.txt',
+    `Hima employee photos — renamed for the ID Cards page.\n\n` +
+    `Drop these files into your server at:\n  /var/www/Tessa/public/img/employees/\n\n` +
+    `(${slugs.length} photo${slugs.length === 1 ? '' : 's'} included)\n`
+  );
+
+  setProgress(20);
+  const out = await zip.generateAsync(
+    { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 4 } },
+    (meta) => setProgress(20 + meta.percent * 0.78)
+  );
+  setProgress(100);
+  setTimeout(() => setProgress(null), 400);
+
+  const url = URL.createObjectURL(out);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hima-employees-renamed-${new Date().toISOString().slice(0,10)}.zip`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+
+  showToast(
+    `<strong>Downloaded ${slugs.length} renamed photos</strong>` +
+    `<span class="muted">Extract the "employees" folder into <code>public/img/</code></span>`,
+    'success', 7000
+  );
+}
+
+function clearAllAssigned() {
+  Object.keys(assignedPhotos).slice().forEach(clearPhoto);
+  document.getElementById('unmatchedPanel').classList.remove('show');
+  document.getElementById('unmatchedList').innerHTML = '';
+  document.getElementById('btnDownload').disabled = true;
+  document.getElementById('btnClear').disabled = true;
+  // revoke all object URLs to free memory
+  while (objectUrls.length) URL.revokeObjectURL(objectUrls.pop());
+  showToast('<strong>Cleared all photos</strong>', 'success', 3000);
+}
+
+function initUpload() {
+  const input    = document.getElementById('zipInput');
+  const btnUp    = document.getElementById('btnUpload');
+  const btnDown  = document.getElementById('btnDownload');
+  const btnClear = document.getElementById('btnClear');
+  const overlay  = document.getElementById('dropOverlay');
+
+  btnUp.addEventListener('click', () => input.click());
+  btnDown.addEventListener('click', downloadRenamedZip);
+  btnClear.addEventListener('click', clearAllAssigned);
+
+  input.addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    if (file) handleZip(file);
+    input.value = '';
+  });
+
+  // Full-page drag-drop
+  let dragCounter = 0;
+  window.addEventListener('dragenter', e => {
+    if (!e.dataTransfer || !Array.from(e.dataTransfer.types || []).includes('Files')) return;
+    e.preventDefault();
+    dragCounter++;
+    overlay.classList.add('active');
+  });
+  window.addEventListener('dragover', e => {
+    if (overlay.classList.contains('active')) e.preventDefault();
+  });
+  window.addEventListener('dragleave', e => {
+    dragCounter = Math.max(0, dragCounter - 1);
+    if (dragCounter === 0) overlay.classList.remove('active');
+  });
+  window.addEventListener('drop', e => {
+    if (!overlay.classList.contains('active')) return;
+    e.preventDefault();
+    dragCounter = 0;
+    overlay.classList.remove('active');
+    const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!file) return;
+    if (!/\.zip$/i.test(file.name) && !/zip/.test(file.type)) {
+      showToast('<strong>Please drop a .zip file</strong><span class="muted">Got: ' + file.name + '</span>', 'warn', 5000);
+      return;
+    }
+    handleZip(file);
+  });
+}
+
+function renderFilter() {
+  const depts = ['all', ...Object.keys(DEPT_LABELS)];
+  const labels = { all: 'All', ...DEPT_LABELS };
+  const html = depts.map(k => {
+    const color = k === 'all' ? '#888' : DEPT_COLORS[k];
+    return `<button data-filter="${k}" class="${k === 'all' ? 'active' : ''}" style="--btn-color: ${color}"><span class="dot"></span>${labels[k]}</button>`;
+  }).join('');
+  const filter = document.getElementById('deptFilter');
+  filter.innerHTML = html;
+  filter.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-filter]');
+    if (!btn) return;
+    filter.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    const val = btn.dataset.filter;
+    document.querySelectorAll('.id-card').forEach(c => {
+      c.classList.toggle('dim', val !== 'all' && c.dataset.dept !== val);
+    });
+  });
+}
+
+function init() {
+  const ROWS = 2;
+  const cols = Math.ceil(employees.length / ROWS);
+  document.getElementById('statTotal').textContent = employees.length;
+  document.getElementById('statGrid').textContent = `${ROWS} × ${cols}`;
+  document.getElementById('statDepts').textContent = Object.keys(DEPT_LABELS).length;
+  document.getElementById('idGrid').innerHTML = employees.map(renderCard).join('');
+  renderFilter();
+  initUpload();
+
+  const grid = document.getElementById('idGrid');
+  const bar  = document.getElementById('scrollBar');
+  const updateBar = () => {
+    const max = grid.scrollWidth - grid.clientWidth;
+    const pct = max > 0 ? (grid.scrollLeft / max) * 100 : 100;
+    bar.style.width = pct + '%';
+  };
+  grid.addEventListener('scroll', updateBar, { passive: true });
+  window.addEventListener('resize', updateBar);
+  updateBar();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
